@@ -1,11 +1,12 @@
-define("dojox/image/Gallery",[
+define([
 	"dojo",
+	"dojo/_base/declare",
 	"dijit/_TemplatedMixin",
 	"dijit/_Widget",
 	"dojox/image/SlideShow",
 	"dojox/image/ThumbnailPicker",
 	"dojo/text!dojox/image/resources/Gallery.html"
-], function(dojo,_TemplatedMixin,_Widget,SlideShow,ThumbnailPicker,template) {
+], function(dojo,declare,_TemplatedMixin,_Widget,SlideShow,ThumbnailPicker,template) {
 //
 // dojox.image.Gallery courtesy Shane O Sullivan, licensed under a Dojo CLA
 //
@@ -14,7 +15,7 @@ define("dojox/image/Gallery",[
 //	TODO: Make public, document params and privitize non-API conformant methods.
 //	document topics.
 
-return dojo.declare("dojox.image.Gallery",
+return declare("dojox.image.Gallery",
 	[_Widget, _TemplatedMixin],
 	{
 	// summary:
@@ -23,44 +24,44 @@ return dojo.declare("dojox.image.Gallery",
 	// imageHeight: Number
 	//		Maximum height of an image in the SlideShow widget
 	imageHeight: 375,
-	
+
 	// imageWidth: Number
 	//		Maximum width of an image in the SlideShow widget
 	imageWidth: 500,
-		
+
 	// pageSize: Number
 	//		The number of records to retrieve from the data store per request.
 	pageSize: SlideShow.prototype.pageSize,
-	
+
 	// autoLoad: Boolean
 	//		If true, images are loaded before the user views them. If false, an
 	//		image is loaded when the user displays it.
 	autoLoad: true,
-	
+
 	// linkAttr: String
 	//		Defines the name of the attribute to request from the store to retrieve the
 	//		URL to link to from an image, if any.
 	linkAttr: "link",
-	
+
 	// imageThumbAttr: String
 	//		Defines the name of the attribute to request from the store to retrieve the
 	//		URL to the thumbnail image.
 	imageThumbAttr: "imageUrlThumb",
-	
+
 	// imageLargeAttr: String
 	//		Defines the name of the attribute to request from the store to retrieve the
 	//		URL to the image.
 	imageLargeAttr: "imageUrl",
-	
+
 	// titleAttr: String
 	//		Defines the name of the attribute to request from the store to retrieve the
 	//		title of the picture, if any.
 	titleAttr: "title",
- 
+
 	// slideshowInterval: Integer
 	//		Time, in seconds, between image changes in the slide show.
 	slideshowInterval: 3,
-	
+
 	templateString: template,
 
 	postCreate: function(){
@@ -68,7 +69,7 @@ return dojo.declare("dojox.image.Gallery",
 		//		Initializes the widget, creates the ThumbnailPicker and SlideShow widgets
 		this.widgetid = this.id;
 		this.inherited(arguments)
-		
+
 		this.thumbPicker = new ThumbnailPicker({
 			linkAttr: this.linkAttr,
 			imageLargeAttr: this.imageLargeAttr,
@@ -77,8 +78,8 @@ return dojo.declare("dojox.image.Gallery",
 			useLoadNotifier: true,
 			size: this.imageWidth
 		}, this.thumbPickerNode);
-		
-		
+
+
 		this.slideShow = new SlideShow({
 			imageHeight: this.imageHeight,
 			imageWidth: this.imageWidth,
@@ -89,7 +90,7 @@ return dojo.declare("dojox.image.Gallery",
 			slideshowInterval: this.slideshowInterval,
 			pageSize: this.pageSize
 		}, this.slideShowNode);
-		
+
 		var _this = this;
 		//When an image is shown in the Slideshow, make sure it is visible
 		//in the ThumbnailPicker
@@ -112,7 +113,7 @@ return dojo.declare("dojox.image.Gallery",
 		});
 		this._centerChildren();
 	},
-	  
+
   	setDataStore: function(dataStore, request, /*optional*/paramNames){
 		// summary:
 		//		Sets the data store and request objects to read data from.
@@ -129,14 +130,14 @@ return dojo.declare("dojox.image.Gallery",
 		this.thumbPicker.setDataStore(dataStore, request, paramNames);
 		this.slideShow.setDataStore(dataStore, request, paramNames);
   	},
-  
+
   	reset: function(){
 		// summary:
 		//		Resets the widget to its initial state
 		this.slideShow.reset();
 		this.thumbPicker.reset();
   	},
-  
+
 	showNextImage: function(inTimer){
 		// summary:
 		//		Changes the image being displayed in the SlideShow to the next
@@ -166,20 +167,20 @@ return dojo.declare("dojox.image.Gallery",
 		//		Optional callback function to call when the image has finished displaying.
 		this.slideShow.showImage(index, callback);
 	},
-	
+
 	resize: function(dim){
 		this.thumbPicker.resize(dim);
 	},
-	
+
 	_centerChildren: function() {
 		// summary:
 		//		Ensures that the ThumbnailPicker and the SlideShow widgets
 		//		are centered.
 		var thumbSize = dojo.marginBox(this.thumbPicker.outerNode);
 		var slideSize = dojo.marginBox(this.slideShow.outerNode);
-		
+
 		var diff = (thumbSize.w - slideSize.w) / 2;
-		
+
 		if(diff > 0) {
 			dojo.style(this.slideShow.outerNode, "marginLeft", diff + "px");
 		} else if(diff < 0) {

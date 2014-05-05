@@ -1,11 +1,12 @@
-define("dojox/image/SlideShow", [
+define([
 	"dojo",
+	"dojo/_base/declare",
 	"dojo/_base/fx",
 	"dojo/string",
 	"dijit/_TemplatedMixin",
 	"dijit/_Widget",
 	"dojo/text!dojox/image/resources/SlideShow.html"
-], function(dojo,fx,string,_TemplatedMixin,_Widget,template) {
+], function(dojo,declare,fx,string,_TemplatedMixin,_Widget,template) {
 
 //
 // dojox.image.SlideShow courtesy Shane O Sullivan, licensed under a Dojo CLA
@@ -15,7 +16,7 @@ define("dojox/image/SlideShow", [
 //	TODO: more cleanups
 //
 
-return dojo.declare("dojox.image.SlideShow",
+return declare("dojox.image.SlideShow",
 	[_Widget, _TemplatedMixin],
 	{
 	// summary:
@@ -24,7 +25,7 @@ return dojo.declare("dojox.image.SlideShow",
 	// imageHeight: Number
 	//		The maximum height of an image
 	imageHeight: 375,
-	
+
 	// imageWidth: Number
 	//		The maximum width of an image.
 	imageWidth: 500,
@@ -58,11 +59,11 @@ return dojo.declare("dojox.image.SlideShow",
 	// images: Array
 	//	Contains the DOM nodes that individual images are stored in when loaded or loading.
 	images: [],
-	
+
 	// pageSize: Number
 	//	The number of images to request each time.
 	pageSize: 20,
-		
+
 	// autoLoad: Boolean
 	//	If true, then images are preloaded, before the user navigates to view them.
 	//	If false, an image is not loaded until the user views it.
@@ -71,7 +72,7 @@ return dojo.declare("dojox.image.SlideShow",
 	// autoStart: Boolean
 	//	If true, the SlideShow begins playing immediately
 	autoStart: false,
-	
+
 	// fixedHeight: Boolean
 	//	If true, the widget does not resize itself to fix the displayed image.
 	fixedHeight: false,
@@ -80,17 +81,17 @@ return dojo.declare("dojox.image.SlideShow",
 	//	Implementation of the dojo/data/api/Read API, which provides data on the images
 	//	to be displayed.
 	imageStore: null,
-		
+
 	// linkAttr: String
 	//	Defines the name of the attribute to request from the store to retrieve the
 	//	URL to link to from an image, if any.
 	linkAttr: "link",
-	
+
 	// imageLargeAttr: String
 	//	Defines the name of the attribute to request from the store to retrieve the
 	//	URL to the image.
 	imageLargeAttr: "imageUrl",
-	
+
 	// titleAttr: String
 	//	Defines the name of the attribute to request from the store to retrieve the
 	//	title of the picture, if any.
@@ -99,17 +100,17 @@ return dojo.declare("dojox.image.SlideShow",
 	// slideshowInterval: Number
 	//	Time, in seconds, between image transitions during a slideshow.
 	slideshowInterval: 3,
-	
+
 	templateString: template,
-	
+
 	// _imageCounter: Number
 	//	A counter to keep track of which index image is to be loaded next
 	_imageCounter: 0,
-	
+
 	// _tmpImage: DomNode
 	//	The temporary image to show when a picture is loading.
 	_tmpImage: null,
-	
+
 	// _request: Object
 	//	Implementation of the dojo/data/api/Request API, which defines the query
 	//	parameters for accessing the store.
@@ -135,16 +136,16 @@ return dojo.declare("dojox.image.SlideShow",
 				catch(e){} //TODO: remove try/catch
 			});
 		}
-		
+
 		this.outerNode.style.width = this.imageWidth + "px";
 
 		img.setAttribute("src", this._blankGif);
 		var _this = this;
-		
+
 		this.largeNode.appendChild(img);
 		this._tmpImage = this._currentImage = img;
 		this._fitSize(true);
-		
+
 		this._loadImage(0, dojo.hitch(this, "showImage", 0));
 		this._calcNavDimensions();
 		dojo.style(this.navNode, "opacity", 0);
@@ -184,7 +185,7 @@ return dojo.declare("dojox.image.SlideShow",
 				}
 			}, this);
 		}
-	
+
 		var _complete = function(items){
 			// FIXME: onBegin above used to work for maxPhotos:
 			_this.maxPhotos = items.length;
@@ -195,7 +196,7 @@ return dojo.declare("dojox.image.SlideShow",
 			} else {
 				_this.showImage(0);
 			}
-			
+
 		};
 
 		this.imageStore = dataStore;
@@ -211,7 +212,7 @@ return dojo.declare("dojox.image.SlideShow",
 		//		Removes all previously loaded images, and clears all caches.
 		dojo.query("> *", this.largeNode).orphan();
 		this.largeNode.appendChild(this._tmpImage);
-		
+
 		dojo.query("> *", this.hiddenNode).orphan();
 		dojo.forEach(this.images, function(img){
 			if(img && img.parentNode){ img.parentNode.removeChild(img); }
@@ -237,7 +238,7 @@ return dojo.declare("dojox.image.SlideShow",
 		//		The number index in the data store to start loading images from.
 		this._imageCounter = index;
 	},
-	
+
 	destroy: function(){
 		// summary:
 		//		Cleans up the widget when it is being destroyed
@@ -251,7 +252,7 @@ return dojo.declare("dojox.image.SlideShow",
 		// inTimer: Boolean
 		//		If true, a slideshow is active, otherwise the slideshow is inactive.
 		if(inTimer && this._timerCancelled){ return false; }
-		
+
 		if(this.imageIndex + 1 >= this.maxPhotos){
 			if(inTimer && (this.loop || forceLoop)){
 				this.imageIndex = -1;
@@ -270,7 +271,7 @@ return dojo.declare("dojox.image.SlideShow",
 	toggleSlideShow: function(){
 		// summary:
 		//		Switches the slideshow mode on and off.
-		
+
 		// If the slideshow is already running, stop it.
 		if(this._slideId){
 			this._stop();
@@ -344,7 +345,7 @@ return dojo.declare("dojox.image.SlideShow",
 				_this.largeNode.appendChild(_this.images[index]);
 				_this._currentImage = _this.images[index]._img;
 				_this._fitSize();
-								
+
 				var onEnd = function(a,b,c){
 
 					var img = _this.images[index].firstChild;
@@ -364,13 +365,13 @@ return dojo.declare("dojox.image.SlideShow",
         				}
 					_this._setTitle(title);
 	        		};
-				
+
 				fx.fadeIn({
 					node: _this.images[index],
 					duration: 300,
 					onEnd: onEnd
 				}).play();
-				
+
 			}else{
 				//If the image is not loaded yet, load it first, then show it.
 				_this._loadImage(index, function(){
@@ -394,7 +395,7 @@ return dojo.declare("dojox.image.SlideShow",
 			showOrLoadIt();
 		}
 	},
-	
+
 	_fitSize: function(force){
 		// summary:
 		//		Fits the widget size to the size of the image being shown,
@@ -408,14 +409,14 @@ return dojo.declare("dojox.image.SlideShow",
 		}
 		dojo.style(this.largeNode, "paddingTop", this._getTopPadding() + "px");
 	},
-	
+
 	_getTopPadding: function(){
 		// summary:
 		//		Returns the padding to place at the top of the image to center it vertically.
 		if(!this.fixedHeight){ return 0; }
 		return (this.imageHeight - this._currentImage.height) / 2;
 	},
-	
+
 	_loadNextImage: function(){
 		// summary:
 		//		Load the next unloaded image.
@@ -428,7 +429,7 @@ return dojo.declare("dojox.image.SlideShow",
 		}
 		this._loadImage(this._imageCounter);
 	},
-	
+
 	_loadImage: function(index, callbackFn){
 		// summary:
 		//		Load image at specified index
@@ -443,14 +444,14 @@ return dojo.declare("dojox.image.SlideShow",
 		if(this.images[index] || !this._request) {
 			return;
 		}
-		
+
 		var pageStart = index - (index % (this._request.count || this.pageSize));
 
 		this._request.start = pageStart;
 
 		this._request.onComplete = function(items){
 			var diff = index - pageStart;
-			
+
 			if(items && items.length > diff){
 				loadIt(items[diff]);
 			}else{ /* Squelch - console.log("Got an empty set of items"); */ }
@@ -460,7 +461,7 @@ return dojo.declare("dojox.image.SlideShow",
 		var store = this.imageStore;
 		var loadIt = function(item){
 			var url = _this.imageStore.getValue(item, _this.imageLargeAttr);
-			
+
 			var img = new Image();	// when creating img with "createElement" IE doesnt has width and height, so use the Image object
 			var div = dojo.create("div", {
 				id: _this.id + "_imageDiv" + index
@@ -485,7 +486,7 @@ return dojo.declare("dojox.image.SlideShow",
 				}
 				_this._fitImage(img);
 				dojo.attr(div, {"width": _this.imageWidth, "height": _this.imageHeight});
-				
+
 				// make a short timeout to prevent IE6/7 stack overflow at line 0 ~ still occuring though for first image
 				dojo.publish(_this.getLoadTopicName(), [index]);
 
@@ -500,7 +501,7 @@ return dojo.declare("dojox.image.SlideShow",
 
 			_this.images[index] = div;
 			dojo.attr(img, "src", url);
-			
+
 			var title = _this.imageStore.getValue(item, _this.titleAttr);
 			if(title){ dojo.attr(img, "title", title); }
 		}
@@ -539,21 +540,21 @@ return dojo.declare("dojox.image.SlideShow",
 			dijit.byId(id).showNextImage(true);
 		}, this.slideshowInterval * 1000);
 	},
-	
+
 	_calcNavDimensions: function() {
 		// summary:
 		//		Calculates the dimensions of the navigation controls
 		dojo.style(this.navNode, "position", "absolute");
-		
+
 		//Place the navigation controls far off screen
 		dojo.style(this.navNode, "top", "-10000px");
-		
+
 		dojo.style(this.navPlay, 'marginLeft', 0);
-		
+
 		this.navPlay._size = dojo.marginBox(this.navPlay);
 		this.navPrev._size = dojo.marginBox(this.navPrev);
 		this.navNext._size = dojo.marginBox(this.navNext);
-		
+
 		dojo.style(this.navNode, {"position": "", top: ""});
 	},
 
@@ -569,7 +570,7 @@ return dojo.declare("dojox.image.SlideShow",
 			total: this.maxPhotos || ""
 		});
 	},
-	
+
 	_fitImage: function(img) {
 		// summary:
 		//		Ensures that the image width and height do not exceed the maximum.
@@ -577,7 +578,7 @@ return dojo.declare("dojox.image.SlideShow",
 		//		The image DOM node to optionally resize
 		var width = img.width;
 		var height = img.height;
-		
+
 		if(width > this.imageWidth){
 			height = Math.floor(height * (this.imageWidth / width));
 			img.height = height;
@@ -589,7 +590,7 @@ return dojo.declare("dojox.image.SlideShow",
 			img.width = width;
 		}
 	},
-	
+
 	_handleClick: function(/* Event */e){
 		// summary:
 		//		Performs navigation on the images based on users mouse clicks
@@ -601,7 +602,7 @@ return dojo.declare("dojox.image.SlideShow",
 			case this.navPlay: this.toggleSlideShow(); break;
 		}
 	},
-	
+
 	_showNav: function(force){
 		// summary:
 		//		Shows the navigation controls
@@ -611,17 +612,17 @@ return dojo.declare("dojox.image.SlideShow",
 		if(this._navShowing && !force){return;}
 		this._calcNavDimensions();
 		dojo.style(this.navNode, "marginTop", "0px");
-		
+
 		var navPlayPos = dojo.style(this.navNode, "width")/2 - this.navPlay._size.w/2 - this.navPrev._size.w;
 		dojo.style(this.navPlay, "marginLeft", navPlayPos + "px");
 		var wrapperSize = dojo.marginBox(this.outerNode);
-		
+
 		var margin = this._currentImage.height - this.navPlay._size.h - 10 + this._getTopPadding();
-		
+
 		if(margin > this._currentImage.height){margin += 10;}
 		dojo[this.imageIndex < 1 ? "addClass":"removeClass"](this.navPrev, "slideShowCtrlHide");
 		dojo[this.imageIndex + 1 >= this.maxPhotos ? "addClass":"removeClass"](this.navNext, "slideShowCtrlHide");
-	
+
 		var _this = this;
 		if(this._navAnim) {
 			this._navAnim.stop();
@@ -635,7 +636,7 @@ return dojo.declare("dojox.image.SlideShow",
 		this._navAnim.play();
 		this._navShowing = true;
 	},
-	
+
 	_hideNav: function(/* Event */e){
 		// summary:
 		//		Hides the navigation controls
@@ -655,12 +656,12 @@ return dojo.declare("dojox.image.SlideShow",
 			this._navShowing = false;
 		}
 	},
-	
+
 	_overElement: function(/*DomNode*/element, /*Event*/e){
 		// summary:
 		//		Returns whether the mouse is over the passed element.
 		//		Element must be display:block (ie, not a `<span>`)
-		
+
 		//When the page is unloading, if this method runs it will throw an
 		//exception.
 		if(typeof(dojo) == "undefined"){ return false; }
