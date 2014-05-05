@@ -18,7 +18,7 @@ define([
 	"dojo/i18n!dijit/nls/common",
 	"dijit/_base/focus",		// dijit.getFocus()
 	"dijit/focus"				// dijit.focus()
-], function(dojo,declare,i18n,windowUtils,metrics,_Contained,_Container,_TemplatedMixin,_WidgetsInTemplateMixin,_Widget,Button,_LayoutWidget,ContentPane,Menu,MenuItem,templateRollingList) {
+], function(dojo,declare,i18n,winUtils,metrics,_Contained,_Container,_TemplatedMixin,_WidgetsInTemplateMixin,_Widget,Button,_LayoutWidget,ContentPane,Menu,MenuItem,templateRollingList) {
 
 declare("dojox.widget._RollingListPane",
 	[ContentPane, _TemplatedMixin, _Contained], {
@@ -426,7 +426,7 @@ declare("dojox.widget._RollingListGroupPane",
 				}
 				window.setTimeout(function(){
 					try{
-						windowUtils.scrollIntoView(focusNode);
+						winUtils.scrollIntoView(focusNode);
 					}catch(e){}
 				}, 1);
 			}else if(focusWidget.focus){
@@ -779,7 +779,7 @@ return declare("dojox.widget.RollingList",
 		delete this._scrollingTimeout;
 		this._scrollingTimeout = window.setTimeout(dojo.hitch(this, function(){
 			if(childWidget.domNode){
-				windowUtils.scrollIntoView(childWidget.domNode);
+				winUtils.scrollIntoView(childWidget.domNode);
 			}
 			delete this._scrollingTimeout;
 			return;
