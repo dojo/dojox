@@ -12,7 +12,6 @@ define([
 	"dojo/dom-construct", // domConstruct.destroy
 	"dojo/dom-geometry", // domGeo.getContentBox
 	"dojo/dom-style", // style.get, style.set
-	"dojo/cache", // cache
 	"dojo/cookie", // cookie
 	"dojo/domReady", // domReady
 	"dojo/fx", // fx.combine
@@ -21,7 +20,7 @@ define([
 	"dijit/_TemplatedMixin", // _TemplatedMixin
 	"dojo/text!./UpgradeBar/UpgradeBar.html"
 ], function(dojo, array, connect, declare, baseFx, lang, has, baseWin,
-            domAttr, domClass, domConstruct, domGeo, style, cache, cookie,
+            domAttr, domClass, domConstruct, domGeo, style, cookie,
             domReady, fx, win, _WidgetBase, _TemplatedMixin, template){
 
 dojo.experimental("dojox.widget.UpgradeBar");
