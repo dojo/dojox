@@ -257,9 +257,9 @@ validate.check = function(/*HTMLFormElement*/form, /*Object*/profile){
 			// case 1: constraint value is validation function
 			if(lang.isFunction(profile.constraints[name])){
 				constraintResponse = profile.constraints[name](elem.value);
-			}else if(lang.isFunction(window[profile.constraints[name]])){
+			}else if(lang.isFunction(lang.getObject(profile.constraints[name])){
 				// case 2: constraint value is validation function name as string
-				constraintResponse = window[profile.constraints[name]](elem.value);	
+				constraintResponse = lang.getObject(profile.constraints[name])(elem.value);	
 			}else if(lang.isArray(profile.constraints[name])){
 				
 				// handle nested arrays for multiple constraints
@@ -271,7 +271,7 @@ validate.check = function(/*HTMLFormElement*/form, /*Object*/profile){
 				}else{
 					// case 3: constraint value is array, first elem is function,
 					// tail is parameters
-					if lang.isFunction(window[profile.constraints[name]])){
+					if lang.isFunction(lang.getObject(profile.constraints[name])){
 							constraintResponse = validate.evaluateConstraint(profile, profile.constraints[profile.constraints[name]], name, elem);
 					}else{
 						constraintResponse = validate.evaluateConstraint(profile, profile.constraints[name], name, elem);
@@ -337,8 +337,8 @@ validate.evaluateConstraint=function(profile, /*Array*/constraint, fieldName, el
 	params.unshift(elem.value);
 	if(typeof isValidSomething != "undefined" && typeof isValidSomething != "string"){
 		return isValidSomething.apply(null, params);
-	}else if(isValidSomething != "undefined" && typeof isValidSomething == "string") {
-		if (lang.isFunction(window[isValidSomething])) return window[isValidSomething].apply(null, params);
+	}else if(typeof isValidSomething != "undefined" && typeof isValidSomething == "string") {
+		if (lang.isFunction(getObject(isValidSomething)) return lang.getObject(isValidSomething).apply(null, params);
 	}
 	return false; // Boolean
 };

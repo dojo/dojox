@@ -16,14 +16,14 @@
 						field3: ["myValidationFunction"]
 					}
 				}
-				
+
 				var results = validate.check(thisForm, profile);
 				if (results.isSuccessful()) { // If validation is a success
 					return true;
 				} else {
 					// Start by removing error messages already generated from previous submission attempt
 					query(".error", thisForm).forEach(domConstruct.destroy);
-					
+
 					var missing = results.getMissing();
 					if (missing.length){
 						arrayUtil.forEach(missing, function(missingField){
@@ -38,13 +38,12 @@
 							domConstruct.create("span", { innerHTML : constraintResponse.message || "Invalid input. Please try again.", "class" : "error" }, query("input[name=" + constraintResponse.field + "]")[0], "after");
 						});
 					}
-					
+
 					return false;
 				}
 			});
 		});
 
-		
 		function myValidationFunction(value, options) {
 			// validation stuff goes here
 			return { isValid : false, message : options.message }
