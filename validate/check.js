@@ -242,7 +242,7 @@ validate.check = function(/*HTMLFormElement*/form, /*Object*/profile){
 		for(name in profile.constraints){
 			var elem = form[name];
 			if(!elem) {continue;}
-			
+
 			// skip if blank - its optional unless required, in which case it
 			// is already listed as missing.
 			if(!_undef("tagName",elem)
@@ -251,17 +251,17 @@ validate.check = function(/*HTMLFormElement*/form, /*Object*/profile){
 				&& /^\s*$/.test(elem.value)){
 				continue;
 			}
-			
+
 			// constraintResponse should have two properties: isValid(bool), message(string)
 			var constraintResponse;
 			// case 1: constraint value is validation function
 			if(lang.isFunction(profile.constraints[name])){
 				constraintResponse = profile.constraints[name](elem.value);
-			}else if(lang.isFunction(lang.getObject(profile.constraints[name])){
+			}else if(lang.isFunction(lang.getObject(name, false, profile.constraints))){
 				// case 2: constraint value is validation function name as string
-				constraintResponse = lang.getObject(profile.constraints[name])(elem.value);	
+				constraintResponse = lang.getObject(name, false, profile.constraints)(elem.value);
 			}else if(lang.isArray(profile.constraints[name])){
-				
+
 				// handle nested arrays for multiple constraints
 				if(lang.isArray(profile.constraints[name][0])){
 					for(var i=0; i<profile.constraints[name].length; i++){
@@ -271,14 +271,14 @@ validate.check = function(/*HTMLFormElement*/form, /*Object*/profile){
 				}else{
 					// case 3: constraint value is array, first elem is function,
 					// tail is parameters
-					if lang.isFunction(lang.getObject(profile.constraints[name])){
+					if(lang.isFunction(lang.getObject(name, false, profile.constraints))){
 							constraintResponse = validate.evaluateConstraint(profile, profile.constraints[profile.constraints[name]], name, elem);
 					}else{
 						constraintResponse = validate.evaluateConstraint(profile, profile.constraints[name], name, elem);
 					}
 				}
 			}
-			
+
 			// if constraintResponse is false (backwards compatibility with last version) or if property isValid is false, return the invalid field name and/or the constraintResponse message
 			if(!constraintResponse){
 				invalid[invalid.length] = elem.name;
@@ -331,14 +331,16 @@ validate.evaluateConstraint=function(profile, /*Array*/constraint, fieldName, el
 	//		The form dom name of the field being validated.
 	// elem:
 	//		The form element field.
-	
+
  	var isValidSomething = constraint[0];
 	var params = constraint.slice(1);
 	params.unshift(elem.value);
 	if(typeof isValidSomething != "undefined" && typeof isValidSomething != "string"){
 		return isValidSomething.apply(null, params);
-	}else if(typeof isValidSomething != "undefined" && typeof isValidSomething == "string") {
-		if (lang.isFunction(getObject(isValidSomething)) return lang.getObject(isValidSomething).apply(null, params);
+	}else if(typeof isValidSomething != "undefined" && typeof isValidSomething == "string"){
+		if(lang.isFunction(lang.getObject(isValidSomething))){
+			return lang.getObject(isValidSomething).apply(null, params);
+		}
 	}
 	return false; // Boolean
 };

@@ -5,15 +5,15 @@
 	<script>
 		require(["dojo/dom", "dojo/on", "dojo/dom-construct", "dojo/query", "dojo/_base/array", "dojox/validate", "dojox/validate/check", "dojox/validate/web", "dojo/domReady!"
 		], function(dom, on, domConstruct, query, arrayUtil, validate) {
-			on()
 			var thisForm = dom.byId('myForm');
 			on(thisForm, "submit", function(event) {
+				event.preventDefault();
 				var profile = {
 					required: [ "field1", "field2", "field3" ],
 					constraints: {
 						field1: [myValidationFunction, { "message" : "Field 1 is incorrect. Please try again." }],
 						field2: [validate.isEmailAddress, false, true],
-						field3: ["myValidationFunction"]
+						field3: ["myValidationFunction", { "message" : "Field 3 is incorrect. Please try again." }]
 					}
 				}
 
@@ -43,7 +43,6 @@
 				}
 			});
 		});
-
 		function myValidationFunction(value, options) {
 			// validation stuff goes here
 			return { isValid : false, message : options.message }
