@@ -823,7 +823,49 @@
 						]).
 						render();
 				}
-			}
+			},
+			{
+				description: "Markers, lines, 2D data, custom centered axis, blue theme.",
+				makeChart: function(node){
+					(new Chart(node)).
+						setTheme(blue).
+						addPlot("default", {
+							type: "Default",
+							lines: true,
+							markers: true,
+							tension: 2
+						}).
+						addAxis("x", {
+							min: 0,
+							max: 6,
+							majorTick: { stroke: "black", length: 3 },
+							minorTick: { stroke: "gray", length: 3 },
+							minorLabels: false,
+							position: "center"
+						}).
+						addAxis("y", {
+							vertical: true,
+							min: 0,
+							max: 10,
+							majorTick: { stroke: "black", length: 3 },
+							minorTick: { stroke: "gray", length: 3 },
+							minorLabels: false,
+							position: "center"
+						}).
+						addSeries("Series A", [
+							{ x: 0.5, y: 5 },
+							{ x: 1.5, y: 1.5 },
+							{ x: 2, y: 9 },
+							{ x: 5, y: 0.3 }
+						]).
+						addSeries("Series B", [
+							{ x: 0.3, y: 8 },
+							{ x: 4, y: 6 },
+							{ x: 5.5, y: 2 }
+						]).
+						render();
+				}
+			}			
 		];
 		var now = function(){
 			return (new Date()).getTime();
