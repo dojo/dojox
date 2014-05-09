@@ -1395,7 +1395,7 @@ define([
 			//		unexpectedly when the user flicks the screen to scroll.
 			//		Note that only the desktop browsers need the cover.
 
-			if(!has('touch') && !this.noCover){
+			if(!has("touch") && !this.noCover){
 				if(!dm._cover){
 					dm._cover = domConstruct.create("div", null, win.doc.body);
 					dm._cover.className = "mblScrollableCover";
@@ -1422,7 +1422,7 @@ define([
 			// summary:
 			//		Removes the transparent DIV cover.
 
-			if(!has('touch') && dm._cover){
+			if(!has("touch") && dm._cover){
 				dm._cover.style.display = "none";
 				this.setSelectable(dm._cover, true);
 				this.setSelectable(this.domNode, true);
