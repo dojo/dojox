@@ -26,7 +26,7 @@ makeShapes = function(surface){
 		;
 	// absolute path with cubic bezier
 	surface
-		.createPath("M100 100 200 100 200 200C200 250 150 250 100 200S50 100 100 100z")
+		.createPath("M100 100 200 100 200 200C200 250 150 250 1E2 200S50 1E2 1E2 100z")
         .setStroke({color: "black", style:'longdash', width:3})
 		.setFill("#f80")
 		.setTransform({dx: 100, dy: -50})
@@ -40,21 +40,21 @@ makeShapes = function(surface){
 		;
 	// relative path with quadratic beziers
 	surface
-		.createPath("m100 100 100 0 0 100q0 50-75-25t-25-75z")
+		.createPath("m100 1E2 1E2 0 0 100q0 50-75-25t-25-75z")
         .setStroke({color: "black", style:'longdash', width:3})
 		.setFill("green")
 		.setTransform({dx: -50, dy: 150})
 		;
 	// absolute path with quadratic bezier
 	surface
-		.createPath("M100 100 200 100 200 200Q200 250 125 175T100 100z")
+		.createPath("M100 1E2 200 1E2 200 200Q200 250 125 175T100 100z")
         .setStroke({color: "black", style:'longdash', width:3})
 		.setFill("blue")
 		.setTransform({dx: 100, dy: 150})
 		;
 	// relative path with horizontal and vertical lines, and quadratic beziers
 	surface
-		.createPath("m100 100h100v100q0 50-75-25t-25-75z")
+		.createPath("m100 100h100v1E2q0 50-75-25t-25-75z")
         .setStroke({color: "black", style:'longdash', width:3})
 		.setFill("#f0f")
 		.setTransform({dx: 250, dy: 150})
