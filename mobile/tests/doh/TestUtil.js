@@ -90,7 +90,7 @@ function fireTouchEvent(eventtype, node, x, y){
 		node.fireEvent( "on" + eventtype[1], e );
 	}else{
 		e = document.createEvent('Events');
-		e.initEvent( dojo.has('touch') ? eventtype[0] : eventtype[1], true, true);
+		e.initEvent( dojo.has("touch-events") ? eventtype[0] : eventtype[1], true, true);
 		e.touches = [ { pageX: x, pageY: y } ];
 		e.pageX = x;
 		e.pageY = y;

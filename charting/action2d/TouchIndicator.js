@@ -69,9 +69,6 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/has",
 		};
 	=====*/
 		
-	// we need to know if touch _events_ are here which is not what has("touch") is doing
-	has.add("touch-events", "ontouchstart" in document);
-
 	return declare("dojox.charting.action2d.TouchIndicator", ChartAction, {
 		// summary:
 		//		Create a touch indicator action. You can touch over the chart to display a data indicator.

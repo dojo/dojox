@@ -160,7 +160,7 @@ define([
 				domAttr.set(this.domNode, "aria-owns", dropDown.id);
 			}
 
-			if(has('touch')){
+			if(has("touch")){
 				win.global.scrollBy(0, domGeometry.position(aroundNode, false).y); // don't call scrollIntoView since it messes up ScrollableView
 			}
 
