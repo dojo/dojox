@@ -28,10 +28,6 @@ define([
 		//		The name of the CSS class of this widget.
 		baseClass: "mblComboBoxMenu",
 		
-		// bgIframe: [private] Boolean
-		//		Flag to prevent the creation of a background iframe, when appropriate. For internal usage. 
-		bgIframe: true, // so it's not created for IE and FF
-
 		buildRendering: function(){
 			this.domNode = this.focusNode = domConstruct.create("div", { "class":"mblReset" });
 			this.containerNode = domConstruct.create("div", { style: { position:"absolute", top:0, left:0 } }, this.domNode); // needed for scrollable
@@ -74,11 +70,6 @@ define([
 			// summary:
 			//		Called when the menu closes.
 			this.scrollable.cleanup();
-		},
-
-		destroyRendering: function(){
-			this.bgIframe = false; // no iframe to destroy
-			this.inherited(arguments);
 		},
 
 		postCreate: function(){
