@@ -76,6 +76,11 @@ define([
 			this.inherited(arguments);
 			this.scrollable = new Scrollable();
 			this.scrollable.resize = function(){}; // resize changes the height rudely
+			// #1800
+			var self = this;
+			this.scrollable.isLeftToRight = function(){
+				return self.isLeftToRight();
+			};
 		}
 	});
 	return has("dojo-bidi") ? declare("dojox.mobile._ComboBoxMenu", [_ComboBoxMenu, BidiComboBoxMenu]) : _ComboBoxMenu;
