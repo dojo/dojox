@@ -1276,7 +1276,7 @@ define([
 				}else if(to.x !== undefined || to.y !== undefined){
 					this.onFlickAnimationStart(); // #17822: needed because there is no transitionstart event.
 					domStyle.set(node, css3.add({}, {
-						// #17822: when scrolling on one direction, avoid unnecessarily animating 
+						// #17822 when scrolling on one direction, avoid unnecessarily animating
 						// both top and left, because this leads to two transitionend events fired 
 						// instead of one in some browsers (Safari/iOS7 at least).
 						transitionProperty: (to.x !== undefined && to.y !== undefined) ?
