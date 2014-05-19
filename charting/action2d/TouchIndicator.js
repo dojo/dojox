@@ -114,6 +114,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/has",
 			//		The chart this action applies to.
 			// kwArgs: __TouchIndicatorCtorArgs?
 			//		Optional arguments for the chart action.
+
 			// we should not have to do that, but dojo/touch is causing performances issue
 			// we have to workaround here for now
 			if(has("touch-events")){
