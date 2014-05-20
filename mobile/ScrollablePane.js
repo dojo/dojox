@@ -47,7 +47,7 @@ define([
 				}
 			}
 
-			if(this.roundCornerMask && (has("webkit")||has("svg"))){
+			if(this.roundCornerMask && (has("mask-image"))){
 				var node = this.containerNode;
 				var mask = this.maskNode = domConstruct.create("div", {
 					className: "mblScrollablePaneMask"
@@ -86,7 +86,7 @@ define([
 			// description:
 			//		Creates a rounded corner rectangle mask.
 			//		This function works only on WebKit-based browsers.
-			if(has("webkit")||has("svg")){
+			if(has("mask-image")){
 				if(this.domNode.offsetHeight == 0){ return; } // in a hidden view
 				this.maskNode.style.height = this.domNode.offsetHeight + "px";
 				var child = this.getChildren()[0],

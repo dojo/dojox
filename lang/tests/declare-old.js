@@ -186,7 +186,7 @@ dojo.mixin(dojox.lang.tests.declareOld, {
 			//		Call an inherited member function of this declared class, allowing advanced
 			//		manipulation of passed arguments to inherited functions.
 			//		Explicitly cannot handle the case of intending to pass no `newArgs`, though
-			//		hoping the use in conjuction with `dojo.hitch`. Calling an inherited
+			//		hoping the use in conjunction with `dojo.hitch`. Calling an inherited
 			//		function directly via hitch() is not supported.
 			//
 			// name: String?

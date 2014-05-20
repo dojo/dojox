@@ -34,22 +34,26 @@ dojo.require("dojox.charting.themes.PrimaryColors");
 
 dojo.require("dojo.parser");
 
-var chart;
+var charts = [];
 
 makeObjects = function(){
-	chart = new dojox.charting.Chart("test1").
+    dojo.query(".chart").forEach(function(node, index){
+	charts[index] = new dojox.charting.Chart(node).
         setTheme(dojox.charting.themes.PrimaryColors).
         addPlot("default").
         addSeries("Series A", [1, 3, 2, 5, 4]).
         addPlot("default2", {hAxis: "x2", vAxis: "y2"}).
         addSeries("Series B", [5, 3, 4, 1, 2], {plot: "default2"});
     updateAxes();
+    });  
 };
 
 dojo.addOnLoad(makeObjects);
 
 updateAxes = function(){
     var rotation = dijit.byId("rotation").get("value");
+    dojo.forEach(charts, function(chart, index){
+        if(index == 0){
 	chart.
         addAxis("x", {
             htmlLabels: false, fixLower: "major", fixUpper: "major", min: 0, max: 6,
@@ -81,7 +85,45 @@ updateAxes = function(){
             htmlLabels: false, vertical: true, fixLower: "major", fixUpper: "major", min: 0, max: 6, leftBottom: false,
             rotation: rotation
         }).
+        render();    
+    }
+    else if(index == 1){
+	chart.
+        addAxis("x", {
+            htmlLabels: false, fixLower: "major", fixUpper: "major", min: 0, max: 6,
+            labels: [
+                {value: 0, text: "zero"},
+                {value: 1, text: "one"},
+                {value: 2, text: "two"},
+                {value: 3, text: "three"},
+                {value: 4, text: "four"},
+                {value: 5, text: "five"},
+                {value: 6, text: "six"}
+            ],
+            rotation: rotation,
+            position: "center"
+        }).
+        addAxis("y", {
+            htmlLabels: false, vertical: true, fixLower: "major", fixUpper: "major", natural: true,  min: 0, max: 6,
+            labels: [{value: 0, text: ""},
+                {value: 1, text: "January"}, {value: 2, text: "February"},
+                {value: 3, text: "March"}, {value: 4, text: "April"},
+                {value: 5, text: "May"}, {value: 6, text: "June"}
+            ],
+            rotation: rotation,
+            position: "center"
+        }).
+        addAxis("x2", {
+            htmlLabels: false, fixLower: "major", fixUpper: "major", min: 0, max: 6, leftBottom: false,
+            rotation: rotation
+        }).
+        addAxis("y2", {
+            htmlLabels: false, vertical: true, fixLower: "major", fixUpper: "major", min: 0, max: 6, leftBottom: false,
+            rotation: rotation
+        }).
         render();
+        }
+    });
 }
 
 </script>
@@ -95,7 +137,9 @@ updateAxes = function(){
     &nbsp;
     <button dojoType="dijit.form.Button" onClick="updateAxes()">Apply</button>
 </p>
-<div id="test1" style="width: 600px; height: 400px;"></div>
+<div class="chart" id="test1" style="width: 500px; height: 300px;"></div>
+<p>&nbsp;</p>
+<div class="chart" id="test2" style="width: 500px; height: 300px;"></div>
 <p>That's all Folks!</p>
 </body>
 </html>

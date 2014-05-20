@@ -90,7 +90,7 @@ function fireTouchEvent(eventtype, node, x, y){
 		node.fireEvent( "on" + eventtype[1], e );
 	}else{
 		e = document.createEvent('Events');
-		e.initEvent( dojo.has('touch') ? eventtype[0] : eventtype[1], true, true);
+		e.initEvent( dojo.has("touch-events") ? eventtype[0] : eventtype[1], true, true);
 		e.touches = [ { pageX: x, pageY: y } ];
 		e.pageX = x;
 		e.pageY = y;
@@ -244,4 +244,7 @@ function verifyTabBarButton(id, text, classNames, visibility1, visibility2, regE
 		console.log("There is no iconNode2. id=" + id);
 	}
 	doh.assertEqual(text, dojo.trim(demoWidget.labelNode.innerHTML), "id=" +id);
+	if(demoWidget.badgeObj){
+		doh.assertEqual(demoWidget.badgeObj.className, demoWidget.badgeClass, "Unexpected badge className. id=" + id);
+	}
 }

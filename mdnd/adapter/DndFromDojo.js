@@ -139,7 +139,7 @@ define(["dojo/_base/kernel",
 			this._dragNode = nodes[0];
 			this._copy = copy; this._source = source;
 			// Connect the onMouseMove :
-			// It's usefull to activate the detection of a D&D area and the dropIndicator place only if
+			// It's useful to activate the detection of a D&D area and the dropIndicator place only if
 			// the dragNode is out of a the source dojo. The classic behaviour of the dojo source is kept.
 			this._outSourceHandler = connect.connect(this._dojoManager, "outSource", this, function(){
 				//dojo.disconnect(this._outSourceHandler);

@@ -432,7 +432,7 @@ define(["dojo/_base/kernel", "./entities", "dojo/_base/array", "dojo/_base/windo
 							// start tag.  So, remove them.
 							continue;
 						}else{
-							//Process non-dup, seemingly wellformed elements!
+							//Process non-dup, seemingly well formed elements!
 							openTag(n);
 							if(tg === "script"){
 								content.push(formatScript(n.innerHTML));

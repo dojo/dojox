@@ -268,10 +268,10 @@ tests.register("dojox.date.tests.hebrew.Date",
 				
 			//	var m =  ["TISHRI " , "HESHVAN", "KISLEV", "TEVET", "SHVAT" , "ADARI", "ADAR", "NISAN" , "IYAR" , "SIVAN" , "TAMMUZ", "AV" , "ELUL"];
 				
-				var amouts = [2, 5, 6, 7, 8,12, 18,20, 24, 50, -3, -4,  -5, -6, -7, -8, -9, -10, -50, 200, -200];
+				var amounts = [2, 5, 6, 7, 8,12, 18,20, 24, 50, -3, -4,  -5, -6, -7, -8, -9, -10, -50, 200, -200];
 				var dateHebrewAdd, dateHebrewAddLeap;
 				
-				dojo.forEach( amouts, function(amount, i){
+				dojo.forEach( amounts, function(amount, i){
 					dateHebrewAdd = dojox.date.hebrew.add(dateHebrew, "month",  amount);
 					dateHebrewAddLeap = dojox.date.hebrew.add(dateHebrewLeap, "month",  amount);
 					t.is(dojox.date.hebrew.difference(dateHebrew, dateHebrewAdd, "month"), amount);

@@ -358,7 +358,7 @@ var formCheckedMultiSelect = declare("dojox.form.CheckedMultiSelect", FormSelect
 		// summary:
 		//		Cancels the mousedown event to prevent others from stealing
 		//		focus
-		event.stop(e);
+		e.preventDefault();
 	},
 
 	validator: function(){

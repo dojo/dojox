@@ -5,6 +5,8 @@
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<title>TabBar</title>
 		<link href="../../../themes/iphone/iphone.css" rel="stylesheet"/>
+		<link href="../../../themes/common/domButtons/DomButtonRedBadge.css" rel="stylesheet"/>
+		<link href="../../../themes/common/domButtons/DomButtonBlueBadge.css" rel="stylesheet"/>
 		<style>
 		.label {
 			font-family: "Helvetica Neue", Helvetica;
@@ -47,6 +49,8 @@
 				<li dojoType="dojox.mobile.TabBarButton" icon1="../../images/tab-icon-16.png" icon2="../../images/tab-icon-16h.png" moveTo="view1" selected="true">New</li>
 				<li dojoType="dojox.mobile.TabBarButton" icon1="../../images/tab-icon-15.png" icon2="../../images/tab-icon-15h.png" moveTo="view2">What's Hot</li>
 				<li dojoType="dojox.mobile.TabBarButton" icon1="../../images/tab-icon-10.png" icon2="../../images/tab-icon-10h.png" moveTo="view3">Genius</li>
+				<li dojoType="dojox.mobile.TabBarButton" id="tbbBadge1" icon1="../../images/tab-icon-16.png" icon2="../../images/tab-icon-16h.png" data-dojo-props="badge:'foo'" >Foo</li>
+				<li dojoType="dojox.mobile.TabBarButton" id="tbbBadge2" icon1="../../images/tab-icon-15.png" icon2="../../images/tab-icon-15h.png" data-dojo-props="badge:'bar', badgeClass:'mblDomButtonBlueBadge'" >Bar</li>
 			</ul>
 	
 			<div class="label">Tab Bar (CSS Sprite)</div>
@@ -144,7 +148,7 @@
 					<div id="spread-tall-button3" data-dojo-type="dojox.mobile.TabBarButton" data-dojo-props="href: 'index.html'">Albums</div>
 					<div id="spread-tall-button4" data-dojo-type="dojox.mobile.TabBarButton" data-dojo-props="href: 'index.html'">Emails</div>
 			</div>
-	
+
 			<div id="view1" dojoType="dojox.mobile.View" selected="true">
 				<div class="view">View 1</div>
 			</div>

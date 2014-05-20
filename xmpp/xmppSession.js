@@ -317,7 +317,7 @@ dojo.extend(dojox.xmpp.xmppSession, {
 
 			if (found>-1){
 				var chat = this.chatRegister[found];
-				chat.recieveMessage(message);
+				chat.receiveMessage(message);
 			}else{
 				var chatInstance = new dojox.xmpp.ChatService();
 				chatInstance.uid = this.getBareJid(message.from);
@@ -338,7 +338,7 @@ dojo.extend(dojox.xmpp.xmppSession, {
 			chatInstance.setSession(this);
 			this.chatRegister.push(chatInstance);
 			this.onRegisterChatInstance(chatInstance, message);
-			chatInstance.recieveMessage(message,true);
+			chatInstance.receiveMessage(message,true);
 		},
 
 		iqSetHandler: function(msg){
@@ -454,7 +454,7 @@ dojo.extend(dojox.xmpp.xmppSession, {
 			if(msg.getAttribute('to')){
 				var jid = this.getBareJid(msg.getAttribute('to'));
 				if(jid != this.jid) {
-					//console.log("xmppService::presenceUpdate Update Recieved with wrong address - ",jid);
+					//console.log("xmppService::presenceUpdate Update Received with wrong address - ",jid);
 					return;
 				}
 			}
@@ -731,7 +731,7 @@ dojo.extend(dojox.xmpp.xmppSession, {
 					}
 				}
 			}else if(msg.getAttribute('type')=="error"){
-				//console.log("xmppService::storeRoster()  Error recieved on roster get");
+				//console.log("xmppService::storeRoster()  Error received on roster get");
 			}
 
 			////console.log("Roster: ", this.roster);

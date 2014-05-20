@@ -56,7 +56,7 @@ Third-Party Licenses, Versions, and Build Information:
 
 * tests/non-licensed - Everything in this directory are third-party web pages and web applications used for testing and ensuring the framework works well in the third world. No license or copyright is asserted on this material, and it should not be distributed in any downloads. An example of material that might be here would be a New York Times page modified as a test work with the SVG Web framework, or a test page to ensure a clip art could work on an eBay page.
 
-TODO: There are alot of third party SVG files in samples/svg-files. Document where these came from, who the copyright holder is, and ensure we have a CLA on file for them.
+TODO: There are a lot of third party SVG files in samples/svg-files. Document where these came from, who the copyright holder is, and ensure we have a CLA on file for them.
 
 TODO: Figure out copyright information on the *.flv and *.mp3 files that we use in our samples in samples/svg-files
 

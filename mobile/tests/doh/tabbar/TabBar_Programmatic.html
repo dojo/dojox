@@ -5,6 +5,8 @@
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<title>TabBar</title>
 		<link href="../../../themes/iphone/iphone.css" rel="stylesheet"/>
+		<link href="../../../themes/common/domButtons/DomButtonRedBadge.css" rel="stylesheet"/>
+		<link href="../../../themes/common/domButtons/DomButtonBlueBadge.css" rel="stylesheet"/>
 		<style>
 		.label {
 			font-family: "Helvetica Neue", Helvetica;
@@ -59,6 +61,11 @@
 				tabBar.addChild(tabBarButton);
 				tabBarButton = new dojox.mobile.TabBarButton({icon1:"../../images/tab-icon-10.png", icon2:"../../images/tab-icon-10h.png", moveTo:"view3", label:"Genius"});
 				tabBar.addChild(tabBarButton);
+				tabBarButton = new dojox.mobile.TabBarButton({id:"tbbBadge1", icon1:"../../images/tab-icon-16.png", icon2:"../../images/tab-icon-16h.png", badge:"foo", label:"Foo"});
+				tabBar.addChild(tabBarButton);
+				tabBarButton = new dojox.mobile.TabBarButton({id:"tbbBadge2", icon1:"../../images/tab-icon-15.png", icon2:"../../images/tab-icon-15h.png", badge:"bar", badgeClass:"mblDomButtonBlueBadge", label:"Bar"});
+				tabBar.addChild(tabBarButton);
+
 				dojo.doc.body.appendChild(tabBar.domNode);
 				tabBar.startup();
 

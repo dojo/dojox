@@ -28,7 +28,7 @@
 			anim = new dojo.Animation({
 				curve: new dojo._Line(0,-500),
 				duration: 3000,
-				onEnd: (function(){ anim.play(); }), // loop indefinately
+				onEnd: (function(){ anim.play(); }), // loop indefinitely
 				onAnimate: function(){
 					var str = Math.floor(parseInt(arguments[0]))+"px 0px";
 					dojo.style(node,"backgroundPosition",str);

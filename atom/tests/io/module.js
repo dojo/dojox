@@ -483,7 +483,7 @@ doh.register("dojox.atom.tests.io.module", [
 				});
 			}, function(error, args){
 				// error callback
-				d.errback("Retreiving the entry failed.");
+				d.errback("Retrieving the entry failed.");
 			});
 			return d;
 		}
@@ -509,7 +509,7 @@ doh.register("dojox.atom.tests.io.module", [
 				});
 			}, function(error, args){
 				// error callback
-				d.errback("Retreiving the entry failed.");
+				d.errback("Retrieving the entry failed.");
 			});
 			return d;
 		}

@@ -42,6 +42,7 @@
 		//	|	http://your.server.com/yourapp.html?theme=Custom // forces Custom theme
 		//	|	http://your.server.com/yourapp.html?theme=iPhone // forces iPhone theme
 		//	|	http://your.server.com/yourapp.html?theme=iPad // forces iPad theme
+		//	|	http://your.server.com/yourapp.html?theme=ios7 // forces iOS 7 theme
 		//
 		//		To simulate a particular device from the application code, the user agent
 		//		can be forced by setting dojoConfig.mblUserAgent as follows:
@@ -136,7 +137,7 @@
 			//		Replaces the dojox/mobile object.
 			// description:
 			//		When this module is loaded from a script tag, dm is a plain
-			//		local object defined at the begining of this module.
+			//		local object defined at the beginning of this module.
 			//		common.js will replace the local dm object with the
 			//		real dojox/mobile object through this method.
 			dm = _dm;
@@ -183,6 +184,21 @@
 			[
 				"BB10",
 				"blackberry",
+				[]
+			],
+			[
+				"ios7",
+				"ios7",
+				[]
+			],
+			[
+				"iPhone;.*OS 7_",
+				"ios7",
+				[]
+			],
+			[
+				"iPad;.*OS 7_",
+				"ios7",
 				[]
 			],
 			[

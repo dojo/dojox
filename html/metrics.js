@@ -60,7 +60,7 @@ define(["dojo/_base/kernel","dojo/_base/lang", "dojo/_base/sniff", "dojo/ready",
 		var m, s;
 		if(!measuringNode){
 			m = measuringNode = Window.doc.createElement("div");
-			// Container that we can set contraints on so that it doesn't
+			// Container that we can set constraints on so that it doesn't
 			// trigger a scrollbar.
 			var c = Window.doc.createElement("div");
 			c.appendChild(m);

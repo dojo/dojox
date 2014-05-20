@@ -158,6 +158,32 @@
 							
 							return d;
 						}
+					},
+					{
+						name: "Add child before startup",
+						timeout: 3000,
+						runTest: function(){
+ 							// Test case for #17393: call addChild before startup
+ 							var accordion = 
+ 								new Accordion({iconBase:"../../images/icons16.png", fixedHeight: true}, 
+ 									"accordion");
+							var childWidget = 
+								new ContentPane({label:"External Content 2",
+									icon1:"mblDomButtonBlackRightArrow16", 
+									icon2:"mblDomButtonWhiteDownArrow16", href:"dojo.html"});
+							accordion.addChild(childWidget);
+							childWidget = 
+								new ContentPane({label:"External Content 3",
+									icon1:"mblDomButtonBlackRightArrow16", 
+									icon2:"mblDomButtonWhiteDownArrow16", href:"dojo.html"});
+							accordion.addChild(childWidget);
+							accordion.startup();
+							var children = accordion.getChildren();
+							doh.assertEqual("1", children[0]._at.textBoxNode.getAttribute("aria-posinset"), "aria-posinset attribute first child");
+							doh.assertEqual("2", children[0]._at.textBoxNode.getAttribute("aria-setsize"), "aria-posinset attribute first child");
+							doh.assertEqual("2", children[1]._at.textBoxNode.getAttribute("aria-posinset"), "aria-posinset attribute second child");
+							doh.assertEqual("2", children[1]._at.textBoxNode.getAttribute("aria-setsize"), "aria-posinset attribute second child");
+						}
 					}
 				]);
 				runner.run();

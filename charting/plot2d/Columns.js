@@ -37,6 +37,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/has",
 			du.updateWithObject(this.opt, kwArgs);
 			du.updateWithPattern(this.opt, kwArgs, this.optionalParams);
 			this.animate = this.opt.animate;
+			this.renderingOptions = { "shape-rendering": "crispEdges" };
 		},
 
 		getSeriesStats: function(){

@@ -6,6 +6,7 @@ define([
 	"./badge/module",
 	"./bidi/module",
 	"./button/module",
+	"./carousel/module",
 	"./checkbox/module",
 	"./combobox/module",
 	"./contentpane/module",

@@ -41,6 +41,21 @@
 							}));
 							return d;
 						}
+					},
+					{
+						name: "Resizing after label update",
+						timeout: 4000,
+						runTest: function(){
+							var d = new doh.Deferred();
+							setTimeout(d.getTestCallback(function(){
+								var demoWidget = dijit.byId("dojox_mobile_Heading_4");
+								var initialLabelNodeLength = demoWidget.labelNodeLen;
+								demoWidget.set("label", "WWWWWWWWWW");
+								demoWidget.resize();
+								doh.assertNotEqual(initialLabelNodeLength, demoWidget.labelNodeLen, "Unexpected label length after resize");
+							}));
+							return d;
+						}
 					}
 				]);
 				doh.run();
@@ -60,6 +75,8 @@
 			<button data-dojo-type="dojox.mobile.ToolBarButton" style="padding: 0px 14px">Edit</button>
 			<button data-dojo-type="dojox.mobile.ToolBarButton" data-dojo-props='icon:"mblDomButtonWhitePlus"' style="float:right;"></button>Alarm Clock</h1><br>
 
+		<h1 data-dojo-type="dojox.mobile.Heading" data-dojo-props="label:'WWWWW'">
+		</h1>
 
 	</body>
 </html>
