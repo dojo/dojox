@@ -71,7 +71,6 @@ var tests = [
 	{ url: "test_EdgeToEdgeDataList-auto-sv.html", tags: "EdgeToEdgeDataList" },
 	{ url: "test_EdgeToEdgeDataList-auto-v.html", tags: "EdgeToEdgeDataList" },
 	{ url: "test_EdgeToEdgeDataList-itemMap.html", tags: "EdgeToEdgeDataList"},
-	{ url: "test_EdgeToEdgeDataList-lazy.html", tags: "EdgeToEdgeDataList"},
 	{ url: "test_EdgeToEdgeDataList-more-sv.html", tags: "EdgeToEdgeDataList" },
 	{ url: "test_EdgeToEdgeDataList-more-v.html", tags: "EdgeToEdgeDataList" },
 	{ url: "test_EdgeToEdgeDataList.html", tags: "EdgeToEdgeDataList" },
