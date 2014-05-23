@@ -173,11 +173,11 @@ define([
 				}
 				if(!this._useTopLeft){
 					if(this._useTransformTransition){
-						this._ch.push(connect.connect(this.domNode, css3.name("transitionEnd"), this, "onFlickAnimationEnd"));
+						this._ch.push(connect.connect(this.containerNode, css3.name("transitionEnd"), this, "onFlickAnimationEnd"));
 						// Note that there is no transitionstart event (#17822).
 					}else{
-						this._ch.push(connect.connect(this.domNode, css3.name("animationEnd"), this, "onFlickAnimationEnd"));
-						this._ch.push(connect.connect(this.domNode, css3.name("animationStart"), this, "onFlickAnimationStart"));
+						this._ch.push(connect.connect(this.containerNode, css3.name("animationEnd"), this, "onFlickAnimationEnd"));
+						this._ch.push(connect.connect(this.containerNode, css3.name("animationStart"), this, "onFlickAnimationStart"));
 	
 						// Creation of keyframes takes a little time. If they are created
 						// in a lazy manner, a slight delay is noticeable when you start
@@ -190,7 +190,7 @@ define([
 						domStyle.set(this.containerNode, css3.name("transform"), "translate3d(0,0,0)");
 					}
 				}else{
-					this._ch.push(connect.connect(this.domNode, css3.name("transitionEnd"), this, "onFlickAnimationEnd"));
+					this._ch.push(connect.connect(this.containerNode, css3.name("transitionEnd"), this, "onFlickAnimationEnd"));
 					// Note that there is no transitionstart event (#17822).
 				}
 			}
@@ -1276,7 +1276,7 @@ define([
 				}else if(to.x !== undefined || to.y !== undefined){
 					this.onFlickAnimationStart(); // #17822: needed because there is no transitionstart event.
 					domStyle.set(node, css3.add({}, {
-						// #17822 when scrolling on one direction, avoid unnecessarily animating
+						// #17822: when scrolling on one direction, avoid unnecessarily animating
 						// both top and left, because this leads to two transitionend events fired 
 						// instead of one in some browsers (Safari/iOS7 at least).
 						transitionProperty: (to.x !== undefined && to.y !== undefined) ?
@@ -1306,19 +1306,29 @@ define([
 				//
 				// This module itself does not make dependency on them.
 				// TODO: for 2.0 the dojo global is going away. Use require("dojo/fx") and require("dojo/fx/easing") instead.
+				
+				var self = this;
 				var s = dojo.fx.slideTo({
 					node: node,
 					duration: duration*1000,
 					left: to.x,
 					top: to.y,
-					easing: (easing == "ease-out") ? dojo.fx.easing.quadOut : dojo.fx.easing.linear
+					easing: (easing == "ease-out") ? dojo.fx.easing.quadOut : dojo.fx.easing.linear,
+					onBegin: function(){ // #17822
+						if(idx == 2){
+							self.onFlickAnimationStart();
+						}
+					},
+					onEnd: function(){
+						if(idx == 2){
+							self.onFlickAnimationEnd();
+						}
+					}
 				}).play();
-				if(idx == 2){
-					connect.connect(s, "onEnd", this, "onFlickAnimationEnd");
-				}
 			}else{
 				// directly jump to the destination without animation
 				if(idx == 2){
+					this.onFlickAnimationStart(); // #17822
 					this.scrollTo(to, false, node);
 					this.onFlickAnimationEnd();
 				}else{

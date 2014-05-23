@@ -17,9 +17,11 @@
 		var onYearSet, onMonthSet, onDaySet;
 		require([
 			"dojo/ready", "dojo/dom-construct", "dijit/registry", "doh/runner",
-			"dojox/mobile/ScrollableView", "dojox/mobile", "dojox/mobile/compat", "dojox/mobile/parser"],
+			"dojox/mobile/ScrollableView", "dojox/mobile", "dojox/mobile/compat", "dojox/mobile/parser",
+			"dojo/fx", "dojo/fx/easing" // needed by dojox/mobile/scrollable for browsers non supporting css3 animations 
+			],
 			function(ready, domConstruct, registry, runner, ScrollableView){
-						
+			
 			var onFlickAnimationStartCounter, onFlickAnimationEndCounter;
 
 			ready(function(){
@@ -77,7 +79,7 @@
 						name: "onFlickAnimationStart/End scrollType 1",
 						timeout: 2000,
 						runTest: function(){
-							testScrollableView(1);
+							return testScrollableView(1);
 						}
 					},
 					{
