@@ -271,11 +271,14 @@ br.computeCpfDv = function(/*String*/value){
 	return "";
 };
 
-var calcDv = function(sum) {
-  var dv = sum % 11;
-  if (dv > 9) dv = 0;
-  return dv;
-}
+var calcDv = function(/*Number*/sum) {
+	var dv = sum % 11;
+	//If dv is 10, it is represented as 0:
+	if (dv === 10) {
+		dv = 0;
+	}
+	return dv;
+};
 
 return br;
 });

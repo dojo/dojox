@@ -22,7 +22,7 @@ doh.register("dojox.validate.tests.br",[
 			doh.assertTrue(br.isValidCnpj('795779860001-17'), "3 Checking ############-## format");
 			doh.assertTrue(br.isValidCnpj('79577986000117'), "3 Checking ############## format");
 			doh.assertTrue(br.isValidCnpj(79577986000117), "3 Checking numeric ############## format");
-			
+
 			doh.assertFalse(br.isValidCnpj('79.577.986/0001-18'), "4 Checking ##.###.###/####-## format");
 			doh.assertFalse(br.isValidCnpj('79577986/0001-18'), "4 Checking ########/####-## format");
 			doh.assertFalse(br.isValidCnpj('795779860001-18'), "4 Checking ############-## format");
@@ -32,7 +32,7 @@ doh.register("dojox.validate.tests.br",[
 			doh.assertFalse(br.isValidCnpj('00000000000000'), "4 Checking numeric ############## format");
 			doh.assertFalse(br.isValidCnpj('11111111111111'), "4 Checking numeric ############## format");
 			doh.assertFalse(br.isValidCnpj('22222222222222'), "4 Checking numeric ############## format");
-			
+
 			doh.assertTrue(br.isValidCnpj('00.835.530/0001-50'), "5 Checking 00.835.530/0001-50 should be valid");
 			doh.assertTrue(br.isValidCnpj('00835530000150'), "5 Checking 00835530000150 should be valid");
 			doh.assertTrue(br.isValidCnpj(00835530000150), "5 Checking numeric 00835530000150 should be valid");
