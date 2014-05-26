@@ -32,6 +32,10 @@ doh.register("dojox.validate.tests.br",[
 			doh.assertFalse(br.isValidCnpj('00000000000000'), "4 Checking numeric ############## format");
 			doh.assertFalse(br.isValidCnpj('11111111111111'), "4 Checking numeric ############## format");
 			doh.assertFalse(br.isValidCnpj('22222222222222'), "4 Checking numeric ############## format");
+
+			doh.assertTrue(br.isValidCnpj('00.835.530/0001-50'), "5 Checking 00.835.530/0001-50 should be valid");
+			doh.assertTrue(br.isValidCnpj('00835530000150'), "5 Checking 00835530000150 should be valid");
+			doh.assertTrue(br.isValidCnpj(00835530000150), "5 Checking numeric 00835530000150 should be valid");
 		}
 	},
 	{
@@ -51,6 +55,10 @@ doh.register("dojox.validate.tests.br",[
 			doh.assertEqual("17", br.computeCnpjDv('79577986/0001'), "3 Checking ########/#### format");
 			doh.assertEqual("17", br.computeCnpjDv('795779860001'), "3 Checking ############ format");
 			doh.assertEqual("17", br.computeCnpjDv(795779860001), "3 Checking numeric ############ format");
+			
+			doh.assertEqual("50", br.computeCnpjDv('00.835.530/0001'), "4 Checking 00.835.530/0001");
+			doh.assertEqual("50", br.computeCnpjDv('008355300001'), "4 Checking 008355300001");
+			doh.assertEqual("50", br.computeCnpjDv(008355300001), "4 Checking numeric 008355300001");
 		}
 	},
 	//All CPF numbers randomly generated from: http://www.gerardocumentos.com.br
@@ -76,6 +84,9 @@ doh.register("dojox.validate.tests.br",[
 			doh.assertTrue(br.isValidCpf('271034755-55'), "4 Checking #########-## format");
 			doh.assertTrue(br.isValidCpf('27103475555'), "4 Checking ########### format");
 			doh.assertTrue(br.isValidCpf(27103475555), "4 Checking numeric ########### format");
+			
+			doh.assertTrue(br.isValidCpf('066.487.679-01'), "5 Checking 066.487.679-01 should be valid");
+			doh.assertTrue(br.isValidCpf(06648767901), "5 Checking numeric 06648767901 should be valid");
 		}
 	},
 	{
@@ -96,7 +107,9 @@ doh.register("dojox.validate.tests.br",[
 			doh.assertEqual("55", br.computeCpfDv('271.034.755'), "4 Checking ###.###.### format");
 			doh.assertEqual("55", br.computeCpfDv('271034755'), "4 Checking ######### format");
 			doh.assertEqual("55", br.computeCpfDv(271034755), "4 Checking numeric ######### format");
-
+			
+			doh.assertEqual("01", br.computeCpfDv('066.487.679'), "6 Checking 066.487.679-01");
+			doh.assertEqual("01", br.computeCpfDv(066487679), "6 Checking numeric 06648767901");
 		}
 	}
 ]);
