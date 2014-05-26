@@ -11,14 +11,16 @@
 	var BUTTON_LABEL = "Button";
 	var BUTTON_WIDTH = 58;
 	var BUTTON_WIDTH_FF = 64;
-	var BUTTON_WIDTH_IE = 64; // IE10
+	var BUTTON_WIDTH_WINTHEME = 64; // IE10
 	var BUTTON_HEIGHT = 27;
-	var BUTTON_HEIGHT_IE = 28; // IE10
+	var BUTTON_HEIGHT_WINTHEME = 28; // IE10
 
 	require([
 		"dojo/sniff",
+		"dojo/dom-class",
 		"dojo/dom-construct", // dojo.place
 		"dojo/ready", // dojo.ready
+		"dojo/_base/window",
 		"dijit/registry",  // dijit.byId
 		"doh/runner",	//doh functions
 		"dojox/mobile/Button",
@@ -26,7 +28,7 @@
 		"dojox/mobile/View",		// This mobile app uses mobile view
 		"dojox/mobile/compat",		// This mobile app supports running on desktop browsers
 		"dojox/mobile/parser"		// This mobile app uses declarative programming with fast mobile parser
-	], function(has, domConst, ready, registry, runner, Button){
+	], function(has, domClass, domConst, ready, win, registry, runner, Button){
 		function _createButtonDeclaratively(buttonId) {
 			return registry.byId(buttonId);
 		}
@@ -53,8 +55,8 @@
 			view1.performTransition("view2", 1, "none");
 		}
 		ready(function(){
-			var buttonWidth = (has("ie") === 10 || (!has("ie") && has("trident") > 6)) ? BUTTON_WIDTH_IE : has("ff") ? BUTTON_WIDTH_FF : BUTTON_WIDTH;
-			var buttonHeight = (has("ie") === 10 || (!has("ie") && has("trident") > 6)) ? BUTTON_HEIGHT_IE : BUTTON_HEIGHT;
+			var buttonWidth = domClass.contains(win.doc.documentElement, "windows_theme") ? BUTTON_WIDTH_WINTHEME : has("ff") ? BUTTON_WIDTH_FF : BUTTON_WIDTH;
+			var buttonHeight = domClass.contains(win.doc.documentElement, "windows_theme") ? BUTTON_HEIGHT_WINTHEME : BUTTON_HEIGHT;
 			// Skip the checks for IE<9
 			if(has("ie") < 9){
 				buttonWidth = -1; // negative value as convention for skipping tests

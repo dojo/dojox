@@ -12,12 +12,14 @@
 			"dojo/ready",
 			"dojo/sniff",
 			"dojo/dom",
+			"dojo/dom-class",
 			"dojo/dom-geometry",
+			"dojo/_base/window",
 			"doh/runner",
 		 	"dojox/mobile",				// This is a mobile app.
 			"dojox/mobile/parser",		// This mobile app uses declarative programming with fast mobile parser
 			"dojox/mobile/ScrollablePane"
-	], function(ready, has, dom, domGeom, runner){
+	], function(ready, has, dom, domClass, domGeom, win, runner){
 		ready(function(){
 			var view = dom.byId("view");
 			var containerDiv = dom.byId("containerDiv");
@@ -27,7 +29,7 @@
 					name: "Verify that ticket #15761 is fixed",
 					timeout: 4000,
 					runTest: function(){
-						var bodyTopPadding = (has("ie") === 10 || (!has("ie") && has("trident") > 6)) ?8:0;
+						var bodyTopPadding = domClass.contains(win.doc.documentElement, "windows_theme") ? 8 : 0;
 						var viewPosition = domGeom.position(view, false);
 						console.log(viewPosition);
 						runner.assertEqual(0 + bodyTopPadding, viewPosition.y, "view position y is not the expected one");

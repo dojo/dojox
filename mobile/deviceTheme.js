@@ -217,13 +217,18 @@
 				[]
 			],
 			[
+				"Windows Phone",
+				"windows",
+				[]
+			],
+			[
 				"MSIE [6-9]",
 				"iphone",
 				[]
 			],
 			[
 				"Trident",
-				"windows",
+				"iphone",
 				[]
 			],
 			[
