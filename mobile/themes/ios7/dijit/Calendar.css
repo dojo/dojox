@@ -57,9 +57,9 @@
   border-right: 1px solid transparent;
   text-align: center;
   text-shadow: rgba(247, 247, 247, 0.6) 0px 1px 0px;
-  background-color: #292c31;
+  background-color: white;
   font-size: 12px;
-  color: white;
+  color: black;
 }
 .dijitCalendarDateTemplate {
   border-bottom: 1px solid lightGrey;
