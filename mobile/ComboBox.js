@@ -89,8 +89,10 @@ define([
 		},
 
 		onInput: function(e){
-			this._onKey(e);
-			this.inherited(arguments);
+			if(!e || e.charCode !== 0){ // #18047
+				this._onKey(e);
+				this.inherited(arguments);
+			}
 		},
 
 		_setListAttr: function(v){
