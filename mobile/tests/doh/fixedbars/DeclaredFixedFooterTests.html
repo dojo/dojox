@@ -15,6 +15,7 @@
 				 "doh/runner",	//doh functions
 				 "dojo/ready",
                  "dojo/dom",
+                 "dojo/dom-class",
                  "dojo/dom-style",
                  "dojo/window",
                  "dojo/_base/window",
@@ -24,7 +25,7 @@
 		         "dojox/mobile/compat",
 		         "dojox/mobile/ScrollableView",
 		         "dojox/mobile/TabBar"
-		     ], function(runner, ready, dom, domStyle, win, winUtils, has){
+		     ], function(runner, ready, dom, domClass, domStyle, win, winUtils, has){
 				ready(function(){
 					var tabBar = dom.byId("thetabbar");
 					var tabHome1 = dom.byId("tabHome1");
@@ -33,7 +34,7 @@
 					var tabEvents = dom.byId("tabEvents");
 					// there is 8px of extra padding -in the body) with the WindowsPhone theme
 					var extraPadding = 0;
-					if (has("ie")===10 || has("trident") > 6){
+					if (domClass.contains(winUtils.doc.documentElement, "windows_theme")){
 						extraPadding = 8;
 					}
 					doh.register("dojox.mobile.test.doh.fixedbars.DeclaredFixedFooterTests", [

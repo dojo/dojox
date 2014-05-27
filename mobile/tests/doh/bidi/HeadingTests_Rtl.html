@@ -26,7 +26,7 @@
 	var WIDGET_BACK_TEXT = "Settings";
 	var WIDGET_HEIGHT1 = "44";
 	var WIDGET_OFFSETHEIGHT1 = 44;
-	var WIDGET_OFFSETHEIGHT1_IE10 = 42; // IE10
+	var WIDGET_OFFSETHEIGHT1_WINTHEME = 42; // IE10
 	var WIDGET_OFFSETHEIGHT2 = 90;
 
 	require([
@@ -35,6 +35,7 @@
 		"dojo/dom-class", // dojo.hasClass
 		"dojo/ready", // dojo.ready
 		"dojo/_base/lang", // lang.trim
+		"dojo/_base/window",
 		"dijit/registry",  // dijit.byId
 		"doh/runner",	// doh functions
 		"dojox/mobile/Heading",
@@ -42,7 +43,7 @@
 		"dojox/mobile/View",		// This mobile app uses mobile view
 		"dojox/mobile/compat",		// This mobile app supports running on desktop browsers
 		"dojox/mobile/parser"		// This mobile app uses declarative programming with fast mobile parser
-	], function(has, domConst, domClass, ready, lang, registry, runner, Heading){
+	], function(has, domConst, domClass, ready, lang, win, registry, runner, Heading){
 
 		function _createHeadingDeclaratively(widgetId) {
 			return registry.byId(widgetId);
@@ -69,7 +70,7 @@
 		function _assertCorrectHeading(widget, titleText, backText, backClassName){
 			runner.assertNotEqual(null, widget, "IconItem: Did not instantiate.");
 			runner.assertTrue(domClass.contains(widget.domNode, WIDGET_CLASSNAME1), WIDGET_CLASSNAME1 + " id=" + widget.domNode.id);
-			runner.assertEqual((has("ie") === 10 || (!has("ie") && has("trident") > 6)) ? WIDGET_OFFSETHEIGHT1_IE10 : WIDGET_OFFSETHEIGHT1, widget.domNode.offsetHeight, "style.height id=" + widget.domNode.id);
+			runner.assertEqual(domClass.contains(win.doc.documentElement, "windows_theme") ? WIDGET_OFFSETHEIGHT1_WINTHEME : WIDGET_OFFSETHEIGHT1, widget.domNode.offsetHeight, "style.height id=" + widget.domNode.id);
 			runner.assertEqual(WIDGET_SPANTITLE_CLASSNAME, widget.labelNode.className);
 			runner.assertEqual(WIDGET_DIVTITLE_CLASSNAME, widget.labelDivNode.className);
 			runner.assertEqual(titleText, widget.labelNode.innerHTML, "widget.labelNode.innerHTML");

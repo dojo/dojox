@@ -10,13 +10,14 @@
 <script language="JavaScript" type="text/javascript">
 	var BUTTON_LABEL = "Button";
 	var BUTTON_HEIGHT = 27;
-	var BUTTON_HEIGHT_IE = 25;
-	var BUTTON_HEIGHT_IE10 = 52;
+	var BUTTON_HEIGHT_WINTHEME = 52;
 
 	require([
 		"dojo/_base/sniff",
+		"dojo/dom-class",
 		"dojo/dom-construct", // dojo.place
 		"dojo/ready", // dojo.ready
+		"dojo/_base/window",
 		"dijit/registry",  // dijit.byId
 		"doh/runner",	//doh functions
 		"dojox/mobile/ToggleButton",
@@ -24,7 +25,7 @@
 		"dojox/mobile/View",		// This mobile app uses mobile view
 		"dojox/mobile/compat",		// This mobile app supports running on desktop browsers
 		"dojox/mobile/parser"		// This mobile app uses declarative programming with fast mobile parser
-	], function(has, domConst, ready, registry, runner, ToggleButton){
+	], function(has, domClass, domConst, ready, win, registry, runner, ToggleButton){
 		function _createToggleButtonDeclaratively(buttonId) {
 			return registry.byId(buttonId);
 		}
@@ -47,7 +48,7 @@
 			view1.performTransition("view2", 1, "none");
 		}
 		ready(function(){
-			var buttonHeight = (has("ie") === 10 || (!has("ie") && has("trident") > 6)) ? BUTTON_HEIGHT_IE10 : BUTTON_HEIGHT;
+			var buttonHeight = (domClass.contains(win.doc.documentElement, "windows_theme")) ? BUTTON_HEIGHT_WINTHEME : BUTTON_HEIGHT;
 			runner.register("dojox.mobile.test.doh.ToggleButtonTests", [
 				function testInView1(){
 					var button1 = _createToggleButtonDeclaratively("view1-button1");
