@@ -264,7 +264,7 @@ define([
 						active = isGesture = false; // click implies no gesture movement
 					}
 				);
-				this.endHandler = this.connect(win.doc.documentElement, "onmouseup",//touch.release,
+				this.endHandler = this.connect(win.doc.documentElement, touch.release,
 					function(){
 						this.defer(function(){ // allow onclick to go first
 							skipReposition = true;
