@@ -44,6 +44,9 @@
 	<br>
 	<button onclick="dijit.byId('customPicker').show()">pop up</button>
 	<button onclick="dijit.byId('customPicker').hide()">pop down</button>
+	<p>
+	Test: click the pop up button and check that the overlay is correctly opened at the bottom of the viewport. Then click the Done button of the overlay, scroll to the bottom of the page and click the pop up button there. Check
+	that the overlay is correctly displayed at the bottom of the viewport.
 	<div id="customPicker" data-dojo-type="dojox.mobile.Overlay">
 		<h1 data-dojo-type="dojox.mobile.Heading" data-dojo-props='label:"Custom Picker"'>
 			<span data-dojo-type="dojox.mobile.ToolBarButton"  data-dojo-props='label:"Done"' class="mblColorBlue" style="width:45px;float:right;" onClick="dijit.byId('customPicker').hide()"></span>
