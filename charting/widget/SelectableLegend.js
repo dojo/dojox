@@ -177,15 +177,15 @@ define(["dojo/_base/array",
 		},
 		_isHidden: function(plotName, index){
 			if(this._isPie()){
-				return this.chart.getPlot(plotName).runFilter.indexOf(index) != -1;
-			}else{ 
+				return arrayUtil.indexOf(this.chart.getPlot(plotName).runFilter, index) != -1;
+			}else{
 				return this.chart.series[index].hidden
 			}
 		},
 		toogle: function(plotName, index, hide){
 			var plot =  this.chart.getPlot(plotName);
 			if(this._isPie()){
-				if(plot.runFilter.indexOf(index) != -1){
+				if(arrayUtil.indexOf(plot.runFilter, index) != -1){
 					if(!hide){
 						plot.runFilter = arrayUtil.filter(plot.runFilter, function(item){
 							return item != index;
