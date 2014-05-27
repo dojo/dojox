@@ -222,11 +222,6 @@
 				[]
 			],
 			[
-				"MSIE [6-9]",
-				"iphone",
-				[]
-			],
-			[
 				"Trident",
 				"iphone",
 				[]
