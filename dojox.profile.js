@@ -23,7 +23,6 @@ var profile = (function(){
 			"help",
 			"image/(Gallery|SlideShow|ThumbnailPicker)",
 			"jq",
-			"jsonPath/query",
 			"lang/(aspect|async|docs|observable|oo|typed|functional/(binrec|curry|linrec|listcomp|multirec|numrec|tailrec|util|zip))",
 			"layout/(BorderContainer|dnd|ext-dijit)",
 			"mobile/app/",
