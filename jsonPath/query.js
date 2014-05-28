@@ -1,7 +1,6 @@
 define(["dojo/_base/kernel",
 	"dojo/_base/lang"
 ], function (kernel, lang) {
-
 	var query = function ( /*Object*/ obj, /*String*/ expr, /*Object*/ arg) {
 		// summary:
 		//		Perform jsonPath query `expr` on javascript object or json string `obj`
