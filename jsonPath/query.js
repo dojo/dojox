@@ -1,7 +1,7 @@
 define(["dojo/_base/kernel",
 	"dojo/_base/lang"
-], function (kernel, lang){
-	var query = function ( /*Object*/ obj, /*String*/ expr, /*Object*/ arg){
+], function(kernel, lang){
+	var query = function( /*Object*/ obj, /*String*/ expr, /*Object*/ arg){
 		// summary:
 		//		Perform jsonPath query `expr` on javascript object or json string `obj`
 		// obj:
@@ -29,15 +29,15 @@ define(["dojo/_base/kernel",
 		}
 		var P = {
 			resultType: arg.resultType || "VALUE",
-			normalize: function (expr){
+			normalize: function(expr){
 				var subx = [];
-				expr = expr.replace(/'([^']|'')*'/g, function (t){
+				expr = expr.replace(/'([^']|'')*'/g, function(t){
 					return _strName + "(" + (strs.push(eval(t)) - 1) + ")";
 				});
 				var ll = -1;
 				while(ll != subx.length){
 					ll = subx.length; //TODO: Do expression syntax checking
-					expr = expr.replace(/(\??\([^\(\)]*\))/g, function ($0){
+					expr = expr.replace(/(\??\([^\(\)]*\))/g, function($0){
 						return "#" + (subx.push($0) - 1);
 					});
 				}
@@ -48,13 +48,13 @@ define(["dojo/_base/kernel",
 				ll = -1;
 				while(ll != expr){
 					ll = expr;
-					expr = expr.replace(/#([0-9]+)/g, function ($0, $1){
+					expr = expr.replace(/#([0-9]+)/g, function($0, $1){
 						return subx[$1];
 					});
 				}
 				return expr.split(";");
 			},
-			asPaths: function (paths){
+			asPaths: function(paths){
 				var i, j, p, x, n;
 				for(j = 0; j < paths.length; j++){
 					p = "$";
@@ -66,7 +66,7 @@ define(["dojo/_base/kernel",
 				}
 				return paths;
 			},
-			exec: function (locs, val, rb){
+			exec: function(locs, val, rb){
 				var path = ['$'];
 				var result = rb ? val : [val];
 				var paths = [path];
@@ -85,7 +85,7 @@ define(["dojo/_base/kernel",
 				function desc(v){
 					result.push(v);
 					paths.push(path);
-					P.walk(v, function (i){
+					P.walk(v, function(i){
 						if(typeof v[i] === 'object'){
 							var oldPath = path;
 							path = path.concat(i);
@@ -101,7 +101,7 @@ define(["dojo/_base/kernel",
 							start = 0,
 							end = len,
 							step = 1;
-						loc.replace(/^(-?[0-9]*):(-?[0-9]*):?(-?[0-9]*)$/g, function ($0, $1, $2, $3){
+						loc.replace(/^(-?[0-9]*):(-?[0-9]*):?(-?[0-9]*)$/g, function($0, $1, $2, $3){
 							start = parseInt($1 || start, 10);
 							end = parseInt($2 || end, 10);
 							step = parseInt($3 || step, 10);
@@ -125,12 +125,12 @@ define(["dojo/_base/kernel",
 						add(val, P.eval(loc, val), rb);
 					}else if(loc === "*"){
 						P.walk(val, rb && val instanceof Array ? // if it is result based, there is no point to just return the same array
-							function (i){
-								P.walk(val[i], function (j){
+							function(i){
+								P.walk(val[i], function(j){
 									add(val[i], j);
 								});
 							} :
-							function (i){
+							function(i){
 								add(val, i);
 							});
 					}else if(loc === ".."){
@@ -141,7 +141,7 @@ define(["dojo/_base/kernel",
 							add(val, repStr(s[i], loc));
 						}
 					}else if(/^\?\(.*?\)$/.test(loc)){ // [?(expr)]
-						P.walk(val, function (i){
+						P.walk(val, function(i){
 							if(P.eval(loc.replace(/^\?\((.*?)\)$/, "$1"), val[i])){
 								add(val, i);
 							}
@@ -151,7 +151,7 @@ define(["dojo/_base/kernel",
 					}else{
 						loc = repStr(loc, loc);
 						if(rb && val instanceof Array && !/^[0-9*]+$/.test(loc)){
-							P.walk(val, function (i){
+							P.walk(val, function(i){
 								add(val[i], loc);
 							});
 						}else{
@@ -172,7 +172,7 @@ define(["dojo/_base/kernel",
 					if(rb){
 						oper(val, loc);
 					}else{
-						P.walk(val, function (i){
+						P.walk(val, function(i){
 							path = valPaths[i] || path;
 							oper(val[i], loc);
 						});
@@ -192,7 +192,7 @@ define(["dojo/_base/kernel",
 				}
 				return P.resultType == "PATH" ? P.asPaths(paths) : result;
 			},
-			walk: function (val, f){
+			walk: function(val, f){
 				var i, n, m;
 				if(val instanceof Array){
 					for(i = 0, n = val.length; i < n; i++){
@@ -208,7 +208,7 @@ define(["dojo/_base/kernel",
 					}
 				}
 			},
-			"eval": function (x, v){
+			"eval": function(x, v){
 				try {
 					return obj && v && eval(x.replace(/@/g, 'v'));
 				} catch (e){
