@@ -222,7 +222,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/has",
 			}
 			var t = this.chart.theme, stroke, outline, events = this.events();
 
-			for(var i = this.series.length - 1; i >= 0; --i){
+			for(var i = 0; i < this.series.length; i++){
 				var run = this.series[i];
 				if(!this.dirty && !run.dirty){
 					t.skip();

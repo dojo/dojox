@@ -72,7 +72,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/has",
 				vt = this._vScaler.scaler.getTransformerFromModel(this._vScaler),
 				events = this.events();
 
-			for(var i = this.series.length - 1; i >= 0; --i){
+			for(var i = 0; i < this.series.length; i++){
 				var run = this.series[i];
 				if(!this.dirty && !run.dirty){
 					t.skip();
