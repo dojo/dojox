@@ -124,7 +124,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/has",
 					}
 					if(finalTheme.marker.outline){
 						var outline = dc.makeStroke(finalTheme.marker.outline);
-						outline.width = 2 * outline.width + finalTheme.marker.stroke.width;
+						outline.width = 2 * outline.width + (finalTheme.marker.stroke && finalTheme.marker.stroke.width || 0);
 						outlineMarkers[i] = s.createPath(path).setStroke(outline);
 						if(this.animate){
 							this._animateScatter(outlineMarkers[i], dim.height - offsets.b);

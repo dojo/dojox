@@ -175,7 +175,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/has",
 							if("mid" in v){
 								//	add the mid line.
 								inner.createLine({
-									x1: (finalTheme.series.stroke.width||1), x2: width - (finalTheme.series.stroke.width || 1),
+										x1: (finalTheme.series.stroke ? finalTheme.series.stroke.width || 1 : 1), x2: width - (finalTheme.series.stroke ? finalTheme.series.stroke.width || 1 : 1),
 									y1: y - mid, y2: y - mid
 								}).setStroke(doFill ? "white" : finalTheme.series.stroke);
 							}
