@@ -325,7 +325,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/has",
 						stroke = theme.series.stroke;
 						if(theme.series.outline){
 							outline = run.dyn.outline = dc.makeStroke(theme.series.outline);
-							outline.width = 2 * outline.width + stroke.width;
+							outline.width = 2 * outline.width + (stroke && stroke.width || 0);
 						}
 					}
 					if(this.opt.markers){
