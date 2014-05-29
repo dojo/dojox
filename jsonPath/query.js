@@ -86,7 +86,7 @@ define(["dojo/_base/kernel",
 					result.push(v);
 					paths.push(path);
 					P.walk(v, function(i){
-						if(typeof v[i] === 'object'){
+						if(typeof v[i] === "object"){
 							var oldPath = path;
 							path = path.concat(i);
 							desc(v[i]);
@@ -210,7 +210,7 @@ define(["dojo/_base/kernel",
 			},
 			"eval": function(x, v){
 				try {
-					return obj && v && eval(x.replace(/@/g, 'v'));
+					return obj && v && eval(x.replace(/@/g, "v"));
 				} catch (e){
 					throw new SyntaxError("jsonPath: " + e.message + ": " + x.replace(/@/g, "v").replace(/\^/g, "_a"));
 				}
