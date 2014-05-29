@@ -194,7 +194,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 				r: r
 			};
 
-			for (i = this.series.length - 1; i >= 0; i--){
+			for(var i = 0; i < this.series.length; i++){
 				serieEntry = this.series[i];
 				if(!this.dirty && !serieEntry.dirty){
 					t.skip();
