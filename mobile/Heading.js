@@ -4,12 +4,12 @@ define([
 	"dojo/_base/declare",
 	"dojo/_base/lang",
 	"dojo/_base/window",
-	"dojo/dom",
 	"dojo/dom-class",
 	"dojo/dom-construct",
 	"dojo/dom-style",
 	"dojo/dom-attr",
 	"dijit/registry",
+	"./common",
 	"dijit/_Contained",
 	"dijit/_Container",
 	"dijit/_WidgetBase",
@@ -18,7 +18,7 @@ define([
 	"./View",
 	"dojo/has",
 	"dojo/has!dojo-bidi?dojox/mobile/bidi/Heading"
-], function(array, connect, declare, lang, win, dom, domClass, domConstruct, domStyle, domAttr, registry, Contained, Container, WidgetBase, ProgressIndicator, ToolBarButton, View, has, BidiHeading){
+], function(array, connect, declare, lang, win, domClass, domConstruct, domStyle, domAttr, registry, common, Contained, Container, WidgetBase, ProgressIndicator, ToolBarButton, View, has, BidiHeading){
 
 	// module:
 	//		dojox/mobile/Heading
@@ -130,7 +130,7 @@ define([
 				domAttr.set(this.labelDivNode, "aria-level", "1");
 			}
 
-			dom.setSelectable(this.domNode, false);
+			common.setSelectable(this.domNode, false);
 		},
 
 		startup: function(){

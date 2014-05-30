@@ -7,13 +7,14 @@ define([
 	"dojo/dom-construct",
 	"dojo/touch",
 	"dojo/on",
+	"./common",
 	"dijit/_WidgetBase",
 	"dijit/form/_ButtonMixin",
 	"dijit/form/_FormWidgetMixin",
 	"dojo/has",
 	"dojo/has!dojo-bidi?dojox/mobile/bidi/Button"
 	],
-	function(array, declare, win, dom, domClass, domConstruct, touch, on, WidgetBase, ButtonMixin, FormWidgetMixin, has, BidiButton){
+	function(array, declare, win, dom, domClass, domConstruct, touch, on, common, WidgetBase, ButtonMixin, FormWidgetMixin, has, BidiButton){
 
 	var Button = declare(has("dojo-bidi") ? "dojox.mobile.NonBidiButton" : "dojox.mobile.Button", [WidgetBase, FormWidgetMixin, ButtonMixin], {
 		// summary:
@@ -99,7 +100,7 @@ define([
 				});
 			});
 
-			dom.setSelectable(this.focusNode, false);
+			common.setSelectable(this.focusNode, false);
 			this.connect(this.domNode, "onclick", "_onClick");
 		},
 

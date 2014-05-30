@@ -3,7 +3,6 @@ define([
 	"dojo/_base/declare",
 	"dojo/_base/lang",
 	"dojo/sniff",
-	"dojo/dom",
 	"dojo/dom-class",
 	"dojo/dom-construct",
 	"dojo/dom-attr",
@@ -13,9 +12,10 @@ define([
 	"./iconUtils",
 	"./lazyLoadUtils",
 	"./_css3",
+	"./common",
 	"require",
 	"dojo/has!dojo-bidi?dojox/mobile/bidi/Accordion"
-], function(array, declare, lang, has, dom, domClass, domConstruct, domAttr, Contained, Container, WidgetBase, iconUtils, lazyLoadUtils, css3, require, BidiAccordion){
+], function(array, declare, lang, has, domClass, domConstruct, domAttr, Contained, Container, WidgetBase, iconUtils, lazyLoadUtils, css3, common, require, BidiAccordion){
 
 	// module:
 	//		dojox/mobile/Accordion
@@ -85,7 +85,7 @@ define([
 
 		postCreate: function(){
 			this.connect(this.domNode, "onclick", "_onClick");
-			dom.setSelectable(this.domNode, false);
+			common.setSelectable(this.domNode, false);
 		},
 
 		inheritParams: function(){

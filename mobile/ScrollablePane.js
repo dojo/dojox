@@ -3,13 +3,13 @@ define([
 	"dojo/_base/declare",
 	"dojo/sniff",
 	"dojo/_base/window",
-	"dojo/dom",
 	"dojo/dom-construct",
 	"dojo/dom-style",
+	"./common",
 	"./_ScrollableMixin",
 	"./Pane",
 	"./_maskUtils"
-], function(array, declare, has, win, dom, domConstruct, domStyle, ScrollableMixin, Pane, maskUtils){
+], function(array, declare, has, win, domConstruct, domStyle, common, ScrollableMixin, Pane, maskUtils){
 
 	// module:
 	//		dojox/mobile/ScrollablePane
@@ -57,7 +57,7 @@ define([
 			}
 
 			this.domNode.appendChild(c);
-			dom.setSelectable(this.containerNode, false);
+			common.setSelectable(this.containerNode, false);
 		},
 
 		resize: function(){

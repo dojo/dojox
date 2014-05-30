@@ -8,13 +8,14 @@ define([
 	"dojo/dom-construct",
 	"dojo/dom-style",
 	"dojo/dom-attr",
+	"./common",
 	"./View",
 	"./iconUtils",
 	"./_ItemBase",
 	"./Badge",
 	"./sniff",
 	"dojo/has!dojo-bidi?dojox/mobile/bidi/TabBarButton"
-], function(connect, declare, event, lang, dom, domClass, domConstruct, domStyle, domAttr, View, iconUtils, ItemBase, Badge, has, BidiTabBarButton){
+], function(connect, declare, event, lang, dom, domClass, domConstruct, domStyle, domAttr, common, View, iconUtils, ItemBase, Badge, has, BidiTabBarButton){
 
 	// module:
 	//		dojox/mobile/TabBarButton
@@ -176,7 +177,7 @@ define([
 				// Not needed anymore (this code executes only once per life cycle):
 				delete this._pendingIcon; 
 			}
-			dom.setSelectable(this.domNode, false);
+			common.setSelectable(this.domNode, false);
 		},
 
 		onClose: function(e){
