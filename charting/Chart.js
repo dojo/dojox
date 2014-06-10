@@ -169,7 +169,8 @@ define(["../main", "dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "
 			this.titlePos  = kwArgs.titlePos;
 			this.titleFont = kwArgs.titleFont;
 			this.titleFontColor = kwArgs.titleFontColor;
-			this.titleAlign = kwArgs.titleAlign; // This can be middle, left, right, or edge (edge is left or right aligned with chart edge depending on bidi).
+			this.titleAlign = kwArgs.titleAlign; // This can be middle, left, right, or edge 
+															 // edge is left or right aligned with chart plot edge depending on bidi.
 			this.chartTitle = null;
 			this.htmlLabels = true;
 			if("htmlLabels" in kwArgs){
