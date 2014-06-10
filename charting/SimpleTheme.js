@@ -494,7 +494,8 @@ lang.mixin(SimpleTheme, {
 			titleGap:		20,
 			titlePos:		"top",
 			titleFont:      "normal normal bold 14pt Tahoma",	// chart title
-			titleFontColor: "#333"
+			titleFontColor: "#333",
+			titleAlign: "middle"
 		},
 		plotarea:{
 			stroke: null,
