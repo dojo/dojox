@@ -64,14 +64,14 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/has",
 				var old_vmin = stats.vmin, old_vmax = stats.vmax;
 				if(!("ymin" in run) || !("ymax" in run)){
 					arr.forEach(run.data, function(val, idx){
-						if(val !== null){
+						if(!this.isNullValue(val)){
 							var x = val.x || idx + 1;
 							stats.hmin = Math.min(stats.hmin, x);
 							stats.hmax = Math.max(stats.hmax, x);
 							stats.vmin = Math.min(stats.vmin, val.open, val.close, val.high, val.low);
 							stats.vmax = Math.max(stats.vmax, val.open, val.close, val.high, val.low);
 						}
-					});
+					}, this);
 				}
 				if("ymin" in run){ stats.vmin = Math.min(old_vmin, run.ymin); }
 				if("ymax" in run){ stats.vmax = Math.max(old_vmax, run.ymax); }
@@ -139,7 +139,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/has",
                 
 				for(var j = 0; j < run.data.length; ++j){
 					var v = run.data[j];
-					if(v !== null){
+					if(!this.isNullValue(v)){
 						var finalTheme = t.addMixin(theme, "candlestick", v, true);
 
 						//	calculate the points we need for OHLC
