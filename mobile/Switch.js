@@ -149,7 +149,7 @@ define([
 				domStyle.set(this.right.firstChild, "width", innWidth);
 				domStyle.set(this.knob, "left", innWidth);
 				if(this.value == "off"){
-					domStyle.set(this.inner, "left", "-" + innWidth);
+					domStyle.set(this.inner, "left", this.isLeftToRight()?("-" + innWidth):0);
 				}
 				this._hasMaskImage = false;
 				this._createMaskImage();

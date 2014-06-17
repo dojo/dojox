@@ -210,55 +210,6 @@ return {
 		});
 
 
-		lang.extend(Switch, {
-			_changeState: function(/*String*/state, /*Boolean*/anim){
-				// summary:
-				//		Function to toggle the switch state on the switch
-				// state:
-				//		The state to toggle, switch 'on' or 'off'
-				// anim:
-				//		Whether to use animation or not
-				// tags:
-				//		private
-				var on = (state === "on");
-
-				var pos;
-				if(!on){
-					pos = this.isLeftToRight() ? -domStyle.get(this.right,"left") : 0;
-				}else{
-					pos = this.isLeftToRight() ? 0 : -domStyle.get(this.right,"left");
-				}
-
-				this.left.style.display = "";
-				this.right.style.display = "";
-
-				var _this = this;
-				var f = function(){
-					domClass.remove(_this.domNode, on ? "mblSwitchOff" : "mblSwitchOn");
-					domClass.add(_this.domNode, on ? "mblSwitchOn" : "mblSwitchOff");
-					_this.left.style.display = on ? "" : "none";
-					_this.right.style.display = !on ? "" : "none";
-					domAttr.set(_this.domNode, "aria-checked", on ? "true" : "false"); //a11y
-				};
-
-				if(anim){
-					var a = fx.slideTo({
-						node: this.inner,
-						duration: 300,
-						left: pos,
-						onEnd: f
-					});
-					a.play();
-				}else{
-					if((this.isLeftToRight() ? on : !on) || pos){
-						this.inner.style.left = pos + "px";
-					}
-					f();
-				}
-			}
-		});
-
-
 		lang.extend(ProgressIndicator, {
 			scale: function(/*Number*/size){
 				if(has("ie")){
