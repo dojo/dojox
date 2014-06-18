@@ -418,6 +418,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/sniff", "dojo/_base/declare
 				var side;
 				var labelWidth = Math.ceil(Math.max(maxLabelSize.majLabelW, maxLabelSize.minLabelW)) + 1,
 					size = Math.ceil(Math.max(maxLabelSize.majLabelH, maxLabelSize.minLabelH)) + 1;
+				var firstTickOffset;
 				if(this.vertical){
 					side = leftBottom ? "l" : "r";
 					switch(rotation){
@@ -449,6 +450,9 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/sniff", "dojo/_base/declare
 							}
 							break;
 					}
+					firstTickOffset = (s.major.start - s.bounds.from) * s.bounds.scale;
+					offsets.t = Math.max(0, offsets.t - firstTickOffset);
+					offsets.b = Math.max(0, offsets.b - firstTickOffset);
 					if(position === "center"){
 					    offsets[side] = 0;
 					}
@@ -487,6 +491,9 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/sniff", "dojo/_base/declare
 							}
 							break;
 					}
+					firstTickOffset = (s.major.start - s.bounds.from) * s.bounds.scale;
+					offsets.l = Math.max(0, offsets.l - firstTickOffset);
+					offsets.r = Math.max(0, offsets.r - firstTickOffset);
 					if(position === "center"){
 					    offsets[side] = 0;
 					}
