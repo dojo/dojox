@@ -143,7 +143,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/has",
 						if(item !== null){
 							var finalTheme = getFinalTheme(run.data[i]),
 								outline = dc.makeStroke(finalTheme.series.outline);
-							outline.width = 2 * outline.width + theme.series.stroke.width;
+							outline.width = 2 * outline.width + (theme.series.stroke && theme.series.stroke.width || 0);
 							var shape = s.createCircle({
 								cx: item.x, cy: item.y, r: item.radius
 							}).setStroke(outline);

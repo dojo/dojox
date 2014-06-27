@@ -148,8 +148,8 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/has",
 
 						if(width >= 1){
 							var hl = {x1: width/2, x2: width/2, y1: y - high, y2: y - low},
-								op = {x1: 0, x2: ((width/2) + ((finalTheme.series.stroke.width||1)/2)), y1: y-open, y2: y-open},
-								cl = {x1: ((width/2) - ((finalTheme.series.stroke.width||1)/2)), x2: width, y1: y-close, y2: y-close};
+								op = {x1: 0, x2: ((width/2) + ((finalTheme.series.stroke ? finalTheme.series.stroke.width || 1 : 1)/2)), y1: y-open, y2: y-open},
+								cl = {x1: ((width/2) - ((finalTheme.series.stroke ? finalTheme.series.stroke.width || 1 : 1)/2)), x2: width, y1: y-close, y2: y-close};
 							var shape = s.createGroup();
 							shape.setTransform({dx: x, dy: 0});
 							var inner = shape.createGroup();
