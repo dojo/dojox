@@ -88,7 +88,15 @@ return declare("dojox.layout.ContentPane", ContentPane, {
 		};
 
 		this.inherited("_setContent", arguments);
-	}
+	},
 	// could put back _renderStyles by wrapping/aliasing dojox.html._ContentSetter.prototype._renderStyles
+
+	destroy: function () {
+		var setter = this._contentSetter;
+		if (setter) {
+			setter.teardown();
+		}
+		this.inherited(arguments);
+	}
 });
 });
