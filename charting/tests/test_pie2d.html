@@ -161,6 +161,24 @@ makeObjects = function(){
 		{y: 0, text: "Other", color: "white", fontColor: "black"}
 	]);
 	chart10.render();
+
+
+	var chart11 = new dojox.charting.Chart("test11");
+	chart11.setTheme(dojox.charting.themes.Claro);
+	chart11.addPlot("default", {
+		type: "Pie",
+		font: "normal normal bold 12pt Tahoma",
+		fontColor: "white",
+		radius: 80,
+		zeroDataMessage: "No Non-Zero Data"
+	});
+	chart11.addSeries("Series A", [
+		{y: 0, text: "Red", color: "red"},
+		{y: 0, text: "Green", color: "green"},
+		{y: 0, text: "Blue", color: "blue"},
+		{y: 0, text: "Other", color: "white", fontColor: "black"}
+	]);
+	chart11.render();
 };
 
 dojo.addOnLoad(makeObjects);
@@ -188,10 +206,12 @@ dojo.addOnLoad(makeObjects);
 <div id="test7" style="width: 200px; height: 200px;"></div>
 <p>8: Degenerated pie with 1 positive elements (out of 5).</p>
 <div id="test8" style="width: 200px; height: 200px;"></div>
-<p>8: Pie with no data.</p>
+<p>9: Pie with no data.</p>
 <div id="test9" style="width: 200px; height: 200px;"></div>
-<p>8: Pie with all data zero (no data).</p>
+<p>10: Pie with all data zero (no data).</p>
 <div id="test10" style="width: 200px; height: 200px;"></div>
+<p>11: Pie with all data zero (no data) and a user-provided message.</p>
+<div id="test11" style="width: 200px; height: 200px;"></div>
 <p>That's all Folks!</p>
 </body>
 </html>

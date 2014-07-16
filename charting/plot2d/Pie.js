@@ -104,7 +104,7 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare", "dojo/dom-g
 			startAngle:    0,			// start angle for slices in degrees
 			innerRadius:	0,			// inner radius in pixels
 			minWidth:      0,			// minimal width of degenerated slices
-			zeroDataMessage: "No Data",    // The message to display when there is no data.
+			zeroDataMessage: "",    // The message to display when there is no data, if provided by the user.
 		},
 		optionalParams: {
 			radius:		0,
@@ -180,7 +180,7 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare", "dojo/dom-g
 			//		An object of the form { width, height }.
 			//	offsets: Object
 			//		An object of the form { l, r, t, b }.
-			//	returns: dojox.charting.plot2d.Pie
+			//	returns: dojox/charting/plot2d/Pie
 			//		A reference to this plot for functional chaining.
 			if(!this.dirty){ return this; }
 			this.resetEvents();
@@ -239,12 +239,14 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare", "dojo/dom-g
 					// If we have a radius, fill it with the faded color.
 					ring.setFill(rColor);
 				}
-				this.renderLabel(s, circle.cx, circle.cy + size/3, this.opt.zeroDataMessage, {
-					series: {
-						font: taFont,
-						fontColor: taFontColor 
-					}
-				},	null, "middle");
+				if(this.opt.zeroDataMessage){
+					this.renderLabel(s, circle.cx, circle.cy + size/3, this.opt.zeroDataMessage, {
+						series: {
+							font: taFont,
+							fontColor: taFontColor 
+						}
+					},	null, "middle");
+				}
 				this.dyn = [];
 				arr.forEach(run, function(item, i){
 					this.dyn.push({
@@ -482,18 +484,10 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare", "dojo/dom-g
 									localStart + (j + 0.5) * delta, localStart + (j + 0.5) * delta));
 					}
 					var stroke = theme.series.stroke;
-					if(stroke && v.selected){
-						// We want to thicken the stroke on selected ones.
-						stroke.width = stroke.width ? stroke.width + 1 : 2;
-					}
 					this._createSlice(group, circle, r, x1, y1, x2, y2, localStart, step).setStroke(stroke);
 					shape = group;
 				}else{
 					var stroke = theme.series.stroke;
-					if(stroke && v.selected){
-						// We want to thicken the stroke on selected ones.
-						stroke.width = stroke.width ? stroke.width + 1 : 2;
-					}
 
 					shape = this._createSlice(s, circle, r, x1, y1, x2, y2, localStart, step).setStroke(stroke);
 
@@ -540,25 +534,6 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare", "dojo/dom-g
 					};
 					this._connectEvents(o);
 					eventSeries[i] = o;
-				}
-
-				if(v.selected){
-					var angle = (localStart + (step / 2)),
-						rotateTo0  = m.rotateAt(-angle, circle.cx, circle.cy),
-						rotateBack = m.rotateAt( angle, circle.cx, circle.cy);
-
-					var action = gfxFx.animateTransform({
-						shape:    shape,
-						duration: 400,
-						easing:   easing.linear,
-						transform: [
-							rotateBack,
-							{name: "translate", start: [0, 0], end: [TRANSLATE_SHIFT, 0]},
-							//{name: "scaleAt",   start: [1, circle.cx, circle.cy],  end: [1, circle.cx, circle.cy]},
-							rotateTo0
-						]
-					});
-					action.play();
 				}
 
 				localStart = localStart + step;
@@ -658,7 +633,7 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare", "dojo/dom-g
 							y = circle.cy + slice.labelR * Math.sin(slice.angle),
 							jointX = (slice.left) ? (leftColumn + labelWidth) : (rightColumn - labelWidth),
 							labelX = (slice.left) ? leftColumn : jointX + lrPadding,
-							newRadius = circle.r + (run[slice.index].selected ? TRANSLATE_SHIFT : 0),
+							newRadius = circle.r,
 							wiring = s.createPath().moveTo(circle.cx + newRadius * Math.cos(slice.angle),
 								circle.cy + newRadius * Math.sin(slice.angle));
 						if(Math.abs(slice.labelR * Math.cos(slice.angle)) < circle.r * 2 - labelWidth){
@@ -720,7 +695,7 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare", "dojo/dom-g
 				this._checkOrientation(this.group, dim, offsets);
 			}
 
-			return this;	//	dojox.charting.plot2d.Pie
+			return this;	//	dojox/charting/plot2d/Pie
 		},
 
 		_getProperLabelRadius: function(slices, labelHeight, minRadius){
