@@ -44,7 +44,7 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare","dojo/_base/C
 	//		The default theme (and structure) looks like so:
 	//	|	// all objects are structs used directly in dojox.gfx
 	//	|	chart:{
-	// |		margins: {l: 10, t: 10, r: 10, b: 10},
+	//	|		margins: {l: 10, t: 10, r: 10, b: 10},
 	//	|		stroke: null,
 	//	|		fill: "white",
 	//	|		pageStyle: null // suggested page style as an object suitable for dojo.style()
