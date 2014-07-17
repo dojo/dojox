@@ -49,7 +49,8 @@ define(["../main", "dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "
 		destroy = func.lambda("item.destroy()"),
 		makeClean = func.lambda("item.dirty = false"),
 		makeDirty = func.lambda("item.dirty = true"),
-		getName = func.lambda("item.name");
+		getName = func.lambda("item.name"),
+		defaultMargins = {l: 10, t: 10, r: 10, b: 10};
 
 	var Chart = declare(has("dojo-bidi")? "dojox.charting.NonBidiChart" : "dojox.charting.Chart", null, {
 		// summary:
@@ -160,7 +161,8 @@ define(["../main", "dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "
 
 			// initialize parameters
 			if(!kwArgs){ kwArgs = {}; }
-			this.margins   = kwArgs.margins ? kwArgs.margins : {l: 10, t: 10, r: 10, b: 10};
+			this.margins = kwArgs.margins || defaultMargins;
+			this._customMargins = !!kwArgs.margins;
 			this.stroke    = kwArgs.stroke;
 			this.fill      = kwArgs.fill;
 			this.delayInMs = kwArgs.delayInMs || 200;
@@ -227,6 +229,9 @@ define(["../main", "dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "
 			// returns: dojox/charting/Chart
 			//		A reference to the current chart for functional chaining.
 			this.theme = theme.clone();
+			if(!this._customMargins){
+				this.margins = this.theme.chart.margins || defaultMargins;
+			}
 			this.dirty = true;
 			return this;	//	dojox/charting/Chart
 		},
