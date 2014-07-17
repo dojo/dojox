@@ -134,12 +134,14 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare","dojo/_base/C
 	//	|		markerStroke:  {width: 1.5, color: "#333"},		// marker stroke
 	//	|		markerOutline: {width: 0.1, color: "#ccc"},		// marker outline
 	//	|		markerShadow: null,								// no marker shadow
-	//	|	}
+	//	|	},
+	//	|	pieInnerRadius: 33
 	//
 	// example:
 	//		Defining a new theme is pretty simple:
 	//	|	var Grasslands = new SimpleTheme({
-	//	|		colors: [ "#70803a", "#dde574", "#788062", "#b1cc5d", "#eff2c2" ]
+	//	|		colors: [ "#70803a", "#dde574", "#788062", "#b1cc5d", "#eff2c2" ],
+	//	|		pieInnerRadius: 15
 	//	|	});
 	//	|
 	//	|	myChart.setTheme(Grasslands);
@@ -205,7 +207,8 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare","dojo/_base/C
 			markerThemes: this.markerThemes,
 			// flags
 			noGradConv: this.noGradConv,
-			noRadialConv: this.noRadialConv
+			noRadialConv: this.noRadialConv,
+			pieInnerRadius: this.pieInnerRadius
 		});
 		// copy custom methods
 		arr.forEach(

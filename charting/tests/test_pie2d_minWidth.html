@@ -32,7 +32,7 @@ dojo.require("dojox.charting.themes.PlotKit.red");
 dojo.require("dojox.charting.themes.Adobebricks");
 dojo.require("dojox.charting.themes.Algae");
 
-makeObjects = function(){
+makeObjects = function () {
 	var chart1 = new dojox.charting.Chart("test1");
 	chart1.setTheme(dojox.charting.themes.PlotKit.blue);
 	chart1.addPlot("default", {
@@ -41,15 +41,16 @@ makeObjects = function(){
 		fontColor: "blue",
 		labelOffset: 5,
 		labelStyle: "columns",
-		labelWiring: "ccc"
+		labelWiring: "ccc",
+		minWidth: 10 // 10 pixes min
 	});
-	chart1.addSeries("Series A", [4, 4]);
+	chart1.addSeries("Series A", [{y: 0.004, text: 0.004}, {y: 0.002, text:  0.002}, {y: 400000, text: "400,000"}, {y: 0.004, text: 0.004}]);
 	chart1.render();
-	
+
 	var legend = new dojox.charting.widget.Legend({
-        	            chart: chart1,
-							horizontal:false
-                	}, "legend");
+		chart: chart1,
+		horizontal: false
+	}, "legend");
 };
 
 dojo.addOnLoad(makeObjects);
@@ -58,7 +59,7 @@ dojo.addOnLoad(makeObjects);
 </head>
 <body>
 <h1>Pie</h1>
-<p>Pie with 2 50% slices</p>
+<p>Pie with 2 slices with one MUCH larger than all the others, but minwidth keeps it from not showing the small ones.</p>
 <div id="test1" style="width: 300px; height: 300px;"></div>
 <div id="legend"></div>
 <p>That's all Folks!</p>
