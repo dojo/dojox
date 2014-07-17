@@ -133,7 +133,7 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare","dojo/_base/C
 	//	|		markerSymbol:  "m-3,0 c0,-4 6,-4 6,0 m-6,0 c0,4 6,4 6,0",	// marker symbol
 	//	|		markerStroke:  {width: 1.5, color: "#333"},		// marker stroke
 	//	|		markerOutline: {width: 0.1, color: "#ccc"},		// marker outline
-	//	|		markerShadow: null,								// no marker shadow
+	//	|		markerShadow: null								// no marker shadow
 	//	|	},
 	//	|	pieInnerRadius: 33
 	//
