@@ -309,6 +309,10 @@ define(["dojo/_base/kernel","dojo/_base/lang","./_base", "dojo/_base/html","dojo
 				svg = svg.replace(/\bdojoGfx\w*\s*=\s*(['"])\w*\1/g, "");
 				svg = svg.replace(/\b__gfxObject__\s*=\s*(['"])\w*\1/g, "");
 				svg = svg.replace(/[=]([^"']+?)(\s|>)/g,'="$1"$2');
+				
+				// Undefined strokes (IE 8 seralization weirdness) should be removed to  
+				// allow default.  'undefined' is not a valid value. 
+				svg = svg.replace(/\bstroke-opacity\w*\s*=\s*(['"])undefined\1/g, ""); 				
 			}
 			return svg;  //Cleaned SVG text.
 		}
