@@ -896,7 +896,21 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/_base
 		_closePath: function(){
 			this.lastControl.type = "";	// no control point after this primitive
 			return ["x"];
-		}
+		},
+		_getRealBBox: function(){ 
+			//	summary: 
+			//		returns an array of four points or null 
+			//		This is called by setFill, which actually creates the path, so we want to avoid 
+			//		duping the path repeatedly in the shape by clearing the path before re-add. 
+			this._confirmSegmented(); 
+			if(this.tbbox){ 
+				return this.tbbox;	// Array 
+			} 
+			if(typeof this.shape.path == "string"){ 
+				this.shape.path = ""; 
+			} 
+			return this.inherited(arguments); 
+		} 		
 	});
 	vml.Path.nodeType = "shape";
 
