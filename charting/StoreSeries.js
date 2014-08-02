@@ -44,7 +44,7 @@ define(["dojo/_base/array", "dojo/_base/declare", "dojo/_base/Deferred"],
 	
 			this.data = [];
 
-			this._initialRendering = false;
+			this._initialRendering = true;
 			this.fetch();
 		},
 	
