@@ -316,21 +316,24 @@ return declare("dojox.widget.Standby", [_Widget, _TemplatedMixin],{
 				}else{
 					//We need to search up the chain to see if there
 					//are any parent zIndexs to overlay.
-					var cNode = target.parentNode;
-					var oldZi = -100000;
-					while(cNode && cNode !== baseWindow.body()){
-						zi = domStyle.get(cNode, "zIndex");
-						if(!zi || zi === "auto"){
-							cNode = cNode.parentNode;
-						}else{
-							var newZi = parseInt(zi, 10);
-							if(oldZi < newZi){
-								oldZi = newZi;
-								ziUl = newZi + 1;
-								ziIn = newZi + 2;
+					var cNode = target;
+					if(cNode && cNode !== baseWindow.body() && cNode !== baseWindow.doc){
+						cNode = target.parentNode;
+						var oldZi = -100000;
+						while(cNode && cNode !== baseWindow.body()){
+							zi = domStyle.get(cNode, "zIndex");
+							if(!zi || zi === "auto"){
+								cNode = cNode.parentNode;
+							}else{
+								var newZi = parseInt(zi, 10);
+								if(oldZi < newZi){
+									oldZi = newZi;
+									ziUl = newZi + 1;
+									ziIn = newZi + 2;
+								}
+								// Keep looking until we run out, we want the highest zIndex.
+								cNode = cNode.parentNode;
 							}
-							// Keep looking until we run out, we want the highest zIndex.
-							cNode = cNode.parentNode;
 						}
 					}
 				}
