@@ -8,7 +8,7 @@ define(["dojo/_base/lang","../_base", "dojo/_base/config", "dojo/aspect"
 
 		// summary:
 		//	plugin to have analyitcs return the base info dojo collects
-		this.addData = lang.hitch(dxa, "addData", "consoleMessages");
+		consoleMessages.addData = lang.hitch(dxa, "addData", "consoleMessages");
 
 		var lvls = config["consoleLogFuncs"] || ["error", "warn", "info", "rlog"];
 		if(!console){
@@ -17,9 +17,9 @@ define(["dojo/_base/lang","../_base", "dojo/_base/config", "dojo/aspect"
 
 		for(var i=0; i < lvls.length; i++){
 			if(console[lvls[i]]){
-				aspect.after(console, lvls[i], lang.hitch(this, "addData", lvls[i]),true);
+				aspect.after(console, lvls[i], lang.hitch(consoleMessages, "addData", lvls[i]),true);
 			}else{
-				console[lvls[i]] = lang.hitch(this, "addData", lvls[i]);
+				console[lvls[i]] = lang.hitch(consoleMessages, "addData", lvls[i]);
 			}
 		}
 	return consoleMessages;
