@@ -10,6 +10,9 @@ define(['doh', '../../digests/_base', '../../digests/SHA384', "../../digests/_sh
 
 	var base64="ywB1P0WjXou1oD1pmsZQBycsMqsO3tFjGotgWkP/W+2AhgcroefMI1i67KE0yCWn";
 	var hex="cb00753f45a35e8bb5a03d699ac65007272c32ab0eded1631a8b605a43ff5bed8086072ba1e7cc2358baeca134c825a7";
+	var hmacKey="Jefe";
+	var hmacData="what do ya want for nothing?";
+	var hmacHex="af45d2e376484031617f78d2b58a6b1b9c7ef464f5a01b47e42ec3736322445e8e2240ca5e69e2c78b3239ecfab21649";
 
 	console.log("Vector:", vector.map(function(item){
 		return ((item >> 16) & 0xffff).toString(16) + (item & 0xffff).toString(16);
@@ -31,6 +34,9 @@ define(['doh', '../../digests/_base', '../../digests/SHA384', "../../digests/_sh
 		},
 		function testHexCompute(t){
 			t.assertEqual(hex, SHA384(message, ded.outputTypes.Hex));
+		},
+		function testHmacCompute(t){
+			t.assertEqual(hmacHex, SHA384.hmac(hmacData, hmacKey, ded.outputTypes.Hex));
 		}
 	]);
 });
