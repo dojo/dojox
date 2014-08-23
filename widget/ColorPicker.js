@@ -229,7 +229,7 @@ define([
 		},
 		
 		_setTimer: function(/* dojo/dnd/Mover */mover){
-			if(mover.node != this.cursorNode){ return; }
+			if(mover.node != this.cursorNode && mover.node != this.hueCursorNode){ return; }
 			// FIXME: should I assume this? focus on mouse down so on mouse up
 			FocusManager.focus(mover.node);
 			DOM.setSelectable(this.domNode,false);
