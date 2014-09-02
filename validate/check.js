@@ -282,7 +282,7 @@ validate.check = function(/*HTMLFormElement*/form, /*Object*/profile){
 			// if constraintResponse is false (backwards compatibility with last version) or if property isValid is false, return the invalid field name and/or the constraintResponse message
 			if(!constraintResponse){
 				invalid[invalid.length] = elem.name;
-			}else if(!constraintResponse.isValid){
+			}else if(typeof constraintResponse !== "boolean" && !constraintResponse.isValid){
 				invalid[invalid.length] = { field : elem.name, message : constraintResponse.message };
 			}
 		}
