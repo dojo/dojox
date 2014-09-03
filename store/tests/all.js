@@ -1,6 +1,5 @@
 define([
 	'./LocalStorage',
 	'./transaction',
-	'./priority',
-	'./OData'
+	'./priority'
 ], function(){});
