@@ -379,7 +379,7 @@ define(["../..", "dojo/_base/lang", "dojo/_base/array", "dojo/date", "dojo/i18n"
 						if(locale.match('^he(?:-.+)?$')){
 							s = (l>2) ? '\\S+ ?\\S+' : '\\S{1,4}';
 						}else{
-							s = (l>2) ?  '\\S+ ?\\S+' : p2+'[1-9]|1[0-2]';
+							s = (l>2) ?  '\\S+ ?\\S+' : p2+'[1-9]|1[0-3]';
 						}
 						break;
 					case 'd':
