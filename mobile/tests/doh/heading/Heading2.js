@@ -1,4 +1,6 @@
 dojo.addOnLoad(function(){
+	var HEADING_CSS = dojo.isIE < 10 ? 'mblHeading' : 'mblHeading unselectable';
+	var HEADING_CSS_CENTER = dojo.isIE < 10 ? 'mblHeading mblHeadingCenterTitle' : 'mblHeading unselectable mblHeadingCenterTitle';
 	doh.register("dojox.mobile.test.doh.Heading2", [
 		{
 			name: "Heading Verification",
@@ -7,22 +9,22 @@ dojo.addOnLoad(function(){
 				var d = new doh.Deferred();
 				setTimeout(d.getTestCallback(function(){
 					var demoWidget = dijit.byId("dojox_mobile_Heading_0");
-					doh.assertTrue('mblHeading mblHeadingCenterTitle' == demoWidget.domNode.className || 'mblHeading' == demoWidget.domNode.className);
+					doh.assertTrue(HEADING_CSS_CENTER == demoWidget.domNode.className || HEADING_CSS == demoWidget.domNode.className);
 					doh.assertEqual('General', demoWidget.domNode.childNodes[1].childNodes[0].nodeValue);
 					doh.assertEqual('Settings', demoWidget.backButton.labelNode.innerHTML);
 
 					demoWidget = dijit.byId("dojox_mobile_Heading_1");
-					doh.assertTrue('mblHeading mblHeadingCenterTitle' == demoWidget.domNode.className || 'mblHeading' == demoWidget.domNode.className);
+					doh.assertTrue(HEADING_CSS_CENTER == demoWidget.domNode.className || HEADING_CSS == demoWidget.domNode.className);
 					doh.assertEqual('Test', demoWidget.domNode.childNodes[1].childNodes[0].nodeValue);
 					doh.assertEqual('Go To', demoWidget.backButton.labelNode.innerHTML);
 
 					demoWidget = dijit.byId("dojox_mobile_Heading_2");
-					doh.assertTrue('mblHeading mblHeadingCenterTitle' == demoWidget.domNode.className || 'mblHeading' == demoWidget.domNode.className);
+					doh.assertTrue(HEADING_CSS_CENTER == demoWidget.domNode.className || HEADING_CSS == demoWidget.domNode.className);
 					doh.assertEqual('Test', demoWidget.domNode.childNodes[1].childNodes[0].nodeValue);
 					doh.assertEqual('Settings', demoWidget.backButton.labelNode.innerHTML);
 
 					demoWidget = dijit.byId("dojox_mobile_Heading_3");
-					doh.assertTrue('mblHeading mblHeadingCenterTitle' == demoWidget.domNode.className || 'mblHeading' == demoWidget.domNode.className);
+					doh.assertTrue(HEADING_CSS_CENTER == demoWidget.domNode.className || HEADING_CSS == demoWidget.domNode.className);
 					doh.assertEqual('Very Very Long Title May Not Be Displayed in the Narrow Space', demoWidget.domNode.childNodes[1].childNodes[0].nodeValue);
 					doh.assertEqual('3', demoWidget.domNode.childNodes.length);
 					doh.assertEqual('Long Button', demoWidget.backButton.labelNode.innerHTML);

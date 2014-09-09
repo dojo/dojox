@@ -26,6 +26,7 @@
 	var WIDGET_HEIGHT1 = "44";
 	var WIDGET_OFFSETHEIGHT1 = 44;
 	var WIDGET_OFFSETHEIGHT1_WINTHEME = 42;
+	var WIDGET_OFFSETHEIGHT1_IOS7THEME = 43;
 	var WIDGET_OFFSETHEIGHT2 = 90;
 
 	require([
@@ -67,10 +68,16 @@
 		};
 
 		function _assertCorrectHeading(widget, titleText, backText, backClassName){
+			var height = WIDGET_OFFSETHEIGHT1;
 			runner.assertNotEqual(null, widget, "IconItem: Did not instantiate.");
 			runner.assertTrue(domClass.contains(widget.domNode, WIDGET_CLASSNAME1), WIDGET_CLASSNAME1 + " id=" + widget.domNode.id);
 	//		runner.assertTrue(domClass.contains(widget.domNode, WIDGET_CLASSNAME2), WIDGET_CLASSNAME2 + " id=" + widget.domNode.id);
-			runner.assertEqual(domClass.contains(win.doc.documentElement, "windows_theme") ? WIDGET_OFFSETHEIGHT1_WINTHEME : WIDGET_OFFSETHEIGHT1, widget.domNode.offsetHeight, "style.height id=" + widget.domNode.id);
+			if (domClass.contains(win.doc.documentElement, "windows_theme")) {
+				height = WIDGET_OFFSETHEIGHT1_WINTHEME;
+			} else if (domClass.contains(win.doc.documentElement, "ios7_theme")) {
+				height = WIDGET_OFFSETHEIGHT1_IOS7THEME;
+			}
+			runner.assertEqual(height, widget.domNode.offsetHeight, "style.height id=" + widget.domNode.id);
 			runner.assertEqual(WIDGET_SPANTITLE_CLASSNAME, widget.labelNode.className);
 			runner.assertEqual(WIDGET_DIVTITLE_CLASSNAME, widget.labelDivNode.className);
 			runner.assertEqual(titleText, widget.labelNode.innerHTML, "widget.labelNode.innerHTML");
