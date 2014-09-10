@@ -49,7 +49,13 @@ var _BusyButtonMixin = declare("dojox.form._BusyButtonMixin", null, {
 		// summary:
 		//		sets state from idle to busy
 		this.isBusy = true;
-		this.set("disabled", true);
+
+		// Webkit does not submit the form if the submit button is disable when clicked, so disable the button later
+		if(this._disableHandle)
+			this._disableHandle.remove();
+		this._disableHandle = this.defer(function() {
+			this.set("disabled", true);
+		});
 
 		this.setLabel(this.busyLabel, this.timeout);
 	},
@@ -58,6 +64,8 @@ var _BusyButtonMixin = declare("dojox.form._BusyButtonMixin", null, {
 		// summary:
 		//		if no timeout is set or for other reason the user can put the button back
 		//		to being idle
+		if(this._disableHandle)
+			this._disableHandle.remove();
 		this.set("disabled", false);
 		this.isBusy = false;
 		this.setLabel(this._label);
