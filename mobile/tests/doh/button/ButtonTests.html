@@ -14,6 +14,9 @@
 	var BUTTON_WIDTH_WINTHEME = 64; // IE10
 	var BUTTON_HEIGHT = 27;
 	var BUTTON_HEIGHT_WINTHEME = 28; // IE10
+	// actual width/height should differ from the expected one by at most this
+	// percentage of difference
+	var DIFF_PERCENTAGE = 15; // at most 15% of difference
 
 	require([
 		"dojo/sniff",
@@ -31,32 +34,40 @@
 	], function(has, domClass, domConst, ready, win, registry, runner, Button){
 		function _createButtonDeclaratively(buttonId) {
 			return registry.byId(buttonId);
-		}
+		};
 		function _createButtonProgrammatically(placeHolderId){
 			var button = new Button({label:BUTTON_LABEL});
 			runner.assertNotEqual(null, button, placeHolderId);
 			domConst.place(button.domNode, placeHolderId, "replace");
 			button.startup();
 			return button;
-		}
+		};
 		function _createButtonProgrammaticallyWithSourceNodeReference(buttonId){
 			return new Button({label:BUTTON_LABEL}, buttonId);
-		}
+		};
 		function _assertCorrectButton(width, height, button){
 			if(width < 0){
 				return; // Skip for IE<9 (a negative width is the convention we use for skipping) 
 			}
 			runner.assertNotEqual(null, button);
-			runner.assertEqual(width, button.domNode.clientWidth, "width id=" + button.domNode.id);
-			runner.assertEqual(height, button.domNode.clientHeight, "height id=" + button.domNode.id);
+			var widthDiffPercentage = Math.abs((width - button.domNode.clientWidth) / width) * 100;
+			var heightDiffPercentage = Math.abs((height - button.domNode.clientHeight) / width) * 100;
+			runner.assertTrue(widthDiffPercentage < DIFF_PERCENTAGE, 
+				"width got " + button.domNode.clientWidth + " expected: near " + width + 
+				" with less than " + DIFF_PERCENTAGE + "%" + " of difference; id=" + button.domNode.id);
+			runner.assertTrue(heightDiffPercentage < DIFF_PERCENTAGE,
+				"height got " + button.domNode.clientHeight + " expected: near " + height + 
+				" with less than " + DIFF_PERCENTAGE + "%" + " of difference; id=" + button.domNode.id);
 		}
 		function _showView2(){
 			var view1 = registry.byId("view1");
 			view1.performTransition("view2", 1, "none");
-		}
+		};
 		ready(function(){
-			var buttonWidth = domClass.contains(win.doc.documentElement, "windows_theme") ? BUTTON_WIDTH_WINTHEME : has("ff") ? BUTTON_WIDTH_FF : BUTTON_WIDTH;
-			var buttonHeight = domClass.contains(win.doc.documentElement, "windows_theme") ? BUTTON_HEIGHT_WINTHEME : BUTTON_HEIGHT;
+			var buttonWidth = domClass.contains(win.doc.documentElement, "windows_theme") ?
+				BUTTON_WIDTH_WINTHEME : has("ff") ? BUTTON_WIDTH_FF : BUTTON_WIDTH;
+			var buttonHeight = domClass.contains(win.doc.documentElement, "windows_theme") ?
+				BUTTON_HEIGHT_WINTHEME : BUTTON_HEIGHT;
 			// Skip the checks for IE<9
 			if(has("ie") < 9){
 				buttonWidth = -1; // negative value as convention for skipping tests
@@ -85,7 +96,7 @@
 			]);
 			runner.run();
 		});
-	})
+	});
 </script>
 </head>
 <body>
