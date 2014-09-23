@@ -1872,7 +1872,7 @@ tests.register("dojox.date.tests.islamic.Date",
 			        [1202,1,15,1],
 			        [1202,1,18,4],
 			        [1202,1,19,5],
-			        [1202,1,20,5]
+			        [1202,1,20,6]
 								
 				];
 				dojo.forEach(dateTable, function(d, i) {
