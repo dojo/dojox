@@ -151,8 +151,8 @@ if( isset($_FILES[$fieldName]) || isset($_FILES['uploadedfileFlash'])){
 
 	$_post = $htmldata;
 	$htmldata = array();
-	
-	
+
+
 
 	while(isset($_FILES['uploadedfile'.$cnt])){
 	  trace("IFrame multiple POST");
@@ -170,7 +170,7 @@ if( isset($_FILES[$fieldName]) || isset($_FILES['uploadedfileFlash'])){
 			}
 			trace("file: " . $file );
 
-			$_post['file'] = $file;
+			$_post['file'] = $download_path . $name;
 			$_post['name'] = $name;
 			$_post['width'] = $width;
 			$_post['height'] = $height;
@@ -181,7 +181,7 @@ if( isset($_FILES[$fieldName]) || isset($_FILES['uploadedfileFlash'])){
 			trace($_post['additionalParams'], true);
 
 			$htmldata[$cnt] = $_post;
-			
+
 			foreach($postdata as $key => $value){
 				//$htmldata[ $key ] = $value;
 			}
@@ -243,7 +243,7 @@ if( isset($_FILES[$fieldName]) || isset($_FILES['uploadedfileFlash'])){
 			}
 			trace("file: " . $file ." size: " . $width." ".$height);
 
-			$_post['file'] = $file;
+			$_post['file'] = $download_path . $name;
 			$_post['name'] = $name;
 			$_post['width'] = $width;
 			$_post['height'] = $height;
@@ -288,7 +288,7 @@ if( isset($_FILES[$fieldName]) || isset($_FILES['uploadedfileFlash'])){
 	}
 	trace("file: " . $file );
 
-	$htmldata['file'] = $file;
+	$htmldata['file'] = $download_path . $name;
 	$htmldata['name'] = $name;
 	$htmldata['width'] = $width;
 	$htmldata['height'] = $height;
@@ -296,7 +296,7 @@ if( isset($_FILES[$fieldName]) || isset($_FILES['uploadedfileFlash'])){
 	$htmldata['uploadType'] = $uploadType;
 	$htmldata['size'] = filesize($file);
 	$htmldata['additionalParams'] = $postdata;
-	
+
 	$data = $json->encode($htmldata);
 	trace($data);
 	print $data;
