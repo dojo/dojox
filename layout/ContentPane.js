@@ -99,7 +99,7 @@ return declare("dojox.layout.ContentPane", ContentPane, {
 	destroy: function () {
 		var setter = this._contentSetter;
 		if (setter) {
-			setter.teardown();
+			setter.tearDown();
 		}
 		this.inherited(arguments);
 	}
