@@ -65,7 +65,9 @@ function createNode(source, nodes, copy, target, dropIndex){
 	//console.log("createNode ::: ", source, nodes, copy, target, dropIndex);
 	if(target){
 		var widget = _createWidget(nodes);
-		dojox.mdnd.areaManager().addDragItem(target, widget.domNode, dropIndex);
+		require(['dojox.mdnd.AreaManager'], function(am) {
+			am.areaManager().addDragItem(target, widget.domNode, dropIndex);
+		})
 	}
 };
 /*

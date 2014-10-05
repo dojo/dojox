@@ -4,7 +4,7 @@ define([
 	"dojo/_base/array",
 	"dojo/dom-geometry",
 	"dojox/mdnd/AreaManager"
-],function(dojo, declare, array, geom){
+],function(dojo, declare, array, geom, AreaManager){
 	var ddm = declare("dojox.mdnd.dropMode.DefaultDropMode", null, {
 		// summary:
 		//		Enabled a type of calcul for Dnd.
@@ -333,6 +333,6 @@ define([
 	//------------
 	//Singleton
 	//------------
-	dojox.mdnd.areaManager()._dropMode = new dojox.mdnd.dropMode.DefaultDropMode();
+	AreaManager.areaManager()._dropMode = new ddm();
 	return ddm;
 });

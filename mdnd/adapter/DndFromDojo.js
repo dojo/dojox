@@ -47,7 +47,7 @@ define(["dojo/_base/kernel",
 		_subscribeHandler: null,
 	
 		constructor: function(){
-			this._areaManager = dojox.mdnd.areaManager();
+			this._areaManager = AreaManager.areaManager();
 			this._dojoManager = Manager.manager();
 			this._currentArea = null;
 			this._moveHandler = null;

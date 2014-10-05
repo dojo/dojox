@@ -25,7 +25,7 @@
 			dojo.require("dojox.mdnd.adapter.DndFromDojo");
 			
 			dojo.ready(function(){
-				var m = dojox.mdnd.areaManager();
+				var m = dojox.mdnd.AreaManager.areaManager();
 				m.areaClass = "dndArea";
 				m.dragHandleClass = "dragHandle";
 				dojox.mdnd.adapter.dndToDojo().register(dojo.byId("dojoSource"), "", true);
@@ -37,7 +37,7 @@
 			
 			function dropInDojox(source, nodes, copy, target, dropIndex){
 				if(target){
-					dojox.mdnd.areaManager().addDragItem(target, nodes[0], dropIndex, true);
+					dojox.mdnd.AreaManager.areaManager().addDragItem(target, nodes[0], dropIndex, true);
 				}
 			}
 		</script>

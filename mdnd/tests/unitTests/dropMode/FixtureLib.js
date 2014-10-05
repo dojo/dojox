@@ -1,5 +1,5 @@
 dojo.provide("dojox.mdnd.tests.unitTests.dropMode.FixtureLib");
-
+dojo.require("dojox.mdnd.AreaManager");
 dojo.declare("getDragPointFixture", null, {
 
 	constructor:function(testName, test) {
@@ -11,7 +11,7 @@ dojo.declare("getDragPointFixture", null, {
 		this.coords = {'x':25,'y':50};
 		this.size = {'w':100,'h':100};
 		this.mousePosition = {'x':50, 'y':75};
-		this.dropMode = dojox.mdnd.areaManager()._dropMode;
+		this.dropMode = dojox.mdnd.AreaManager.areaManager()._dropMode;
 	},
 
 	tearDown:function() {
@@ -30,7 +30,7 @@ dojo.declare("AreaFixture", null, {
 	},
 
 	setUp:function() {
-		this.dropMode = dojox.mdnd.areaManager()._dropMode;
+		this.dropMode = dojox.mdnd.AreaManager.areaManager()._dropMode;
 		this.array = [];
 		
 		//fake area object
@@ -58,7 +58,7 @@ dojo.declare("ItemFixture", null, {
 	},
 						
 	setUp:function() {
-		this.dropMode = dojox.mdnd.areaManager()._dropMode;
+		this.dropMode = dojox.mdnd.AreaManager.areaManager()._dropMode;
 		this.objet = {};
 		// fake moveable object
 		this.moveableA = {'node': dojo.byId("itemA")};
