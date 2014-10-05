@@ -91,7 +91,7 @@ var _BusyButtonMixin = declare("dojox.form._BusyButtonMixin", null, {
 		while(this.containerNode.firstChild){
 			this.containerNode.removeChild(this.containerNode.firstChild);
 		}
-		this.containerNode.innerHTML = this.label;
+		this.containerNode.appendChild(document.createTextNode(this.label));
 
 		if(this.showLabel == false && !domAttr.get(this.domNode, "title")){
 			this.titleNode.title=lang.trim(this.containerNode.innerText || this.containerNode.textContent || '');
