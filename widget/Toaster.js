@@ -251,7 +251,7 @@ define([
 			style.clip = "rect(0px, " + nodeSize.w + "px, " + nodeSize.h + "px, 0px)";
 			if(has("ie")){
 				if(!this.bgIframe){
-					this.clipNode.id = registry.getUniqueId("dojox_widget_Toaster_clipNode");
+					this.clipNode.id || (this.clipNode.id = registry.getUniqueId("dojox_widget_Toaster_clipNode"));
 					this.bgIframe = new BackgroundIframe(this.clipNode);
 				}
 				var iframe = this.bgIframe.iframe;
