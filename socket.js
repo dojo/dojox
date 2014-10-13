@@ -118,7 +118,7 @@ Socket.LongPoll = function(/*dojo.__XhrArgs*/ args){
 	//		| dojox.socket.LongPoll.add();
 	//		| var socket = dojox.socket({url:"/comet"});
 
-var cancelled = false,
+	var cancelled = false,
 		first = true,
 		timeoutId,
 		connections = [];
