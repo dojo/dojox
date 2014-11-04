@@ -38,11 +38,10 @@ var Socket = function(/*dojo.__XhrArgs*/ argsOrUrl){
 	//		|    ...
 	//		| });
 	//		You can also use the Reconnect module:
-	//		| dojo.require("dojox.socket");
-	//		| dojo.require("dojox.socket.Reconnect");
-	//		| var socket = dojox.socket({url:"/comet"});
-	//		| // add auto-reconnect support
-	//		| socket = dojox.socket.Reconnect(socket);
+	//		| require["dojox/socket", "dojox/socket/Reconnect"], function(dxSocket, reconnect){
+	//		|    var socket = dxSocket({url:"/comet"});
+	//		|    // add auto-reconnect support
+	//		|    socket = reconnect(socket);
 	if(typeof argsOrUrl == "string"){
 		argsOrUrl = {url: argsOrUrl};
 	}
