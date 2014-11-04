@@ -53,9 +53,11 @@ var Socket = function(/*dojo.__XhrArgs*/ argsOrUrl){
 Socket.WebSocket = function(args, fallback){
 	// summary:
 	//		A wrapper for WebSocket, than handles standard args and relative URLs
-	var baseURI = window.location.href;
-	if(typeof baseURI !== "string"){
-		baseURI = (document.URL || ((document.location) ? document.location.href : document.baseURI));
+	var baseURI = document.baseURI || window.location.href;
+	if(!baseURI){
+		// Try some other fallbacks in case baseURI was not defined by the above.  If all else fails, 
+		// just use a dummy/give up, there is problem.
+		baseURI = (document.URL || ((document.location) ? document.location.href : "http://"));
 	}
 	var ws = new WebSocket(new dBaseUrl(baseURI.replace(/^http/i,'ws'), args.url));
 	ws.on = function(type, listener){
