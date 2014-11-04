@@ -25,18 +25,17 @@ var Socket = function(/*dojo.__XhrArgs*/ argsOrUrl){
 	// returns:
 	//		An object that implements the WebSocket API
 	// example:
-	//		| dojo.require("dojox.socket");
-	//		| var socket = dojox.socket({"url://comet-server/comet");
-	//		| // we could also add auto-reconnect support
-	//		| // now we can connect to standard HTML5 WebSocket-style events
-	//		| dojo.connect(socket, "onmessage", function(event){
-	//		|    var message = event.data;
-	//		|    // do something with the message
-	//		| });
-	//		| // send something
-	//		| socket.send("hi there");
-	//		| whenDone(function(){
-	//		|   socket.close();
+	//		| require(["dojox/socket", "dojo/aspect"], function(socket, aspect) {
+	//		|    var sock = socket({"url://comet-server/comet");
+	//		|    // we could also add auto-reconnect support
+	//		|    // now we can connect to standard HTML5 WebSocket-style events
+	//		|    aspect.after(socket, "onmessage", function(event){
+	//		|       var message = event.data;
+	//		|       // do something with the message
+	//		|    });
+	//		|    // send something
+	//		|    sock.send("hi there");
+	//		|    ...
 	//		| });
 	//		You can also use the Reconnect module:
 	//		| dojo.require("dojox.socket");
