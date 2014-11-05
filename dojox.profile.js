@@ -17,7 +17,6 @@ var profile = (function(){
 			"secure",
 			"data/(demos|ItemExplorer|StoreExplorer|restListener)",
 			"drawing/plugins/drawing/Silverlight",
-			"editor/plugins/(ResizeTableColumn|SpellCheck)",
 			"embed/(IE)",
 			"flash/_base",
 			"help",
