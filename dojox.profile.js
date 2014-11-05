@@ -28,7 +28,6 @@ var profile = (function(){
 			"mobile/app/",
 			"rails",
 			"robot",
-			"socket/Reconnect",
 			"storage",
 			"sql",
 			"widget/(AnalogGauge|AutoRotator|BarGauge|Calendar|CalendarFx|CalendarViews|DataPresentation|DocTester|DynamicTooltip|FeedPortlet|FilePicker|FisheyeList|gauge|Iterator|Loader|Pager|Portlet|RollingList|Rotator|rotator|SortList|UpgradeBar)",
