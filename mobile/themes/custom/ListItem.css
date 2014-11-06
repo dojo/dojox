@@ -1,17 +1,16 @@
 @import url("../common/domButtons/DomButtonGrayArrow.css");
-
 @import url("../common/domButtons/DomButtonDarkBlueCheck.css");
 /* dojox.mobile.ListItem */
 .mblListItem {
   position: relative;
   overflow: hidden;
   /* for focus frame */
-
   padding: 0 8px;
   height: 43px;
   list-style-type: none;
   line-height: 43px;
   -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+  outline-color: rgba(255, 255, 255, 0);
   border-bottom: 1px solid #c0c0c0;
   background-color: #ffffff;
   color: #000000;

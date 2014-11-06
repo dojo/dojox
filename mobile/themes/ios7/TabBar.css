@@ -23,6 +23,7 @@
   overflow: hidden;
   cursor: pointer;
   -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+  outline-color: rgba(255, 255, 255, 0);
   position: relative;
   list-style-type: none;
   float: left;

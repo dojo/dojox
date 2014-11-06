@@ -8,6 +8,7 @@
   line-height: 29px;
   cursor: pointer;
   -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+  outline-color: rgba(255, 255, 255, 0);
   border: 2px solid #ffffff;
   border-radius: 0;
   margin-top: 8px;

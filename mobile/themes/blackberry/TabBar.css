@@ -24,6 +24,7 @@
   overflow: hidden;
   cursor: pointer;
   -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+  outline-color: rgba(255, 255, 255, 0);
   position: relative;
   list-style-type: none;
   float: left;
@@ -138,7 +139,6 @@
   color: #000000;
   background-color: #ced3ce;
   /* TODO: to compat */
-
   background-image: -webkit-gradient(linear, left top, left bottom, from(#f7fbf7), to(#cecfd6), color-stop(0.5, #ced3ce));
   background-image: linear-gradient(to bottom, #f7fbf7 0%, #ced3ce 50%, #cecfd6 100%);
 }

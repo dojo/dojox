@@ -24,6 +24,7 @@
   overflow: hidden;
   cursor: pointer;
   -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+  outline-color: rgba(255, 255, 255, 0);
   position: relative;
   list-style-type: none;
   float: left;
@@ -138,7 +139,6 @@
   color: #000000;
   background-color: #c6c6c6;
   /* TODO: to compat */
-
   background-image: -webkit-gradient(linear, left top, left bottom, from(#dfdfdf), to(#a6a6a6));
   background-image: linear-gradient(to bottom, #dfdfdf 0%, #a6a6a6 100%);
 }
@@ -151,7 +151,6 @@
   color: #ffffff;
   background-color: #3578b1;
   /* TODO: to compat */
-
   background-image: -webkit-gradient(linear, left top, left bottom, from(#313031), to(#959595), color-stop(0.5, #5a555a), color-stop(0.5, #616161));
   background-image: linear-gradient(to bottom, #313031 0%, #5a555a 50%, #616161 50%, #959595 100%);
 }
