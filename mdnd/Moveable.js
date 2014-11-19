@@ -1,16 +1,15 @@
 define([
-	"dojo/_base/kernel",
 	"dojo/_base/declare",
 	"dojo/_base/array",
 	"dojo/_base/connect",
 	"dojo/_base/event",
 	"dojo/_base/sniff",
+	"dojo/touch",
 	"dojo/dom",
 	"dojo/dom-geometry",
 	"dojo/dom-style",
-	"dojo/_base/window",
-	"dojox/mdnd/AutoScroll"
-],function(dojo, declare, array, connect, event, sniff, dom, geom, domStyle, baseWin, AutoScroll){
+	"./AutoScroll"
+],function(declare, array, connect, event, sniff, touch, dom, geom, domStyle, AutoScroll){
 	return declare(
 		"dojox.mdnd.Moveable",
 		null,
@@ -51,7 +50,7 @@ define([
 			if(!this.handle){ this.handle = this.node; }
 			this.skip = params.skip;
 			this.events = [
-				connect.connect(this.handle, "onmousedown", this, "onMouseDown")
+				connect.connect(this.handle, touch.press, this, "onMouseDown")
 			];
 			if(AutoScroll.autoScroll){
 				this.autoScroll = AutoScroll.autoScroll;
@@ -96,8 +95,8 @@ define([
 				this.autoScroll.setAutoScrollNode(this.node);
 				this.autoScroll.setAutoScrollMaxPage();
 			}
-			this.events.push(connect.connect(this.d, "onmouseup", this, "onMouseUp"));
-			this.events.push(connect.connect(this.d, "onmousemove", this, "onFirstMove"));
+			this.events.push(connect.connect(this.d, touch.release, this, "onMouseUp"));
+			this.events.push(connect.connect(this.d, touch.move, this, "onFirstMove"));
 			this._selectStart = connect.connect(dojo.body(), "onselectstart", event.stop);
 			this._firstX = e.clientX;
 			this._firstY = e.clientY;
@@ -124,7 +123,7 @@ define([
 				connect.disconnect(this.events.pop());
 				domStyle.set(this.node, "width", geom.getContentBox(this.node).w + "px");
 				this.initOffsetDrag(e);
-				this.events.push(connect.connect(this.d, "onmousemove", this, "onMove"));
+				this.events.push(connect.connect(this.d, touch.move, this, "onMove"));
 			}
 		},
 		
