@@ -271,7 +271,7 @@ return dojox.json.ref = {
 				return getUniqueId();
 			}
 			return str;
-        }
+		}
 		function serialize(it,path,_indentStr){
 			if(typeof it == 'object' && it){
 				if ((path === 'undefined') && (typeof idAttribute != 'undefined')) {
