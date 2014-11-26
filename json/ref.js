@@ -264,21 +264,19 @@ return dojox.json.ref = {
 		idPrefix = idPrefix || ''; // the id prefix for this context
 		var paths={};
 		var generated = {};
-		function getRandomId() {
-                    	var str = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-                        	var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-                        	return v.toString(16);
-                    	});
-                    	if (generated.hasOwnProperty(str)) {
-                        	return getRandomId();
-                    	}
-                    	return str;
-                }
+		var uniqueIdCount = 0;
+		function getUniqueId() {
+			var str = (uniqueIdCount++).toString();
+			if (generated.hasOwnProperty(str)) {
+				return getUniqueId();
+			}
+			return str;
+        }
 		function serialize(it,path,_indentStr){
 			if(typeof it == 'object' && it){
 				if ((path === 'undefined') && (typeof idAttribute != 'undefined')) {
-                                	path = getRandomId();
-        			}
+					path = getUniqueId();
+				}
 				var value;
 				if(it instanceof Date){ // properly serialize dates
 					return '"' + stamp.toISOString(it,{zulu:true}) + '"';
@@ -326,8 +324,8 @@ return dojox.json.ref = {
 	
 				var output = [];
 				if ((typeof idAttribute != 'undefined') && (typeof it[idAttribute] === 'undefined')) {
-                        		output.push(newLine + nextIndent + djson._escapeString(idAttribute) + ":" + sep + djson.toJson(it.__id));
-                    		}	
+					output.push(newLine + nextIndent + djson._escapeString(idAttribute) + ":" + sep + djson.toJson(it.__id));
+				}	
 				for(var i in it){
 					if(it.hasOwnProperty(i)){
 						var keyStr;
