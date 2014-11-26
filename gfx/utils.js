@@ -85,6 +85,9 @@ define(["dojo/_base/kernel","dojo/_base/lang","./_base", "dojo/_base/html","dojo
 				return arr.map(object, lang.hitch(null, gu.deserialize, parent));	// Array
 			}
 			var shape = ("shape" in object) ? parent.createShape(object.shape) : parent.createGroup();
+                        if (null === shape && "path" in  object.shape) {
+                            shape = parent.createPath(object.shape.path);
+                        }
 			if("transform" in object){
 				shape.setTransform(object.transform);
 			}
