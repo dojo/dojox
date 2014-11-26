@@ -1,4 +1,6 @@
-define(['./jsonPath/query'],function(){
+define(["dojo/_base/kernel", 
+	"./jsonPath/query"
+],function(kernel, query){
 	/*=====
 	 return {
 	 // summary:
@@ -6,4 +8,6 @@ define(['./jsonPath/query'],function(){
 	 //		this module.
 	 };
 	 =====*/
+	kernel.deprecated("dojox/jsonPath: The dojox/jsonPath root module is deprecated, use dojox/jsonPath/query", "", "2.0");
+	return {query: query};
 });

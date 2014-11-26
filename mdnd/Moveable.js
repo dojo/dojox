@@ -8,8 +8,9 @@ define([
 	"dojo/dom",
 	"dojo/dom-geometry",
 	"dojo/dom-style",
-	"dojo/_base/window"
-],function(dojo, declare, array, connect, event, sniff, dom, geom, domStyle){
+	"dojo/_base/window",
+	"dojox/mdnd/AutoScroll"
+],function(dojo, declare, array, connect, event, sniff, dom, geom, domStyle, baseWin, AutoScroll){
 	return declare(
 		"dojox.mdnd.Moveable",
 		null,
@@ -52,8 +53,8 @@ define([
 			this.events = [
 				connect.connect(this.handle, "onmousedown", this, "onMouseDown")
 			];
-			if(dojox.mdnd.autoScroll){
-				this.autoScroll = dojox.mdnd.autoScroll;
+			if(AutoScroll.autoScroll){
+				this.autoScroll = AutoScroll.autoScroll;
 			}
 			
 		},

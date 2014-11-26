@@ -134,7 +134,7 @@ define([
 			var arred = [];
 			if(isObject){
 				for(var key in items){
-					arred.push(items[key]);
+					arred.push([key, items[key]]);
 				}
 			}else{
 				arred = items;

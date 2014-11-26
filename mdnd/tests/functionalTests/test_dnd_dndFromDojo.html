@@ -25,7 +25,7 @@
 			dojo.require("dojox.mdnd.adapter.DndFromDojo");
 			dojo.require("dijit._base.sniff");
 			var init = function(){
-				var m = dojox.mdnd.areaManager();
+				var m = dojox.mdnd.AreaManager.areaManager();
 				m.areaClass = "dndArea";
 				m.dragHandleClass = "dragHandle";
 				m.init();
@@ -38,7 +38,7 @@
 			function createNode(source, nodes, copy, target, dropIndex){
 				var node = dojo.byId("item").cloneNode(true);
 				if(target){
-					dojox.mdnd.areaManager().addDragItem(target, node, dropIndex);
+					dojox.mdnd.AreaManager.areaManager().addDragItem(target, node, dropIndex);
 				}
 			}
 		</script>

@@ -23,7 +23,7 @@ define([
 	"dojo/_base/NodeList",
 	"dojox/mdnd/AreaManager", "dojox/mdnd/DropIndicator",
 	"dojox/mdnd/dropMode/OverDropMode","dojox/mdnd/AutoScroll"
-],function(dojo, template, declare, query, has, domClass, domStyle, geom, domConstruct, domAttr, array, lang, events, keys, topic, registry, focus, baseFocus, _WidgetBase, _TemplatedMixin, _LayoutWidget, NodeList){
+],function(dojo, template, declare, query, has, domClass, domStyle, geom, domConstruct, domAttr, array, lang, events, keys, topic, registry, focus, baseFocus, _WidgetBase, _TemplatedMixin, _LayoutWidget, NodeList, AreaManager){
 
 	var gcl = declare(
 		"dojox.layout.GridContainerLite",
@@ -122,7 +122,7 @@ define([
 			this.subscribe("/dojox/mdnd/drop", "resizeChildAfterDrop");
 			this.subscribe("/dojox/mdnd/drag/start", "resizeChildAfterDragStart");
 
-			this._dragManager = dojox.mdnd.areaManager();
+			this._dragManager = AreaManager.areaManager();
 			// console.info("autorefresh ::: ", this.autoRefresh);
 			this._dragManager.autoRefresh = this.autoRefresh;
 
@@ -376,7 +376,7 @@ define([
 			//		List all zones and insert child into columns.
 
 			//console.log("dojox.layout.GridContainerLite ::: _organizeChildren");
-			var children = dojox.layout.GridContainerLite.superclass.getChildren.call(this);
+			var children = this.constructor.superclass.getChildren.call(this);
 			var numZones = this.nbZones,
 				numPerZone = Math.floor(children.length / numZones),
 				mod = children.length % numZones,
@@ -408,7 +408,7 @@ define([
 			//		Organize children by column property of widget.
 
 			//console.log("dojox.layout.GridContainerLite ::: _organizeChildrenManually");
-			var children = dojox.layout.GridContainerLite.superclass.getChildren.call(this),
+			var children = this.constructor.superclass.getChildren.call(this),
 				length = children.length,
 				child;
 			for(var i = 0; i < length; i++){
@@ -485,7 +485,7 @@ define([
 
 			//console.log("dojox.layout.GridContainerLite ::: addChild");
 			child.domNode.id = child.id;
-			dojox.layout.GridContainerLite.superclass.addChild.call(this, child, 0);
+			this.constructor.superclass.addChild.call(this, child, 0);
 			if(column < 0 || column === undefined){ column = 0; }
 			if(p <= 0){ p = 0; }
 			try{
