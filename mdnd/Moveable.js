@@ -208,6 +208,8 @@ define([
 			}
 			connect.disconnect(this.events.pop());
 			connect.disconnect(this.events.pop());
+			connect.disconnect(this._selectStart);
+			this._selectStart = null;
 		},
 		
 		onDragStart: function(/*DOMNode*/node, /*Object*/coords, /*Object*/size){
