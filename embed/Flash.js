@@ -1,13 +1,14 @@
 define([
-    	"dojo/_base/lang",
-    	"dojo/_base/unload",
-    	"dojo/_base/array",
-    	"dojo/query",
-    	"dojo/has",
-    	"dojo/dom",
-    	"dojo/on",
-    	"dojo/window"
-        ], function(lang,unload,array,query,has,dom,on,win) {
+	"dojo/_base/lang",
+	"dojo/_base/unload",
+	"dojo/_base/array",
+	"dojo/query",
+	"dojo/has",
+	"dojo/dom",
+	"dojo/on",
+	"dojo/window",
+	"dojo/string"
+], function(lang,unload,array,query,has,dom,on,win,stringUtil) {
 
 	// module:
 	//		dojox/embed/Flash
@@ -56,21 +57,21 @@ define([
 			if(kwArgs.vars){
 				var a = [];
 				for(p in kwArgs.vars){
-					a.push(p + '=' + kwArgs.vars[p]);
+					a.push(encodeURIComponent(p) + '=' + encodeURIComponent(kwArgs.vars[p]));
 				}
 				kwArgs.params.FlashVars = a.join("&");
 				delete kwArgs.vars;
 			}
-			var s = '<object id="' + kwArgs.id + '" '
+			var s = '<object id="' + stringUtil.escape(String(kwArgs.id)) + '" '
 				+ 'classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" '
-				+ 'width="' + kwArgs.width + '" '
-				+ 'height="' + kwArgs.height + '"'
-				+ ((kwArgs.style)?' style="' + kwArgs.style + '"':'')
+				+ 'width="' + stringUtil.escape(String(kwArgs.width)) + '" '
+				+ 'height="' + stringUtil.escape(String(kwArgs.height)) + '"'
+				+ ((kwArgs.style)?' style="' + stringUtil.escape(String(kwArgs.style)) + '"':'')
 				+ '>'
-				+ '<param name="movie" value="' + path + '" />';
+				+ '<param name="movie" value="' + stringUtil.escape(String(path)) + '" />';
 			if(kwArgs.params){
 				for(p in kwArgs.params){
-					s += '<param name="' + p + '" value="' + kwArgs.params[p] + '" />';
+					s += '<param name="' + stringUtil.escape(p) + '" value="' + stringUtil.escape(String(kwArgs.params[p])) + '" />';
 				}
 			}
 			s += '</object>';
@@ -124,22 +125,22 @@ define([
 			if(kwArgs.vars){
 				var a = [];
 				for(p in kwArgs.vars){
-					a.push(p + '=' + kwArgs.vars[p]);
+					a.push(encodeURIComponent(p) + '=' + encodeURIComponent(kwArgs.vars[p]));
 				}
 				kwArgs.params.flashVars = a.join("&");
 				delete kwArgs.vars;
 			}
 			var s = '<embed type="application/x-shockwave-flash" '
-				+ 'src="' + path + '" '
-				+ 'id="' + kwArgs.id + '" '
-				+ 'width="' + kwArgs.width + '" '
-				+ 'height="' + kwArgs.height + '"'
-				+ ((kwArgs.style)?' style="' + kwArgs.style + '" ':'')
+				+ 'src="' + stringUtil.escape(String(path)) + '" '
+				+ 'id="' + stringUtil.escape(String(kwArgs.id)) + '" '
+				+ 'width="' + stringUtil.escape(String(kwArgs.width)) + '" '
+				+ 'height="' + stringUtil.escape(String(kwArgs.height)) + '"'
+				+ ((kwArgs.style)?' style="' + stringUtil.escape(String(kwArgs.style)) + '" ':'')
 
 				+ 'pluginspage="' + window.location.protocol + '//www.adobe.com/go/getflashplayer" ';
 			if(kwArgs.params){
 				for(p in kwArgs.params){
-					s += ' ' + p + '="' + kwArgs.params[p] + '"';
+					s += ' ' + stringUtil.escape(p) + '="' + stringUtil.escape(String(kwArgs.params[p])) + '"';
 				}
 			}
 			s += ' />';
