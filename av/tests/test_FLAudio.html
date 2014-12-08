@@ -35,14 +35,12 @@
 			mixer.load({url:"../tests/audio/FuzzWah.mp3", id:"Wah"});
 
 			var c = dojo.connect;
-			c(mixer, "onPlayStatus", function(obj){
-				console.info("media info >> ", obj);
-				console.log("----------Test getPosition:", mixer.getPosition({id:"Ola"}))
+			c(mixer, "onPlayStatus", function(ar){
 				var txt = "";
 				dojo.forEach(ar, function(obj){
 					txt += obj.status+" "+obj.id+" "+obj.time+"\n";
 				});
-				dojo.byId("tf").value += txt;
+				dojo.byId("ta").value += txt;
 			});
 			c(mixer, "onLoadStatus", function(ar){
 				var txt = "";
