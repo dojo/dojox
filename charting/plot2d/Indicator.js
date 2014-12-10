@@ -1,6 +1,6 @@
 define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./CartesianBase", "./_PlotEvents", "./common",
-    "../axis2d/common", "dojox/gfx", "dojox/lang/utils", "dojox/gfx/fx", "dojo/has"],
-	function(lang, array, declare, CartesianBase, _PlotEvents, dcpc, dcac, gfx, du, fx, has){
+    "../axis2d/common", "dojox/gfx", "dojox/lang/utils", "dojox/gfx/fx", "dojo/has", "dojo/sniff"],
+	function(lang, array, declare, CartesianBase, _PlotEvents, dcpc, dcac, gfx, du, fx, has, sniff){
 
 	// all the code below should be removed when http://trac.dojotoolkit.org/ticket/11299 will be available
 	var getBoundingBox = function(shape){
@@ -13,7 +13,28 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./Cartesia
 			// try/catch the FF native getBBox error. cheaper than walking up in the DOM
 			// hierarchy to check the conditions (bench show /10 )
 			try {
-				return lang.mixin({}, s.rawNode.getBBox());
+				var bBox = s.rawNode.getBBox();
+				
+				// workaround for https://bugzilla.mozilla.org/show_bug.cgi?id=1109860
+				if (has('dojo-bidi') && sniff('ff')) {
+					var clone = s.rawNode.cloneNode(),
+						bidiPattern = /[\u200E\u202A\u202C\u200f\u202B]/g;
+
+					while (clone.lastChild) {
+						clone.removeChild(clone.lastChild);
+					}
+
+					clone.appendChild(document.createTextNode(t.replace(bidiPattern, '')));
+					clone.setAttribute('style', 'visibility: hidden');
+					s.rawNode.parentNode.appendChild(clone);
+					bBox = clone.getBBox();
+					clone.parentNode.removeChild(clone);
+				}
+				else {
+					bBox = s.rawNode.getBBox();
+				}
+
+				return lang.mixin({}, bBox);
 			}catch (e){
 				return null;
 			}
