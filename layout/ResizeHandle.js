@@ -1,7 +1,7 @@
 define(["dojo/_base/kernel","dojo/_base/lang","dojo/_base/connect","dojo/_base/array","dojo/_base/event",
 	"dojo/_base/fx","dojo/_base/window","dojo/fx","dojo/dom","dojo/dom-class",
 	"dojo/dom-geometry","dojo/dom-style","dojo/_base/declare", "dojo/touch",
-	"dijit/_base/manager","dijit/_Widget","dijit/_TemplatedMixin",
+	"dijit/_base/manager","dijit/_Widget","dijit/_TemplatedMixin"
 	], function (
 	kernel, lang, connect, arrayUtil, eventUtil, fxBase, windowBase, fxUtil, 
 	domUtil, domClass, domGeometry, domStyle, declare, touch, manager, Widget, TemplatedMixin) {
