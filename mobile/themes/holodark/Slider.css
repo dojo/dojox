@@ -61,6 +61,7 @@
   height: 100%;
   background-color: transparent;
   -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+  outline-color: rgba(255, 255, 255, 0);
 }
 .mblSlider {
   border-style: none;

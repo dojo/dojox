@@ -6,7 +6,6 @@
 }
 .mblDomButtonGrayPlus > div {
   /* horiz line */
-
   position: absolute;
   top: 12px;
   left: 6px;
@@ -20,7 +19,6 @@
 }
 .mblDomButtonGrayPlus > div > div {
   /* vert line */
-
   position: absolute;
   top: -8px;
   left: 7px;

@@ -9,6 +9,7 @@
   overflow: hidden;
   text-align: left;
   -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+  outline-color: rgba(255, 255, 255, 0);
 }
 .mblListItem .mblSwitch {
   position: absolute;

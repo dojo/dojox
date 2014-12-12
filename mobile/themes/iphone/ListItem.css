@@ -1,17 +1,16 @@
 @import url("../common/domButtons/DomButtonGrayArrow.css");
-
 @import url("../common/domButtons/DomButtonDarkBlueCheck.css");
 /* dojox.mobile.ListItem */
 .mblListItem {
   position: relative;
   overflow: hidden;
   /* for focus frame */
-
   padding: 0 8px;
   height: 43px;
   list-style-type: none;
   line-height: 43px;
   -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+  outline-color: rgba(255, 255, 255, 0);
   border-bottom: 1px solid #adaaad;
   font-weight: bold;
   color: black;
@@ -122,6 +121,5 @@
 }
 .dj_ios6 .mblListItem {
   /* enables hardware acc. to avoid flickering issues - see #16956 */
-
   -webkit-perspective: 1000;
 }

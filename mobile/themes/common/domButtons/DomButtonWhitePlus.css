@@ -6,7 +6,6 @@
 }
 .mblDomButtonWhitePlus > div {
   /* horiz line */
-
   position: absolute;
   top: 12px;
   left: 8px;
@@ -19,7 +18,6 @@
 }
 .mblDomButtonWhitePlus > div > div {
   /* vert line */
-
   position: absolute;
   top: -6px;
   left: 5px;
