@@ -217,7 +217,8 @@ define([
 
 		_setValueAttr: function(/*Array or Number*/ value, /*Boolean, optional*/ priorityChange, /*Boolean, optional*/ isMaxVal){
 			// we pass an array, when we move the slider with the bar
-			var actValue = this.value;
+			var actValue = lang.clone(this.value);
+
 			if(!lang.isArray(value)){
 				if(isMaxVal){
 					if(this._isReversed()){
@@ -237,15 +238,16 @@ define([
 			}
 			// we have to reset this values. don't know the reason for that
 			this._lastValueReported = "";
-			this.valueNode.value = this.value = value = actValue;
+			this.valueNode.value = value = actValue;
 
-			this.value.sort(this._isReversed() ? sortReversed : sortForward);
+			actValue.sort(this._isReversed() ? sortReversed : sortForward);
 
 			this.sliderHandle.setAttribute("aria-valuenow", actValue[0]);
 			this.sliderHandleMax.setAttribute("aria-valuenow", actValue[1]);
 			
 			// not calling the _setValueAttr-function of Slider, but the super-super-class (needed for the onchange-event!)
 			FormValueWidget.prototype._setValueAttr.apply(this, arguments);
+
 			this._printSliderBar(priorityChange, isMaxVal);
 		},
 
