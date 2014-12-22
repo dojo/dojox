@@ -16,9 +16,10 @@ define([
 		//		|    var socket = dxSocket({url:"/comet"});
 		//		|    // add auto-reconnect support
 		//		|    socket = reconnect(socket);
+		options = options || {};
+
 		var reconnectTime = options.reconnectTime || 10000;
 		var checkForOpen, newSocket;
-		options = options || {};
 
 		aspect.after(socket, "onclose", function(event){
 			clearTimeout(checkForOpen);
