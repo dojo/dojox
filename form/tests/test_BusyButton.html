@@ -21,6 +21,8 @@
 			data-dojo-config="parseOnLoad: true, isDebug: true"></script>
 		<script type="text/javascript">
 			dojo.require("dojox.form.BusyButton");
+			dojo.require("dojox.form.BusyComboButton");
+			dojo.require("dojox.form.BusyDropDownButton");
 			dojo.require("dojo.parser");
 			dojo.require("dijit.Menu");
 			dojo.addOnLoad(function(){
@@ -47,7 +49,7 @@
 		<h1 class="testTitle">Test: dojox.form.BusyButton</h1>
 		<p>
 		Normal busy button, 5000 miliseconds timeout<br />
-		<button dojoType="dojox.form.BusyButton" timeout="5000" >
+		<button dojoType="dojox/form/BusyButton" timeout="5000" >
 			<script type="dojo/connect" data-dojo-event="onClick" data-dojo-args="evt">
 				console.log("dojox.form.BusyButton clicked");
 			</script>
@@ -57,19 +59,19 @@
 	
 		<p>
 		Busy button, no timeout, custom label<br />
-		<button dojoType="dojox.form.BusyButton" id="button_noTimeout" busyLabel="Charging creditcard..." >Pay now</button> <button dojoType="dijit.form.Button" id="buttonCancel">Cancel button</button>
+		<button dojoType="dojox/form/BusyButton" id="button_noTimeout" busyLabel="Charging creditcard..." >Pay now</button> <button dojoType="dijit.form.Button" id="buttonCancel">Cancel button</button>
 		</p>
 		<p>
 		Busy button, no initial timeout, changing state and setting timeout on button press<br />
-		<button dojoType="dojox.form.BusyButton" id="button_noTimeout2" busyLabel="Canceling payment...">Cancel payment</button> <button dojoType="dijit.form.Button" id="buttonCancel2">Change state</button>
+		<button dojoType="dojox/form/BusyButton" id="button_noTimeout2" busyLabel="Canceling payment...">Cancel payment</button> <button dojoType="dijit.form.Button" id="buttonCancel2">Change state</button>
 		</p>
 		<p>
 		Busy button, initially busy with 10 sec timeout<br />
-		<button dojoType="dojox.form.BusyButton" id="button_noTimeout3" isBusy="true" busyLabel="Please read the agreement..." timeout="10000">I Agree</button>
+		<button dojoType="dojox/form/BusyButton" id="button_noTimeout3" isBusy="true" busyLabel="Please read the agreement..." timeout="10000">I Agree</button>
 		</p>
 		<p>
 		Combo and DropDown Buttons (5000 ms timeout)<br />
-			<button dojoType="dojox.form.BusyComboButton" id="comboBusy" timeout="5000" optionsTitle='save options' onClick='console.log("clicked combo save")'
+			<button dojoType="dojox/form/BusyComboButton" id="comboBusy" timeout="5000" optionsTitle='save options' onClick='console.log("clicked combo save")'
 					iconClass="plusIcon">
 				<span>Create</span>
 				<div dojoType="dijit.Menu" id="createMenu" style="display: none;">
@@ -79,7 +81,7 @@
 						onClick="makeBusy('comboBusy'); console.log('not actually saving anything, just a test!')">Create from template</div>
 				</div>
 			</button>
-			<button dojoType="dojox.form.BusyDropDownButton" id="dropDownBusy" timeout="5000" iconClass="noteIcon">
+			<button dojoType="dojox/form/BusyDropDownButton" id="dropDownBusy" timeout="5000" iconClass="noteIcon">
 				<span>Edit<b>!</b></span>
 				<div dojoType="dijit.Menu">
 					<div dojoType="dijit.MenuItem"  iconClass="dijitEditorIcon dijitEditorIconCut"
