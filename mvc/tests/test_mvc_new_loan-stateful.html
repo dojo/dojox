@@ -28,6 +28,7 @@
 				"dojox/charting/Chart",
 				"dojox/charting/themes/PlotKit/blue",
 				"dojox/mvc/at",
+				"dojox/mvc/computed",
 				"dojo/Stateful",
 				"dojox/mvc/StatefulSeries",
 				"dijit/form/TextBox",
@@ -40,7 +41,7 @@
 				"dojox/mvc/ModelRefController",
 				"dojox/mvc/Output",
 				"dojo/domReady!"
-			], function(array, declare, lang, dxhr, parser, Chart, blue, at, Stateful, StatefulSeries){
+			], function(array, declare, lang, dxhr, parser, Chart, blue, at, computed, Stateful, StatefulSeries){
 
 				lookup = function(model){
 					if(isNaN(model.get("Zip"))){ return; }
@@ -61,29 +62,6 @@
 					});	
 				};
 
-				function getNewValue(model, prop, name, value){
-					return prop == name ? value : model.get(prop);
-				}
-
-				function recomputeTotalAndPercentages(model, name, value){
-					var mortgage = getNewValue(model, "Mortgage", name, value);
-					var taxes = getNewValue(model, "Taxes", name, value);
-					var otherHousing = getNewValue(model, "OtherHousing", name, value);
-					var totalHousing = mortgage + taxes + otherHousing;
-			
-					var baseIncome = getNewValue(model, "BaseIncome", name, value);
-					var bonusIncome = getNewValue(model, "BonusIncome", name, value);
-					var totalIncome = baseIncome + bonusIncome;
-			
-					var housingPercentage = Math.round(totalHousing / totalIncome * 100);
-			
-					model.set("HousingPercent", housingPercentage);
-					model.set("TotalHousing", totalHousing);
-					model.set("TotalIncome", totalIncome);
-			
-					model[name] = value;
-				}
-
 				loanModel = new Stateful({
 					Name: "John Doe",
 					Street: "",
@@ -92,30 +70,32 @@
 					State: "",
 					Zip: "",
 					Country: "US",
-					TotalIncome: 0,
 					BaseIncome: 50000,
 					BonusIncome: 10000,
-					TotalHousing: 2700,
-					HousingPercent: 5,
 					Mortgage: 1000,
 					Taxes: 500,
-					OtherHousing: 1200,
-					_MortgageSetter: function(value){
-						recomputeTotalAndPercentages(this, "Mortgage", value);
-					},
-					_TaxesSetter: function(value){
-						recomputeTotalAndPercentages(this, "Taxes", value);
-					},
-					_OtherHousingSetter: function(value){
-						recomputeTotalAndPercentages(this, "OtherHousing", value);
-					},
-					_BaseIncomeSetter: function(value){
-						recomputeTotalAndPercentages(this, "BaseIncome", value);
-					},
-					_BonusIncomeSetter: function(value){
-						recomputeTotalAndPercentages(this, "BonusIncome", value);
-					}
+					OtherHousing: 1200
 				});
+
+				computed(loanModel, "TotalIncome", function(BaseIncome, BonusIncome){
+					return BaseIncome + BonusIncome;
+				}, at(loanModel, "BaseIncome"), at(loanModel, "BonusIncome"));
+
+				computed(loanModel, "TotalHousing", function(Mortgage, Taxes, OtherHousing){
+					return Mortgage + Taxes + OtherHousing;
+				}, at(loanModel, "Mortgage"), at(loanModel, "Taxes"), at(loanModel, "OtherHousing"));
+
+				computed(loanModel, "HousingPercent", function(TotalHousing, TotalIncome){
+					return Math.round(TotalHousing / TotalIncome * 100);
+				}, at(loanModel, "TotalHousing"), at(loanModel, "TotalIncome"));
+
+				computed(loanModel, "HousingPercentError", function(HousingPercent){
+					return HousingPercent > 33 ? "Housing should be less than 1/3 total expenses!" : "";
+				}, at(loanModel, "HousingPercent"));
+
+				computed(loanModel, "HousingPercentDisabled", function(HousingPercent){
+					return HousingPercent <= 0 ? "disabled" : null;
+				}, at(loanModel, "HousingPercent"));
 
 				parser.parse();
 

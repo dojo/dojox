@@ -2,6 +2,7 @@ define([
 	"doh/runner",
 	"dojo/_base/sniff",
 	"./doh/atEquals",
+	"./doh/computed",
 	"./doh/equals",
 	"./doh/wildcard",
 	"./doh/_Controller",
