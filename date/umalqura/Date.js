@@ -495,7 +495,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/date", "../islamic/Date"]
 
 	getDaysDiff: function (date1, date2) {
         // summary:
-        // This function returns the number of days between two different dates.
+        //      This function returns the number of days between two different dates.
         var ONE_DAY = 1000 * 60 * 60 * 24;
         var diff = Math.abs(date1.getTime() - date2.getTime());
         return Math.round(diff / ONE_DAY);
