@@ -176,7 +176,7 @@ define([
 			function observeJsonRest(){
 				// Test we can observe results from a store that DOES defer results.
 				var store = new JsonRest({
-					target: require.toUrl("dojo/tests/store/"),
+					target: require.toUrl("dojox/mvc/tests/_data/"),
 					put: function(o){ var dfd = new Deferred(); setTimeout(function(){ dfd.resolve(o.id); }, 500); return dfd.promise; }, // Intead of making REST call, just return the ID asynchronously
 					remove: function(){ var dfd = new Deferred(); setTimeout(function(){ dfd.resolve(true); }, 500); return dfd.promise; } // Intead of making REST call, just return true asynchronously
 				});
