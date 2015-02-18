@@ -29,7 +29,7 @@ define(["dojo/_base/lang"], function(lang) {
 				regexp.push(map[i][0]);
 			}
 			regexp.push("]");
-			regexp = new RegExp(regexp.join(""), "g");
+			regexp = new RegExp(regexp.join(""), "gi");
 			map._encCache = {
 				mapper: mapper,
 				regexp: regexp,
@@ -65,7 +65,7 @@ define(["dojo/_base/lang"], function(lang) {
 				regexp.push(e);
 			}
 			regexp.push(")");
-			regexp = new RegExp(regexp.join(""), "g");
+			regexp = new RegExp(regexp.join(""), "gi");
 			map._decCache = {
 				mapper: mapper,
 				regexp: regexp,
