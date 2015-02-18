@@ -25,11 +25,11 @@ define(["dojo/_base/lang"], function(lang) {
 			regexp = ["["];
 			var i;
 			for(i = 0; i < map.length; i++){
-				mapper[map[i][0]] = "&" + map[i][1] + ";";
+				mapper[map[i][0]] = "&" + map[i][1].toLowerCase() + ";";
 				regexp.push(map[i][0]);
 			}
 			regexp.push("]");
-			regexp = new RegExp(regexp.join(""), "g");
+			regexp = new RegExp(regexp.join(""), "gi");
 			map._encCache = {
 				mapper: mapper,
 				regexp: regexp,
@@ -37,7 +37,7 @@ define(["dojo/_base/lang"], function(lang) {
 			};
 		}
 		str = str.replace(regexp, function(c){
-			return mapper[c];
+			return mapper[c.toLowerCase()];
 		});
 		return str;
 	};
@@ -59,13 +59,13 @@ define(["dojo/_base/lang"], function(lang) {
 			regexp = ["("];
 			var i;
 			for(i = 0; i < map.length; i++){
-				var e = "&" + map[i][1] + ";";
+				var e = "&" + map[i][1].toLowerCase() + ";";
 				if(i){regexp.push("|");}
 				mapper[e] = map[i][0];
 				regexp.push(e);
 			}
 			regexp.push(")");
-			regexp = new RegExp(regexp.join(""), "g");
+			regexp = new RegExp(regexp.join(""), "gi");
 			map._decCache = {
 				mapper: mapper,
 				regexp: regexp,
@@ -73,7 +73,7 @@ define(["dojo/_base/lang"], function(lang) {
 			};
 		}
 		str = str.replace(regexp, function(c){
-			return mapper[c];
+			return mapper[c.toLowerCase()];
 		});
 		return str;
 	};
