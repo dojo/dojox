@@ -51,7 +51,37 @@ define(["dojox/main", "../_base"], function(dojox){
 			},
 			{
 				className: 'string',
+				begin: 'r\'\'\'', end: '\'\'\'',
+				relevance: 10
+			},
+			{
+				className: 'string',
+				begin: 'u\'\'\'', end: '(^|[^\\\\])\'\'\'',
+				relevance: 10
+			},
+			{
+				className: 'string',
+				begin: 'ur\'\'\'', end: '\'\'\'',
+				relevance: 10
+			},
+			{
+				className: 'string',
 				begin: '"""', end: '"""',
+				relevance: 10
+			},
+			{
+				className: 'string',
+				begin: 'r"""', end: '"""',
+				relevance: 10
+			},
+			{
+				className: 'string',
+				begin: 'u"""', end: '(^|[^\\\\])"""',
+				relevance: 10
+			},
+			{
+				className: 'string',
+				begin: 'ur"""', end: '"""',
 				relevance: 10
 			},
 			dhc.APOS_STRING_MODE,
