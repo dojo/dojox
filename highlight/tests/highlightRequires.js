@@ -5,3 +5,4 @@ dojo.require("dojox.highlight.languages.xml");
 dojo.require("dojox.highlight.languages.pygments.xml");
 dojo.require("dojox.highlight.languages.java");
 dojo.require("dojox.highlight.languages.xquery");
+dojo.require("dojox.highlight.languages.python");
