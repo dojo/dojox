@@ -24,5 +24,71 @@ doh.register("dojox.highlight.tests.highlight", [
 		doh.assertEqual(unformatted, result.result);
 		doh.assertEqual(expected, result.partialResult);
 		doh.assertEqual("javascript", result.langName);
+	},
+	function test_validpython_raw3singlequotestring(){
+		// summary:
+		//    Test a valid Python raw triple single-quoted string literal
+		//    is highlighted correctly
+		var unformatted = "s = r'''value'''";
+		var expected = "s = <span class=\"string\">r'''value'''</span>";
+		var result = dojox.highlight.processString(unformatted, "python");
+		doh.assertEqual(expected, result.result);
+		doh.assertTrue(!result.partialResult);
+		doh.assertEqual("python", result.langName);
+	},
+	function test_validpython_3singlequoteunicode(){
+		// summary:
+		//    Test a valid Python triple single-quoted unicode literal
+		//    is highlighted correctly
+		var unformatted = "s = u'''value'''";
+		var expected = "s = <span class=\"string\">u'''value'''</span>";
+		var result = dojox.highlight.processString(unformatted, "python");
+		doh.assertEqual(expected, result.result);
+		doh.assertTrue(!result.partialResult);
+		doh.assertEqual("python", result.langName);
+ 	},
+	function test_validpython_raw3singlequoteunicode(){
+		// summary:
+		//    Test a valid Python raw triple single-quoted unicode literal
+		//    is highlighted correctly
+		var unformatted = "s = ur'''value'''";
+		var expected = "s = <span class=\"string\">ur'''value'''</span>";
+		var result = dojox.highlight.processString(unformatted, "python");
+		doh.assertEqual(expected, result.result);
+		doh.assertTrue(!result.partialResult);
+		doh.assertEqual("python", result.langName);
+	},
+	function test_validpython_raw3doublequotestring(){
+		// summary:
+		//    Test a valid Python raw triple double-quoted string literal
+		//    is highlighted correctly
+		var unformatted = 's = r"""value"""';
+		var expected = 's = <span class="string">r"""value"""</span>';
+		var result = dojox.highlight.processString(unformatted, "python");
+		doh.assertEqual(expected, result.result);
+		doh.assertTrue(!result.partialResult);
+		doh.assertEqual("python", result.langName);
+	},
+	function test_validpython_3doublequoteunicode(){
+		// summary:
+		//    Test a valid Python triple double-quoted unicode literal
+		//    is highlighted correctly
+		var unformatted = 's = u"""value"""';
+		var expected = 's = <span class="string">u"""value"""</span>';
+		var result = dojox.highlight.processString(unformatted, "python");
+		doh.assertEqual(expected, result.result);
+		doh.assertTrue(!result.partialResult);
+		doh.assertEqual("python", result.langName);
+	},
+	function test_validpython_raw3doublequoteunicode(){
+		// summary:
+		//    Test a valid Python raw triple double-quoted unicode literal
+		//    is highlighted correctly
+		var unformatted = 's = ur"""value"""';
+		var expected = 's = <span class="string">ur"""value"""</span>';
+		var result = dojox.highlight.processString(unformatted, "python");
+		doh.assertEqual(expected, result.result);
+		doh.assertTrue(!result.partialResult);
+		doh.assertEqual("python", result.langName);
 	}
-	]);
+]);
