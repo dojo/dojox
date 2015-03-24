@@ -1,6 +1,6 @@
 define(
 ({
-	"descTemplate": "Od ${2} do ${3} z ${1} ${0}",
+	"descTemplate": "${2} - ${3} / ${1}",
 	"firstTip": "Pierwsza strona",
 	"lastTip": "Ostatnia strona",
 	"nextTip": "Następna strona",
