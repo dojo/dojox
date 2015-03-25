@@ -33,6 +33,7 @@ define({ root:
 "fr": true,
 "fi": true,
 "es": true,
+"eu": true,
 "el": true,
 "de": true,
 "da": true,
