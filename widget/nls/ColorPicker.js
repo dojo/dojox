@@ -41,6 +41,7 @@ saturationPickerTitle: "Saturation Selector"
 "fi": true,
 "es": true,
 "el": true,
+"eu": true,
 "de": true,
 "da": true,
 "cs": true,

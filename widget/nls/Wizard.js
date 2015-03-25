@@ -32,6 +32,7 @@ done: "Done"
 "he": true,
 "fr": true,
 "fi": true,
+"eu": true,
 "es": true,
 "el": true,
 "de": true,
