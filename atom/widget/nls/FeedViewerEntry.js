@@ -12,6 +12,7 @@ define({ root:
 "cs": true,
 "da": true,
 "de": true,
+"eu": true,
 "el": true,
 "es": true,
 "fi": true,
