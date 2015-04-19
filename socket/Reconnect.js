@@ -16,9 +16,12 @@ define([
 		//		|    var socket = dxSocket({url:"/comet"});
 		//		|    // add auto-reconnect support
 		//		|    socket = reconnect(socket);
-		var reconnectTime = options.reconnectTime || 10000;
-		var checkForOpen, newSocket;
 		options = options || {};
+
+		var reconnectTime = options.reconnectTime || 10000;
+		var backoffRate = options.backoffRate || 2;
+		var timeout = reconnectTime;
+		var checkForOpen, newSocket;
 
 		aspect.after(socket, "onclose", function(event){
 			clearTimeout(checkForOpen);
@@ -36,12 +39,12 @@ define([
 					checkForOpen = setTimeout(function(){
 						//reset the backoff
 						if(newSocket.readyState < 2){
-							reconnectTime = options.reconnectTime || 10000;
+							timeout = reconnectTime;
 						}
-					}, 10000);
-				}, reconnectTime);
+					}, reconnectTime);
+				}, timeout);
 				// backoff each time
-				reconnectTime *= options.backoffRate || 2;
+				timeout *= backoffRate;
 			};
 		}
 		if(!socket.reconnect){
