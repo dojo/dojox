@@ -28,7 +28,7 @@ var profile = (function(){
 			"rails",
 			"robot",
 			"sql/",
-			"storage/",
+			"storage/(AirDBStorageProvider|AirEncryptedLocalStorageProvider|AirFileStorageProvider|BehaviorStorageProvider|CookieStorageProvider|FlashStorageProvider|GearsStorageProvider|WhatWGStorageProvider)",
 			"widget/(AnalogGauge|BarGauge|DataPresentation|DocTester|DynamicTooltip|FeedPortlet|FilePicker|gauge|Iterator|Loader|RollingList|SortList)",
 			"wire/",
 			"xmpp"
