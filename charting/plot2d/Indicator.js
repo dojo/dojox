@@ -452,7 +452,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./Cartesia
 					this.chart,
 					g,
 					x, y,
-					"middle",
+					this.opt.vertical? "middle" : (this.opt.start ? "start":"end"),
 					text, this.opt.font?this.opt.font:t.indicator.font, this.opt.fontColor?this.opt.fontColor:t.indicator.fontColor);
 			var b = getBoundingBox(label);
 			b.x-=2; b.y-=1; b.width+=4; b.height+=2; b.r = this.opt.radius?this.opt.radius:t.indicator.radius;
