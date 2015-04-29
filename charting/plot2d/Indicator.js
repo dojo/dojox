@@ -454,7 +454,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./Cartesia
 					x, y,
 					this.opt.vertical? "middle" : (this.opt.start ? "start":"end"),
 					text, this.opt.font?this.opt.font:t.indicator.font, this.opt.fontColor?this.opt.fontColor:t.indicator.fontColor);
-			var b = label.getBoundingBox();
+			var b = getBoundingBox(label);
                         if(this.opt.vertical && !this.opt.start) {
                             b.y += b.height/2;
                             label.setShape({y: y+b.height/2});
