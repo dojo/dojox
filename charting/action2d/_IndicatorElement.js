@@ -234,6 +234,19 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "../plot2d/
 					break;
 				}
 			}
+			if(has("dojo-bidi")){
+				i = l - i;
+				r = data[i];
+				//I found by testing that the renderer uses the right side of the arrow pointer to calculate the X position
+				//that's should be fine for LTR but for RTL we need to use the left side, hence I added the arrow width
+				//1 to fix the error
+				if(cd[attr] > 1){
+					cd[attr] = l - cd[attr] + 1;
+					if(cd[attr] > l)
+						cd[attr] = l-0.1;
+				}
+			}
+
 			var x, y, px, py;
 			if(typeof r == "number"){
 				x = i+1;
