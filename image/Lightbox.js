@@ -194,7 +194,7 @@ define(["dojo", "dijit", "dojox", "dojo/text!./resources/Lightbox.html", "dijit/
 
 		// errorImg: Url
 		//		Path to the image used when a 404 is encountered
-		errorImg: dojo.moduleUrl("dojox.image","resources/images/warning.png"),
+                errorImg: require.toUrl("dojox/image/resources/images/warning.png"),
 
 		templateString: template, 
 		
