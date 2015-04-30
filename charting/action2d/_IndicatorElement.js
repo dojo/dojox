@@ -1,5 +1,5 @@
 define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "../plot2d/Indicator",
-        "dojo/has", "../plot2d/common", "../axis2d/common", "dojox/gfx"], 
+        "dojo/has", "../plot2d/common", "../axis2d/common", "dojox/gfx"],
 	function(lang, array, declare, Indicator, has){
 
 	var getXYCoordinates = function(v, values, data){
@@ -217,6 +217,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "../plot2d/
 		_snapData: function(cd, attr, v){
 			// we need to find which actual data point is "close" to the data value
 			var data = this.chart.getSeries(this.inter.opt.series).data;
+			// BIDI Support for RTL languages
 			// let's consider data are sorted because anyway rendering will be "weird" with unsorted data
 			// i is an index in the array, which is different from a x-axis value even for index based data
 			var i, r, l = data.length;
@@ -288,8 +289,8 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "../plot2d/
 					if(cp2){
 						cp2.x = this.chart.dim.width + (this.chart.offsets.l - this.chart.offsets.r) - cp2.x;
 					}
-				}			
-			}			
+				}
+			}
 		});
 	}
 	return _IndicatorElement;
