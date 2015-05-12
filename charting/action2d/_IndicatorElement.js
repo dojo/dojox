@@ -217,7 +217,6 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "../plot2d/
 		_snapData: function(cd, attr, v){
 			// we need to find which actual data point is "close" to the data value
 			var data = this.chart.getSeries(this.inter.opt.series).data;
-			// BIDI Support for RTL languages
 			// let's consider data are sorted because anyway rendering will be "weird" with unsorted data
 			// i is an index in the array, which is different from a x-axis value even for index based data
 			var i, r, l = data.length;
@@ -234,13 +233,14 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "../plot2d/
 					break;
 				}
 			}
+			// BIDI Support for RTL languages
 			if(has("dojo-bidi")){
+				// In RTL language like Arabic, data need to be flipped, do this by substracting it from the data length
 				i = l - i;
 				r = data[i];
-				//I found by testing that the renderer uses the right side of the arrow pointer to calculate the X position
-				//that's should be fine for LTR but for RTL we need to use the left side, hence I added the arrow width
-				//1 to fix the error
+
 				if(cd[attr] > 1){
+					// Add mouse width (1) to use the X position of the mouse left side
 					cd[attr] = l - cd[attr] + 1;
 					if(cd[attr] > l)
 						cd[attr] = l-0.1;
