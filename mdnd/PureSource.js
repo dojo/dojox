@@ -86,7 +86,7 @@ define(["dojo/_base/kernel",
 			//		Prepares the object to be garbage-collected.
 	
 			//console.log('dojox.mdnd.PureSource ::: destroy');
-			this.constructor.superclass.destroy.call(this);
+			PureSource.superclass.destroy.call(this);
 			array.forEach(this.topics, connect.unsubscribe);
 			this.targetAnchor = null;
 		},
@@ -116,7 +116,7 @@ define(["dojo/_base/kernel",
 			if(this.isDragging){
 				return;
 			}
-			this.constructor.superclass.onMouseMove.call(this, e);
+			PureSource.superclass.onMouseMove.call(this, e);
 			var m = Manager.manager();
 			if(this.mouseDown && !this.isDragging && this.isSource){
 				var nodes = this.getSelectedNodes();
@@ -140,7 +140,7 @@ define(["dojo/_base/kernel",
 			if(this._legalMouseDown(e) && (!this.skipForm || !dnd.isFormElement(e))){
 				this.mouseDown = true;
 				this.mouseButton = e.button;
-				this.constructor.superclass.onMouseDown.call(this, e);
+				PureSource.superclass.onMouseDown.call(this, e);
 			}
 		},
 		
@@ -155,7 +155,7 @@ define(["dojo/_base/kernel",
 			//console.log('.dnd.PureSource ::: onMouseUp');
 			if(this.mouseDown){
 				this.mouseDown = false;
-				this.constructor.superclass.onMouseUp.call(this, e);
+				PureSource.superclass.onMouseUp.call(this, e);
 			}
 		},
 	
@@ -166,7 +166,7 @@ define(["dojo/_base/kernel",
 			//		callback
 	
 			//console.log('dojox.mdnd.PureSource ::: onOverEvent');
-			this.constructor.superclass.onOverEvent.call(this);
+			PureSource.superclass.onOverEvent.call(this);
 			Manager.manager().overSource(this);
 		},
 		
@@ -177,7 +177,7 @@ define(["dojo/_base/kernel",
 			//		callback
 	
 			//console.log('dojox.mdnd.PureSource ::: onOutEvent');
-			this.constructor.superclass.onOutEvent.call(this);
+			PureSource.superclass.onOutEvent.call(this);
 			Manager.manager().outSource(this);
 		},
 		
