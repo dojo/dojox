@@ -1,9 +1,9 @@
 define([
 	"dojo/_base/declare", // declare
-        "dojo/_base/lang", // lang.getObject...
+	"dojo/_base/lang", // lang.getObject...
 	"dojo/_base/connect", // connect.connect, connect.subscribe
 	"dojo/_base/fx", // fx.fadeOut
-        "dojo/dom-style", // domStyle.set
+	"dojo/dom-style", // domStyle.set
 	"dojo/dom-class", // domClass.add
 	"dojo/dom-geometry", // domGeometry.getMarginBox
 	"dijit/registry",    // registry.getUniqueId()
@@ -12,9 +12,8 @@ define([
 	"dijit/BackgroundIframe",
 	"dojo/fx",
 	"dojo/has",
-	"dojo/_base/window",
 	"dojo/window"
-], function(declare, lang, connect, baseFx, domStyle, domClass, domGeometry, registry, WidgetBase, Templated, BackgroundIframe, coreFx, has, baseWindow, window){
+], function(declare, lang, connect, baseFx, domStyle, domClass, domGeometry, registry, WidgetBase, Templated, BackgroundIframe, coreFx, has, window){
 
 	lang.getObject("dojox.widget", true);
 
@@ -70,14 +69,14 @@ define([
 
 		// separator: String
 		//		String used to separate messages if consecutive calls are made to setContent before previous messages go away
-		separator: "<hr></hr>",
+		separator: "<hr>",
 
 		postCreate: function(){
 			this.inherited(arguments);
 			this.hide();
 
 			// place node as a child of body for positioning
-			baseWindow.body().appendChild(this.domNode);
+			this.ownerDocument.body.appendChild(this.domNode);
 
 			if(this.messageTopic){
 				connect.subscribe(this.messageTopic, this, "_handleMessage");
@@ -160,19 +159,19 @@ define([
 					node: this.containerNode,
 					top: 0, left: 0,
 					duration: this.slideDuration});
-				this.connect(this.slideAnim, "onEnd", function(nodes, anim){
+				this.connect(this.slideAnim, "onEnd", function(){
 						//we build the fadeAnim here so we dont have to duplicate it later
 						// can't do a fadeHide because we're fading the
 						// inner node rather than the clipping node
 						this.fadeAnim = baseFx.fadeOut({
 							node: this.containerNode,
 							duration: 1000});
-						this.connect(this.fadeAnim, "onEnd", function(evt){
+						this.connect(this.fadeAnim, "onEnd", function(){
 							this.isVisible = false;
 							this.hide();
 						});
 						this._setHideTimer(duration);
-						this.connect(this, 'onSelect', function(evt){
+						this.connect(this, 'onSelect', function(){
 							this._cancelHideTimer();
 							//force clear sticky message
 							this._stickyMessage=false;
@@ -224,7 +223,7 @@ define([
 		},
 
 		_placeClip: function(){
-			var view = window.getBox();
+			var view = window.getBox(this.ownerDocument);
 
 			var nodeSize = domGeometry.getMarginBox(this.containerNode);
 
