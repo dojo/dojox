@@ -1,5 +1,5 @@
-define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/lang", "dojo/Stateful"], 
-	function(declare, arr, lang, Stateful){
+define(["dojo/_base/declare", "dojo/_base/array", "dojo/sniff", "dojo/_base/lang", "dojo/Stateful"], 
+	function(declare, arr, has, lang, Stateful){
 		
 	return declare("dojox.widget.Selection", Stateful, {
 		// summary:
@@ -157,14 +157,14 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/lang", "dojo/State
 			var changed;
 			var oldSelectedItem = this.get("selectedItem");
 			var selected = item ? this.isItemSelected(item): false;
-			
+			var evtMultiSelectKey = has("mac") ? e.metaKey : e.ctrlKey;
 			if(item == null){
-				if(!e.ctrlKey && this.selectedItem != null){
+				if(!evtMultiSelectKey && this.selectedItem != null){
 					this.set("selectedItem", null);
 					changed = true;
 				}
 			}else if(this.selectionMode == "multiple"){
-				 if(e.ctrlKey){
+				 if(evtMultiSelectKey){
 					this.setItemSelected(item, !selected);
 					changed = true;
 				}else{
@@ -172,7 +172,7 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/lang", "dojo/State
 					changed = true;						
 				}				 								
 			}else{ // single
-				if(e.ctrlKey){					
+				if(evtMultiSelectKey){					
 					//if the object is selected deselects it.
 					this.set("selectedItem", selected ? null : item);
 					changed = true;					
