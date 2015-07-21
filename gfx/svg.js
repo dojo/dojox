@@ -605,7 +605,25 @@ else
 			if(s.text){
 				// try/catch the FF native getBBox error.
 				try {
-					bbox = this.rawNode.getBBox();
+					// workaround for https://bugzilla.mozilla.org/show_bug.cgi?id=1109860
+					if(has("dojo-bidi") && has("ff")){
+						var clone = this.rawNode.cloneNode(),
+							bidiPattern = /[\u200E\u202A\u202C\u200f\u202B]/g;
+
+						while(clone.lastChild){
+							clone.removeChild(clone.lastChild);
+						}
+
+						clone.appendChild(document.createTextNode(s.text.replace(bidiPattern, "")));
+						clone.setAttribute("style", "visibility: hidden");
+						this.rawNode.parentNode.appendChild(clone);
+						bbox = clone.getBBox();
+						clone.parentNode.removeChild(clone);
+					}else{
+						bbox = this.rawNode.getBBox();
+					}
+
+					bbox = lang.mixin({}, bbox);
 				} catch (e) {
 					// under FF when the node is orphan (all other browsers return a 0ed bbox.
 					bbox = {x:0, y:0, width:0, height:0};

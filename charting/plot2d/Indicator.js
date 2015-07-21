@@ -2,90 +2,6 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./Cartesia
     "../axis2d/common", "dojox/gfx", "dojox/lang/utils", "dojox/gfx/fx", "dojo/has", "dojo/sniff"],
 	function(lang, array, declare, CartesianBase, _PlotEvents, dcpc, dcac, gfx, du, fx, has, sniff){
 
-	// all the code below should be removed when http://trac.dojotoolkit.org/ticket/11299 will be available
-	var getBoundingBox = function(shape){
-		return getTextBBox(shape, shape.getShape().text);
-	};
-	var getTextBBox = function(s, t){
-		var c = s.declaredClass;
-		var w, h;
-		if(c.indexOf("svg")!=-1){
-			// try/catch the FF native getBBox error. cheaper than walking up in the DOM
-			// hierarchy to check the conditions (bench show /10 )
-			try {
-				var bBox = s.rawNode.getBBox();
-				
-				// workaround for https://bugzilla.mozilla.org/show_bug.cgi?id=1109860
-				if (has('dojo-bidi') && sniff('ff')) {
-					var clone = s.rawNode.cloneNode(),
-						bidiPattern = /[\u200E\u202A\u202C\u200f\u202B]/g;
-
-					while (clone.lastChild) {
-						clone.removeChild(clone.lastChild);
-					}
-
-					clone.appendChild(document.createTextNode(t.replace(bidiPattern, '')));
-					clone.setAttribute('style', 'visibility: hidden');
-					s.rawNode.parentNode.appendChild(clone);
-					bBox = clone.getBBox();
-					clone.parentNode.removeChild(clone);
-				}
-				else {
-					bBox = s.rawNode.getBBox();
-				}
-
-				return lang.mixin({}, bBox);
-			}catch (e){
-				return null;
-			}
-		}else if(c.indexOf("vml")!=-1){
-			var rawNode = s.rawNode, _display = rawNode.style.display;
-			rawNode.style.display = "inline";
-			w = gfx.pt2px(parseFloat(rawNode.currentStyle.width));
-			h = gfx.pt2px(parseFloat(rawNode.currentStyle.height));
-			var sz = {x: 0, y: 0, width: w, height: h};
-			// in VML, the width/height we get are in view coordinates
-			// in our case we don't zoom the view so that is ok
-			// It's impossible to get the x/y from the currentStyle.left/top,
-			// because all negative coordinates are 'clipped' to 0.
-			// (x:0 + translate(-100) -> x=0
-			computeLocation(s, sz);
-			rawNode.style.display = _display;
-			return sz;
-		}else if(c.indexOf("silverlight")!=-1){
-			var bb = {width: s.rawNode.actualWidth, height: s.rawNode.actualHeight};
-			return computeLocation(s, bb, 0.75);
-		}else if(s.getTextWidth){
-			// canvas
-			w = s.getTextWidth();
-			var font = s.getFont();
-			var fz = font ? font.size : gfx.defaultFont.size;
-			h = gfx.normalizedLength(fz);
-			sz = {width: w, height: h};
-			computeLocation(s, sz, 0.75);
-			return sz;
-		}
-		return null;
-	};
-	var computeLocation =  function(s, sz, coef){
-		var width = sz.width, height = sz.height, sh = s.getShape(), align = sh.align;
-		switch (align) {
-		case "end":
-			sz.x = sh.x - width;
-			break;
-		case "middle":
-			sz.x = sh.x - width / 2;
-			break;
-		case "start":
-		default:
-			sz.x = sh.x;
-		break;
-		}
-		coef = coef || 1;
-		sz.y = sh.y - height*coef; // rough approximation of the ascent!...
-		return sz;
-	};
-
 	/*=====
 	declare("dojox.charting.plot2d.__IndicatorCtorArgs", dojox.charting.plot2d.__CartesianCtorArgs, {
 		// summary:
@@ -475,7 +391,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./Cartesia
 					x, y,
 					"middle",
 					text, this.opt.font?this.opt.font:t.indicator.font, this.opt.fontColor?this.opt.fontColor:t.indicator.fontColor);
-			var b = getBoundingBox(label);
+			var b = label.getBoundingBox();
 			b.x-=2; b.y-=1; b.width+=4; b.height+=2; b.r = this.opt.radius?this.opt.radius:t.indicator.radius;
 			var sh = this.opt.shadow!=undefined?this.opt.shadow:t.indicator.shadow,
 				ls = this.opt.stroke!=undefined?this.opt.stroke:t.indicator.stroke,
