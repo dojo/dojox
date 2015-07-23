@@ -1,7 +1,5 @@
-dojo.provide("dojox.string.tests.BidiEngine.BidiEngineTest");
-dojo.require("dojox.string.BidiEngine");
-dojo.addOnLoad(function() {
-
+define(["doh/runner", "dojox/string/BidiEngine"], function(doh, BidiEngine) {
+	
 	var unilisrc = [
 	       		// 0
 	       		"abc def ghij",
@@ -906,9 +904,9 @@ dojo.addOnLoad(function() {
 	       	    // 13
 	       		"123 DEF \u05d3\u05d2\u05d1\u05d0"
 	       		];	
-	 var bdEngine = new dojox.string.BidiEngine();
+	 var bdEngine = new BidiEngine();
 	 
-	tests.register("dojox.string.tests.BidiEngine.BidiEngineTest", 
+	doh.register("BidiEngine Transformations Test", 
 	[
 		{	
 			// testmati - case 37

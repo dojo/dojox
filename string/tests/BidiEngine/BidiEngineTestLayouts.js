@@ -1,18 +1,17 @@
-dojo.provide("dojox.string.tests.BidiEngine.BidiEngineTestLayouts");
-dojo.require("dojox.string.BidiEngine");
-dojo.addOnLoad(function() {
-
+define(["doh/runner", "dojox/string/BidiEngine"], function(doh, BidiEngine) {
+	
 	var unilisrc = [
 		"11"
 	];
 
 	var bdEngine;
 	var errorMessage = "dojox/string/BidiEngine: the bidi layout string is wrong!";
-	doh.register('dojox.string.tests.BidiEngine.BidiEngineTestLayouts', [
+	
+	doh.register('BidiEngine Parameters Test', [
 		{
 			name:'1. test empty',
 			setUp: function() {
-				bdEngine = new dojox.string.BidiEngine();
+				bdEngine = new BidiEngine();
 			},
 			runTest:function() {
 				dojo.forEach(unilisrc, function(el, i){	

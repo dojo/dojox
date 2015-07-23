@@ -1,14 +1,12 @@
-dojo.provide("dojox.string.tests.BidiEngine.BidiEngineMapsTest");
-dojo.require("dojox.string.BidiEngine");
+define(["doh/runner", "dojox/string/BidiEngine"], function(doh, BidiEngine) {
 
-dojo.addOnLoad(function() {
 	var txt1 = "\u05d0\u05d1\u05d2 123 ABC 456.";
 	var lengthErr = "Wrong length of the map";
 	var contErr = "Wrong content of the map";
-	var engine = new dojox.string.BidiEngine();
+	var engine = new BidiEngine();
 	var result;
 
-	tests.register("dojox.string.tests.BidiEngine.BidiEngineMapsTest",
+	doh.register("BidiEngine Maps and Levels Test",
 	[
 		{
 			name: "(1) Maps: implicit ltr -> visual ltr",

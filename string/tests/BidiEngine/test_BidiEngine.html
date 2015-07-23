@@ -5,9 +5,10 @@
 <title>Test Bidi Engine</title>
 <script type="text/javascript" src="../../../../dojo/dojo.js" data-dojo-config="parseOnLoad: true, isDebug: true"></script>
 <script language="javascript" type="text/javascript">
-	dojo.require("dojox.string.BidiEngine");
-	var bdEngine = new dojox.string.BidiEngine();
-	function doTransform() {
+var doTransform, showMap, changeInp;
+require(["dojox/string/BidiEngine"], function(BidiEngine) {
+	var bdEngine = new BidiEngine();
+	doTransform = function() {
 		var txt = document.getElementById("inp").value;
 		document.getElementById("div0").innerHTML = txt;
 		document.getElementById("div1").innerHTML = txt;
@@ -32,8 +33,8 @@
 		for (var i=0; i<3; i++) {
 			showMap(arrays[i], divNames[i]);
 		}
-	}
-	function showMap(arr, divName) {
+	};
+	showMap = function (arr, divName) {
 		var map = "", sps;
 		for (var i=0; i<arr.length; i++) {
 			sps = "";
@@ -42,8 +43,8 @@
 			map = map + sps + arr[i].toString() + "&#160;";
 		}
 		document.getElementById(divName).innerHTML = map;		
-	}
-	function changeInp(b) {
+	};
+	changeInp = function(b) {
 		if (b.innerHTML == "Visual") {
 			document.getElementById("inp").className = "v";
 			b.innerHTML = "Logical";
@@ -52,6 +53,7 @@
 			b.innerHTML = "Visual";			
 		}
 	}
+});
 </script>
 <style>
 	.il {
