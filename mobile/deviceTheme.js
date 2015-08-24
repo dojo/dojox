@@ -171,6 +171,16 @@
 				[]
 			],
 			[
+				"Android 5",
+				"holodark",
+				[]
+			],
+			[
+				"Android 6",
+				"holodark",
+				[]
+			],
+			[
 				"Android",
 				"android",
 				[]
