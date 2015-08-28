@@ -7,8 +7,9 @@ define([
 	"dijit/_Contained",
 	"dijit/_Container",
 	"dijit/_WidgetBase",
+	"./common",
 	"dojo/has"
-], function(array, declare, win, domClass, domGeometry, Contained, Container, WidgetBase, has){
+], function(array, declare, win, domClass, domGeometry, Contained, Container, WidgetBase, common, has){
 
 	// module:
 	//		dojox/mobile/FixedSplitter
