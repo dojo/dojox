@@ -257,7 +257,6 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/has",
 				}
 			}
 			return extracted;
-<<<<<<< HEAD
 		},
 		rearrangeValues: function(values, transform, baseline){
 			// transform to pixels
@@ -272,22 +271,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/has",
 			}
 			return values;
 		},
-=======
-		},
-		rearrangeValues: function(values, transform, baseline){
-			// transform to pixels
-			for(var i = 0, n = values.length; i < n; ++i){
-				var extractedSet = values[i];
-				if(extractedSet){
-					for(var j = extractedSet.min, k = extractedSet.max; j < k; ++j){
-						var value = extractedSet[j];
-						extractedSet[j] = this.isNullValue(value) ? 0 : transform(value) - baseline;
-					}
-				}
-			}
-			return values;
-		},
->>>>>>> 5eba099f35ea89462747f82c1795fe53a48a1643
+
 		isNullValue: function(value){
 			if(value === null || typeof value == "undefined"){
 				return true;
