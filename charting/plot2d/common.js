@@ -39,17 +39,17 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/Color",
 			hmin: Number.POSITIVE_INFINITY, hmax: Number.NEGATIVE_INFINITY
 		},
 
-		collectSimpleStats: function(series){
+		collectSimpleStats: function(series, isNullValue){
 			var stats = lang.delegate(common.defaultStats);
 			for(var i = 0; i < series.length; ++i){
 				var run = series[i];
 				for(var j = 0; j < run.data.length; j++){
-					if(run.data[j] !== null){
+					if(!isNullValue(run.data[j])){
 						if(typeof run.data[j] == "number"){
 							// 1D case
 							var old_vmin = stats.vmin, old_vmax = stats.vmax;
 							arr.forEach(run.data, function(val, i){
-								if(val !== null){
+								if(!isNullValue(val)){
 									var x = i + 1, y = val;
 									if(isNaN(y)){ y = 0; }
 									stats.hmin = Math.min(stats.hmin, x);
@@ -66,7 +66,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/Color",
 								old_vmin = stats.vmin, old_vmax = stats.vmax;
 							if(!("xmin" in run) || !("xmax" in run) || !("ymin" in run) || !("ymax" in run)){
 								arr.forEach(run.data, function(val, i){
-									if(val !== null){
+									if(!isNullValue(val)){
 										var x = "x" in val ? val.x : i + 1, y = val.y;
 										if(isNaN(x)){ x = 0; }
 										if(isNaN(y)){ y = 0; }
