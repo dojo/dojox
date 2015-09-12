@@ -1,7 +1,8 @@
 define([
 	"dojo/_base/declare", // declare
 	"dojo/_base/lang", // lang.getObject...
-	"dojo/_base/connect", // connect.connect, connect.subscribe
+	"dojo/on",
+	"dojo/topic",
 	"dojo/_base/fx", // fx.fadeOut
 	"dojo/dom-style", // domStyle.set
 	"dojo/dom-class", // domClass.add
@@ -9,11 +10,12 @@ define([
 	"dijit/registry",    // registry.getUniqueId()
 	"dijit/_WidgetBase",
 	"dijit/_TemplatedMixin",
+	"dijit/Destroyable",
 	"dijit/BackgroundIframe",
 	"dojo/fx",
 	"dojo/has",
 	"dojo/window"
-], function(declare, lang, connect, baseFx, domStyle, domClass, domGeometry, registry, WidgetBase, Templated, BackgroundIframe, coreFx, has, window){
+], function(declare, lang, on, topic, baseFx, domStyle, domClass, domGeometry, registry, WidgetBase, Templated, Destroyable, BackgroundIframe, coreFx, has, window){
 
 	lang.getObject("dojox.widget", true);
 
@@ -21,12 +23,12 @@ define([
 	    return w.substring(0,1).toUpperCase() + w.substring(1);
 	};
 
-	return declare("dojox.widget.Toaster", [WidgetBase, Templated], {
+	return declare("dojox.widget.Toaster", [WidgetBase, Templated/*, Destroyable*/], {
 		// summary:
 		//		Message that slides in from the corner of the screen, used for notifications
 		//		like "new email".
 
-		templateString: '<div class="dijitToasterClip" dojoAttachPoint="clipNode"><div class="dijitToasterContainer" dojoAttachPoint="containerNode" dojoAttachEvent="onclick:onSelect"><div class="dijitToasterContent" dojoAttachPoint="contentNode"></div></div></div>',
+		templateString: '<div class="dijitToasterClip" data-dojo-attach-point="clipNode"><div class="dijitToasterContainer" data-dojo-attach-point="containerNode" data-dojo-attach-event="onclick:onSelect"><div class="dijitToasterContent" data-dojo-attach-point="contentNode"></div></div></div>',
 
 		// messageTopic: String
 		//		Name of topic; anything published to this topic will be displayed as a message.
@@ -76,10 +78,11 @@ define([
 			this.hide();
 
 			// place node as a child of body for positioning
-			this.ownerDocument.body.appendChild(this.domNode);
+			this.domNode.ownerDocument.body.appendChild(this.domNode);
 
 			if(this.messageTopic){
-				connect.subscribe(this.messageTopic, this, "_handleMessage");
+				// TODO: wrap in a call to this.own
+				topic.subscribe(this.messageTopic, lang.hitch(this, "_handleMessage"));
 			}
 		},
 
@@ -159,19 +162,19 @@ define([
 					node: this.containerNode,
 					top: 0, left: 0,
 					duration: this.slideDuration});
-				this.connect(this.slideAnim, "onEnd", function(){
+				this.on(this.slideAnim, "end", function(){
 						//we build the fadeAnim here so we dont have to duplicate it later
 						// can't do a fadeHide because we're fading the
 						// inner node rather than the clipping node
 						this.fadeAnim = baseFx.fadeOut({
 							node: this.containerNode,
 							duration: 1000});
-						this.connect(this.fadeAnim, "onEnd", function(){
+						this.on(this.fadeAnim, "end", function(){
 							this.isVisible = false;
 							this.hide();
 						});
 						this._setHideTimer(duration);
-						this.connect(this, 'onSelect', function(){
+						this.on(this, 'select', function(){
 							this._cancelHideTimer();
 							//force clear sticky message
 							this._stickyMessage=false;
@@ -273,7 +276,7 @@ define([
 			this._placeClip();
 
 			if(!this._scrollConnected){
-				this._scrollConnected = connect.connect(window, "onscroll", this, this._placeClip);
+				this._scrollConnected = on(window, "scroll", lang.hitch(this, "_placeClip"));
 			}
 		},
 
@@ -284,7 +287,7 @@ define([
 			domStyle.set(this.domNode, 'display', 'none');
 
 			if(this._scrollConnected){
-				connect.disconnect(this._scrollConnected);
+				this._scrollConnected.remove();
 				this._scrollConnected = false;
 			}
 
