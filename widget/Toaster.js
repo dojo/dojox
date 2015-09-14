@@ -78,11 +78,11 @@ define([
 			this.hide();
 
 			// place node as a child of body for positioning
-			this.domNode.ownerDocument.body.appendChild(this.domNode);
+			this.ownerDocument.body.appendChild(this.domNode);
 
 			if(this.messageTopic){
 				// TODO: wrap in a call to this.own
-				topic.subscribe(this.messageTopic, lang.hitch(this, "_handleMessage"));
+				this.own(topic.subscribe(this.messageTopic, lang.hitch(this, "_handleMessage")));
 			}
 		},
 
@@ -159,7 +159,6 @@ define([
 				}else{
 					throw new Error(this.id + ".positionDirection is invalid: " + pd);
 				}
-//				this.slideAnim = this.own(coreFx.slideTo({
 				this.slideAnim = coreFx.slideTo({
 					node: this.containerNode,
 					top: 0, left: 0,
@@ -168,25 +167,27 @@ define([
 						//we build the fadeAnim here so we dont have to duplicate it later
 						// can't do a fadeHide because we're fading the
 						// inner node rather than the clipping node
-						this.fadeAnim = /*this.own(*/baseFx.fadeOut({
+						this.fadeAnim = (baseFx.fadeOut({
 							node: this.containerNode,
 							duration: 1000,
 							onEnd: lang.hitch(this, function(){
 								this.isVisible = false;
 								this.hide();
 							})
-						})/*)*/;
+						}));
+						this.own(this.fadeAnim);
 						this._setHideTimer(duration);
-						/*this.own(*/aspect.after(this, 'onSelect', lang.hitch(this, function(){
+						this.own(aspect.after(this, 'onSelect', lang.hitch(this, function(){
 							this._cancelHideTimer();
 							//force clear sticky message
 							this._stickyMessage=false;
 							this.fadeAnim.play();
-						}))/*)*/;
+						})));
 
 						this.isVisible = true;
 					})
-				})/*)*/;
+				});
+				this.own(this.slideAnim);
 				this.slideAnim.play();
 			}
 		},
@@ -279,8 +280,9 @@ define([
 			this._placeClip();
 
 			if(!this._scrollConnected){
-//				this._scrollConnected = this.own(on(window, "scroll", lang.hitch(this, "_placeClip")));
-//				this._scrollConnected = on(window, "scroll", lang.hitch(this, "_placeClip"));
+
+				this._scrollConnected = aspect.after(window, "scroll", lang.hitch(this, "_placeClip"));
+				this.own(this._scrollConnected);
 			}
 		},
 
