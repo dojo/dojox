@@ -23,13 +23,12 @@
 			"dojo/domReady!"
 		], function (parser, topic, on, dom, registry) {
 			parser.parse();
-			var toast = registry.byId("toast");
-			function showTestMessage(){
+			on(dom.byId("submitButton1"), "click",function () {
 				topic.publish("testMessageTopic",
 					"This is a message! It's kind of long to show message wrapping."
 				);
-			}
-			function showAnotherMessage(){
+			});
+			on(dom.byId("submitButton2"), "click", function () {
 				topic.publish("testMessageTopic",
 					{
 						message: "This is another message!",
@@ -37,16 +36,12 @@
 						duration: 500
 					}
 				);
-			}
-			function showYetAnotherMessage(){
+			});
+			on(dom.byId("submitButton3"), "click", function () {
 				topic.publish("testMessageTopic",
 					{ message: "This is yet another message!" }
 				);
-			}
-
-			on(dom.byId("submitButton1"), "click", showTestMessage);
-			on(dom.byId("submitButton2"), "click", showAnotherMessage);
-			on(dom.byId("submitButton3"), "click", showYetAnotherMessage);
+			});
 		});
 
 	</script>

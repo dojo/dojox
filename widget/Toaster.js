@@ -81,7 +81,6 @@ define([
 			this.ownerDocument.body.appendChild(this.domNode);
 
 			if(this.messageTopic){
-				// TODO: wrap in a call to this.own
 				this.own(topic.subscribe(this.messageTopic, lang.hitch(this, "_handleMessage")));
 			}
 		},
@@ -177,12 +176,12 @@ define([
 						}));
 						this.own(this.fadeAnim);
 						this._setHideTimer(duration);
-						this.own(aspect.after(this, 'onSelect', lang.hitch(this, function(){
+						this.on('select', lang.hitch(this, function(){
 							this._cancelHideTimer();
 							//force clear sticky message
 							this._stickyMessage=false;
 							this.fadeAnim.play();
-						})));
+						}));
 
 						this.isVisible = true;
 					})
