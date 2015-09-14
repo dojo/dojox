@@ -2,6 +2,7 @@ define([
 	"dojo/_base/declare", // declare
 	"dojo/_base/lang", // lang.getObject...
 	"dojo/on",
+	"dojo/aspect",
 	"dojo/topic",
 	"dojo/_base/fx", // fx.fadeOut
 	"dojo/dom-style", // domStyle.set
@@ -10,12 +11,11 @@ define([
 	"dijit/registry",    // registry.getUniqueId()
 	"dijit/_WidgetBase",
 	"dijit/_TemplatedMixin",
-	"dijit/Destroyable",
 	"dijit/BackgroundIframe",
 	"dojo/fx",
 	"dojo/has",
 	"dojo/window"
-], function(declare, lang, on, topic, baseFx, domStyle, domClass, domGeometry, registry, WidgetBase, Templated, Destroyable, BackgroundIframe, coreFx, has, window){
+], function(declare, lang, on, aspect, topic, baseFx, domStyle, domClass, domGeometry, registry, _WidgetBase, _TemplatedMixin, BackgroundIframe, coreFx, has, window){
 
 	lang.getObject("dojox.widget", true);
 
@@ -23,7 +23,7 @@ define([
 	    return w.substring(0,1).toUpperCase() + w.substring(1);
 	};
 
-	return declare("dojox.widget.Toaster", [WidgetBase, Templated/*, Destroyable*/], {
+	return declare("dojox.widget.Toaster", [_WidgetBase, _TemplatedMixin], {
 		// summary:
 		//		Message that slides in from the corner of the screen, used for notifications
 		//		like "new email".
@@ -103,6 +103,7 @@ define([
 			//		type of message; possible values in messageTypes enumeration ("message", "warning", "error", "fatal")
 			// duration:
 			//		duration in milliseconds to display message before removing it. Widget has default value.
+
 			duration = duration||this.duration;
 			// sync animations so there are no ghosted fades and such
 			if(this.slideAnim){
@@ -158,31 +159,34 @@ define([
 				}else{
 					throw new Error(this.id + ".positionDirection is invalid: " + pd);
 				}
+//				this.slideAnim = this.own(coreFx.slideTo({
 				this.slideAnim = coreFx.slideTo({
 					node: this.containerNode,
 					top: 0, left: 0,
-					duration: this.slideDuration});
-				this.on(this.slideAnim, "end", function(){
+					duration: this.slideDuration,
+					onEnd: lang.hitch(this, function(){
 						//we build the fadeAnim here so we dont have to duplicate it later
 						// can't do a fadeHide because we're fading the
 						// inner node rather than the clipping node
-						this.fadeAnim = baseFx.fadeOut({
+						this.fadeAnim = /*this.own(*/baseFx.fadeOut({
 							node: this.containerNode,
-							duration: 1000});
-						this.on(this.fadeAnim, "end", function(){
-							this.isVisible = false;
-							this.hide();
-						});
+							duration: 1000,
+							onEnd: lang.hitch(this, function(){
+								this.isVisible = false;
+								this.hide();
+							})
+						})/*)*/;
 						this._setHideTimer(duration);
-						this.on(this, 'select', function(){
+						/*this.own(*/aspect.after(this, 'onSelect', lang.hitch(this, function(){
 							this._cancelHideTimer();
 							//force clear sticky message
 							this._stickyMessage=false;
 							this.fadeAnim.play();
-						});
+						}))/*)*/;
 
 						this.isVisible = true;
-					});
+					})
+				})/*)*/;
 				this.slideAnim.play();
 			}
 		},
@@ -209,7 +213,7 @@ define([
 			//if duration == 0 we keep the message displayed until clicked
 			if(duration>0){
 				this._cancelHideTimer();
-				this._hideTimer=setTimeout(lang.hitch(this, function(evt){
+				this._hideTimer = setTimeout(lang.hitch(this, function(evt){
 					// we must hide the iframe in order to fade
 					// TODO: figure out how to fade with a BackgroundIframe
 					if(this.bgIframe && this.bgIframe.iframe){
@@ -272,11 +276,11 @@ define([
 			// summary:'
 			//		show the Toaster
 			domStyle.set(this.domNode, 'display', 'block');
-
 			this._placeClip();
 
 			if(!this._scrollConnected){
-				this._scrollConnected = on(window, "scroll", lang.hitch(this, "_placeClip"));
+//				this._scrollConnected = this.own(on(window, "scroll", lang.hitch(this, "_placeClip")));
+//				this._scrollConnected = on(window, "scroll", lang.hitch(this, "_placeClip"));
 			}
 		},
 
