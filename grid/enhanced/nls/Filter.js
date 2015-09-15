@@ -86,6 +86,9 @@ define({ root:
 })
 //end v1.x content
 ,
+"bs": true,
+"mk": true,
+"sr": true,
 "ar": true,
 "bg": true,
 "ca": true,
