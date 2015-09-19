@@ -1,6 +1,7 @@
-define(["dojo/_base/lang"], 
-  function(lang){
-	var Builder = lang.getObject("string", true, dojox).Builder =
+define(["dojo/_base/lang"
+], function(lang){
+	var strLib = (dojox) ? lang.getObject("string", true, dojox) : {};
+	strLib.Builder =
 	  function(/*String?*/str){
 		// summary:
 		//		A fast buffer for creating large strings.
@@ -12,7 +13,7 @@ define(["dojo/_base/lang"],
 		// length: Number
 		//		The current length of the internal string.
 		this.length = 0;
-		
+
 		this.append = function(/* String... */s){
 			// summary:
 			//		Append all arguments to the end of the buffer
@@ -67,13 +68,13 @@ define(["dojo/_base/lang"],
 			this.length = b.length;
 			return this;	//	dojox.string.Builder
 		};
-		
+
 		this.concat = function(/*String...*/s){
 			// summary:
 			//		Alias for append.
 			return this.append.apply(this, arguments);	//	dojox.string.Builder
 		};
-		
+
 		this.appendArray = function(/*Array*/strings) {
 			// summary:
 			//		Append an array of items to the internal buffer.
@@ -81,7 +82,7 @@ define(["dojo/_base/lang"],
 			//	Changed from String.prototype.concat.apply because of IE.
 			return this.append.apply(this, strings);	//	dojox.string.Builder
 		};
-		
+
 		this.clear = function(){
 			// summary:
 			//		Remove all characters from the buffer.
@@ -89,7 +90,7 @@ define(["dojo/_base/lang"],
 			this.length = 0;
 			return this;	//	dojox.string.Builder
 		};
-		
+
 		this.replace = function(/* String */oldStr, /* String */ newStr){
 			// summary:
 			//		Replace instances of one string with another in the buffer.
@@ -97,7 +98,7 @@ define(["dojo/_base/lang"],
 			this.length = b.length;
 			return this;	//	dojox.string.Builder
 		};
-		
+
 		this.remove = function(/* Number */start, /* Number? */len){
 			// summary:
 			//		Remove len characters starting at index start.  If len
@@ -108,7 +109,7 @@ define(["dojo/_base/lang"],
 			this.length = b.length;
 			return this;	//	dojox.string.Builder
 		};
-		
+
 		this.insert = function(/* Number */index, /* String */str){
 			// summary:
 			//		Insert string str starting at index.
@@ -120,7 +121,7 @@ define(["dojo/_base/lang"],
 			this.length = b.length;
 			return this;	//	dojox.string.Builder
 		};
-		
+
 		this.toString = function(){
 			// summary:
 			//		Return the string representation of the internal buffer.
@@ -130,5 +131,5 @@ define(["dojo/_base/lang"],
 		//	initialize the buffer.
 		if(str){ this.append(str); }
 	};
-	return Builder;
+	return strLib.Builder;
 });

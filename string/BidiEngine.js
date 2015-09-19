@@ -1,18 +1,18 @@
-define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"], 
-  function(lang,declare,Stateful) {
-	lang.getObject("string", true, dojox);
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"
+], function(lang,declare,Stateful) {
+	var strLib = (dojox) ? lang.getObject("string", true, dojox) : {};
 
-	var BidiEngine = declare("dojox.string.BidiEngine", Stateful, {
+	strLib.BidiEngine = declare("dojox.string.BidiEngine", Stateful, {
 		// summary:
 		//		This class provides a bidi transformation engine, i.e.
 		//		functions for reordering and shaping bidi text.
 		// description:
-		//		Bidi stands for support for languages with a bidirectional script. 
+		//		Bidi stands for support for languages with a bidirectional script.
 		//
-		//		Usually Unicode Bidi Algorithm used by OS platform (and web browsers) is capable of properly 
-		//		transforming Bidi text and as a result it is adequately displayed on the screen. 
-		//		However, in some situations, Unicode Bidi Algorithm is not invoked or is not properly applied.  
-		//		This may occur in situation in which software responsible for rendering the text is not leveraging 
+		//		Usually Unicode Bidi Algorithm used by OS platform (and web browsers) is capable of properly
+		//		transforming Bidi text and as a result it is adequately displayed on the screen.
+		//		However, in some situations, Unicode Bidi Algorithm is not invoked or is not properly applied.
+		//		This may occur in situation in which software responsible for rendering the text is not leveraging
 		//		Unicode Bidi Algorithm implemented by OS (e.g. GFX renderers).
 		//
 		//		Bidi engine provided in this class implements Unicode Bidi Algorithm as specified at
@@ -26,7 +26,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
 		//
 		//		1. No support for following numeric shaping options:
 		//			- H - Hindi,
-		//			- C - Contextual, 
+		//			- C - Contextual,
 		//			- N - Nominal.
 		//		2. No support for following shaping options:
 		//			- I - Initial shaping,
@@ -36,27 +36,27 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
 		//		3. No support for LRE/RLE/LRO/RLO/PDF (they are handled like neutrals).
 		//		4. No support for Windows compatibility.
 		//		5. No support for  insert/remove marks.
-		//		6. No support for code pages. 
-		//			
-		
+		//		6. No support for code pages.
+		//
+
 		// Input Bidi layout in which inputText is passed to the function.
 		inputFormat: "ILYNN",
-		
+
 		// Output Bidi layout to which inputText should be transformed.
 		outputFormat: "VLNNN",
 
-		// Array, containing positions of each character from the source text in the resulting text. 
+		// Array, containing positions of each character from the source text in the resulting text.
 		sourceToTarget: [],
-		
-		// Array, containing positions of each character from the resulting text in the source text. 
+
+		// Array, containing positions of each character from the resulting text in the source text.
 		targetToSource: [],
-		
+
 		// Array, containing bidi level of each character from the source text
 		levels: [],
 
 		bidiTransform: function (/*String*/text, /*String*/formatIn, /*String*/formatOut) {
 			// summary:
-			//		Central public API for Bidi engine. Transforms the text according to formatIn, formatOut 
+			//		Central public API for Bidi engine. Transforms the text according to formatIn, formatOut
 			//		parameters. If formatIn or formatOut parametrs are not valid throws an exception.
 			// inputText:
 			//		Input text subject to application of Bidi transformation.
@@ -65,8 +65,8 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
 			// formatOut:
 			//		Output Bidi layout to which inputText should be transformed.
 			// description:
-			//		Both formatIn and formatOut parameters are 5 letters long strings. 
-			//		For example - "ILYNN". Each letter is associated with specific attribute of Bidi layout. 
+			//		Both formatIn and formatOut parameters are 5 letters long strings.
+			//		For example - "ILYNN". Each letter is associated with specific attribute of Bidi layout.
 			//		Possible and default values for each one of the letters are provided below:
 			//
 			//		First letter:
@@ -93,7 +93,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
 			//			- C - Contextual Left to Right.
 			//			- D - Contextual Right to Left.
 			//		- Default value:
-			//			L		
+			//			L
 			//
 			//		Third letter:
 			//
@@ -105,7 +105,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
 			//			- Y - Symmetric swapping is on.
 			//			- N - Symmetric swapping is off.
 			//		- Default value:
-			//			Y		
+			//			Y
 			//
 			//		Fourth letter:
 			//
@@ -117,7 +117,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
 			//			- S - Text is shaped.
 			//			- N - Text is not shaped.
 			//		- Default value:
-			//			N				
+			//			N
 			//
 			//		Fifth letter:
 			//
@@ -128,15 +128,15 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
 			//		- Possible values:
 			//			- N - Nominal.
 			//		- Default value:
-			//			N				
+			//			N
 			//
-			//		The output of this function is original text (passed via first argument) transformed from 
-			//		input Bidi layout (second argument) to output Bidi layout (last argument). 
+			//		The output of this function is original text (passed via first argument) transformed from
+			//		input Bidi layout (second argument) to output Bidi layout (last argument).
 			//
 			//		Sample call:
 			//	|	mytext = bidiTransform("HELLO WORLD", "ILYNN", "VLYNN");
-			//		In this case, "HELLO WORLD" text is transformed from Logical - LTR to Visual - LTR Bidi layout 
-			//		with default values for symmetric swapping (Yes), shaping (Not shaped) and numeric shaping 
+			//		In this case, "HELLO WORLD" text is transformed from Logical - LTR to Visual - LTR Bidi layout
+			//		with default values for symmetric swapping (Yes), shaping (Not shaped) and numeric shaping
 			//		(Nominal).
 			// returns: String
 			//		Original text transformed from input Bidi layout (second argument)
@@ -154,7 +154,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
 			if (!this.checkParameters(formatIn, formatOut)) {
 				return text;
 			}
-			
+
 			formatIn = this.inputFormat;
 			formatOut = this.outputFormat;
 			var result = text;
@@ -166,7 +166,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
 				inFormat = osIn + orientIn,
 				outFormat = osOut + orientOut,
 				swap = formatIn.charAt(2) + formatOut.charAt(2);
-	
+
 			bdx.defInFormat = inFormat;
 			bdx.defOutFormat = outFormat;
 			bdx.defSwap = swap;
@@ -179,11 +179,11 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
 			} else if (formatOut.charAt(1) === "C" || formatOut.charAt(1) === "D") {
 				isRtl = this.checkContextual(stage1Text);
 			}
-			
+
 			this.sourceToTarget = stMap;
 			this.targetToSource = reverseMap(this.sourceToTarget);
 			tsMap = this.targetToSource;
-			
+
 			if (formatIn.charAt(3) === formatOut.charAt(3)) {
 				result = stage1Text;
 			} else if (formatOut.charAt(3) === "S") {
@@ -217,7 +217,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
 			// formatIn:
 			//		Input Bidi layout in which inputText is passed to the function.
 			// formatOut:
-			//		Output Bidi layout to which inputText should be transformed.			
+			//		Output Bidi layout to which inputText should be transformed.
 			// description:
 			//		Checks, that layout parameters are different and contain allowed values.
 			//		Allowed values for format string are:
@@ -228,10 +228,10 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
 			//			- 5th letter: N
 			// returns: /*Boolean*/
 			//		true - if layout parameters are valid.
-			//		false - otherwise. 
+			//		false - otherwise.
 			// tags:
 			//		private
-			
+
 			if (!formatIn) {
 				formatIn = this.inputFormat;
 			} else {
@@ -252,14 +252,14 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
 			// summary:
 			//		Determine the base direction of a bidi text according
 			//		to its first strong directional character.
-			// text: 
+			// text:
 			//		The text to check.
 			// returns: /*String*/
 			//		"ltr" or "rtl" according to the first strong character.
 			//		If there is no strong character, returns the value of the
 			//		document dir property.
 			// tags:
-			//		public		
+			//		public
 			var dir = firstStrongDir(text);
 			if (dir !== "ltr" && dir !== "rtl") {
 				try {
@@ -279,14 +279,14 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
 			// text:
 			//		The source string.
 			// description:
-			//		Searches for RTL directed character. 
+			//		Searches for RTL directed character.
 			//		Returns true if found, else returns false.
 			// returns: /*Boolean*/
 			//		true - if text has a RTL directed character.
-			//		false - otherwise. 
+			//		false - otherwise.
 			// tags:
 			//		public
-	
+
 		    return bidiChars.test(text);
 		}
 	});
@@ -323,7 +323,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
 		//		Used for intermediate data storage
 		// returns:
 		//		Text reordered according to source and result attributes.
-		
+
 		var params = prepareReorderingParameters(text, {inFormat: inFormat, outFormat: outFormat, swap: swap}, bdx);
 		if (params.inFormat === params.outFormat) {
 			return text;
@@ -403,22 +403,22 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
 			return text;
 		}
 	}
-	
+
 	function prepareReorderingParameters(/*String*/text, /*Object*/params, /*Object*/bdx) {
 		// summary:
 		//		Prepare reordering parameters
 		// text:
 		//		The text to reorder.
 		// params:
-		//      Object, containing reordering parameters: 
+		//      Object, containing reordering parameters:
 		//         - inFormat: Ordering scheme and base direction of the source text.
 		//         - outFormat: Required ordering scheme and base direction of the result.
 		//         - swap: Symmetric swapping attributes of source and result.
 		// bdx: Object
-		//		Used for intermediate data storage		
+		//		Used for intermediate data storage
 		// tags:
 		//		private
-		
+
 		if (params.inFormat === undefined) {
 			params.inFormat = bdx.defInFormat;
 		}
@@ -478,7 +478,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
 		//		text shaped.
 		// tags:
 		//		private.
-		
+
 		if (text.length === 0) {
 			return;
 		}
@@ -489,7 +489,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
 			compress = true;
 		}
 		text = String(text);
-		
+
 		var str06 = text.split(""),
 			Ix = 0,
 			step = +1,
@@ -511,7 +511,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
 		}
 		return outBuf;
 	}
-	
+
 	function doShape(str06, Ix, step, nIEnd, compress) {
 		// summary:
 		//		Shape the source text.
@@ -526,12 +526,12 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
 		// compress:
 		//		A flag indicates to insert extra space after the lam alef compression
 		//		to preserve the buffer size or not insert an extra space which will lead
-		//		to decrease the buffer size.		
+		//		to decrease the buffer size.
 		// returns:
 		//		Array, contained shaped text.
 		// tags:
 		//		private.
-		
+
 		var previousCursive = 0, compressArray = [], compressArrayIndx = 0;
 		for (var index = Ix; index * step < nIEnd; index = index + step) {
 			if (isArabicAlefbet(str06[index]) || isArabicDiacritics(str06[index])) {
@@ -577,15 +577,15 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
 		}
 		return compressArray;
 	}
-	
+
 	function firstStrongDir(/*String*/text) {
 		// summary:
 		//		Return the first strong character direction
 		// text:
 		//		The source string.
 		// description:
-		//		Searches for first "strong" character. 
-		//		Returns if strong character was found with the direction defined by this 
+		//		Searches for first "strong" character.
+		//		Returns if strong character was found with the direction defined by this
 		//		character, if no strong character was found returns an empty string.
 		// returns: String
 		//		"ltr" - if the first strong character is Latin.
@@ -593,28 +593,28 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
 		//		"" - if the strong character wasn't found.
 		// tags:
 		//		private
-	
+
 		var fdc = /[A-Za-z\u05d0-\u065f\u066a-\u06ef\u06fa-\u07ff\ufb1d-\ufdff\ufe70-\ufefc]/.exec(text);
 		// if found return the direction that defined by the character
 		return fdc ? (fdc[0] <= "z" ? "ltr" : "rtl") : "";
 	}
-	
+
 	function lastStrongDir(text) {
 		// summary:
 		//		Return the last strong character direction
 		// text:
 		//		The source string.
 		// description:
-		//		Searches for first (from the end) "strong" character. 
-		//		Returns if strong character was found with the direction defined by this 
+		//		Searches for first (from the end) "strong" character.
+		//		Returns if strong character was found with the direction defined by this
 		//		character, if no strong character was found returns an empty string.
 		// tags:
-		//		private		
+		//		private
 		var chars = text.split("");
 		chars.reverse();
 		return firstStrongDir(chars.join(""));
 	}
-	
+
 	function deshape(/*String*/text, /*boolean*/rtl, /*boolean*/consumeNextSpace) {
 		// summary:
 		//		deshape the source text.
@@ -624,8 +624,8 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
 		//		flag indicating if the text is in RTL direction (logical
 		//		direction for Arabic words).
 		// consumeNextSpace:
-		//		flag indicating whether to consume the space next to the 
-		//		the lam alef if there is a space followed the Lamalef character to preserve the buffer size. 
+		//		flag indicating whether to consume the space next to the
+		//		the lam alef if there is a space followed the Lamalef character to preserve the buffer size.
 		//		In case there is no space next to the lam alef the buffer size will be increased due to the
 		//		expansion of the lam alef one character into lam+alef two characters
 		// returns:
@@ -640,7 +640,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
 			rtl = true;
 		}
 		text = String(text);
-	
+
 		var outBuf = "", strFE = [];
 		strFE = text.split("");
 		for (var i = 0; i < text.length; i++) {
@@ -680,20 +680,20 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
 		}
 		return outBuf;
 	}
-	
+
 	function doReorder(str, bdx) {
 		// summary:
 		//		Helper to the doBidiReorder. Manages the UBA.
 		// str:
 		//		the string to reorder.
 		// bdx: Object
-		//		Used for intermediate data storage		
+		//		Used for intermediate data storage
 		// returns:
 		//		text reordered according to source and result attributes.
-		// tags: 
-		//		private	
+		// tags:
+		//		private
 		var chars = str.split(""), levels = [];
-	
+
 		computeLevels(chars, levels, bdx);
 		swapChars(chars, levels, bdx);
 		invertLevel(2, chars, levels, bdx);
@@ -756,7 +756,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
 			handleUbatS(types, levels, len, bdx);
 		}
 	}
-	
+
 	function handleUbatS(types, levels, len, bdx) {
 		for (var i = 0; i < len; i++) {
 			if (types[i] === UBAT_S) {
@@ -771,7 +771,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
 			}
 		}
 	}
-	
+
 	function swapChars(chars, levels, bdx) {
 		// summary:
 		//		Swap characters with symmetrical mirroring as all kinds of parenthesis.
@@ -784,8 +784,8 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
 		// bdx: Object
 		//		Used for intermediate data storage
 		// tags:
-		//		private	
-	
+		//		private
+
 		if (bdx.hiLevel === 0 || bdx.swap.substr(0, 1) === bdx.swap.substr(1, 2)) {
 			return;
 		}
@@ -795,23 +795,23 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
 			}
 		}
 	}
-	
+
 	function getCharacterType(ch) {
 		// summary:
 		//		Return the type of the character.
 		// ch:
 		//		The character to be checked.
-	
+
 		// description:
 		//		Check the type of the character according to MasterTable,
 		//		type = LTR, RTL, neutral,Arabic-Indic digit etc.
 		// tags:
-		//		private			
+		//		private
 		var uc = ch.charCodeAt(0),
 			hi = MasterTable[uc >> 8];
 		return (hi < TBBASE) ? hi : UnicodeTable[hi - TBBASE][uc & 0xFF];
 	}
-	
+
 	function invertStr(str, bdx) {
 		// summary:
 		//		Return the reversed string.
@@ -820,7 +820,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
 		// description:
 		//		Reverse the string str.
 		// tags:
-		//		private					
+		//		private
 		var chars = str.split("");
 		if (bdx) {
 			var levels = [];
@@ -831,7 +831,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
 		stMap.reverse();
 		return chars.join("");
 	}
-	
+
 	function indexOf(cArray, cLength, idx) {
 		for (var i = 0; i < cLength; i++) {
 			if (cArray[i] === idx) {
@@ -840,7 +840,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
 		}
 		return -1;
 	}
-	
+
 	function isArabicAlefbet(c) {
 		for (var i = 0; i < ArabicAlefBetIntervalsBegine.length; i++) {
 			if (c >= ArabicAlefBetIntervalsBegine[i] && c <= ArabicAlefBetIntervalsEnd[i]) {
@@ -849,7 +849,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
 		}
 		return false;
 	}
-	
+
 	function isNextArabic(str06, index, step, nIEnd) {
 		while (((index) * step) < nIEnd && isArabicDiacritics(str06[index])) {
 			index += step;
@@ -859,7 +859,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
 		}
 		return false;
 	}
-	
+
 	function isNextAlef(str06, index, step, nIEnd) {
 		while (((index) * step) < nIEnd && isArabicDiacritics(str06[index])) {
 			index += step;
@@ -877,7 +877,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
 		}
 		return false;
 	}
-	
+
 	function invertLevel(lev, chars, levels, bdx) {
 		if (bdx.hiLevel < lev) {
 			return;
@@ -907,7 +907,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
 			start++;
 		}
 	}
-	
+
 	function getCharClass(chars, types, classes, ix, bdx) {
 		// summary:
 		//		Return the class if ix character in chars.
@@ -916,13 +916,13 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
 		// types:
 		//		Array of types, for each character in chars.
 		// classes:
-		//		Array of classes that already been solved. 
+		//		Array of classes that already been solved.
 		// ix:
 		//		the index of checked character.
 		// bdx: Object
-		//		Used for intermediate data storage		
+		//		Used for intermediate data storage
 		// tags:
-		//		private				
+		//		private
 		var cType = types[ix],
 			results = {
 				UBAT_L : function () { bdx.lastArabic = false; return UBAT_L; },
@@ -1007,9 +1007,9 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
 		// c:
 		//		The character to be mirrored.
 		// tags:
-		//		private					
+		//		private
 		var mid, low = 0, high = SwapTable.length - 1;
-	
+
 		while (low <= high) {
 			mid = Math.floor((low + high) / 2);
 			if (c < SwapTable[mid][0]) {
@@ -1022,7 +1022,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
 		}
 		return c;
 	}
-	
+
 	function isStandAlonCharacter(c) {
 		for (var i = 0; i < StandAlonForm.length; i++) {
 			if (StandAlonForm[i] === c) {
@@ -1031,7 +1031,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
 		}
 		return false;
 	}
-	
+
 	function getMedialFormCharacterFE(c) {
 		for (var i = 0; i < BaseForm.length; i++) {
 			if (c === BaseForm[i]) {
@@ -1040,7 +1040,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
 		}
 		return c;
 	}
-	
+
 	function getFormCharacterFE(/*char*/ c, /*char[]*/formArr) {
 		for (var i = 0; i < BaseForm.length; i++) {
 			if (c === BaseForm[i]) {
@@ -1049,11 +1049,11 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
 		}
 		return c;
 	}
-	
+
 	function isArabicDiacritics(c) {
 		return	(c >= "\u064b" && c <= "\u0655") ? true : false;
 	}
-	
+
 	function getOrientation(/*Char*/ oc) {
 		if (oc === "L") {
 			return "LTR";
@@ -1068,7 +1068,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
 			return "CRL";
 		}
 	}
-	
+
 	function setAlefToSpace(str06, index, step, nIEnd) {
 		while (((index) * step) < nIEnd && isArabicDiacritics(str06[index])) {
 			index += step;
@@ -1079,7 +1079,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
 		}
 		return false;
 	}
-	
+
 	function getLamAlefFE(alef06, LamAlefForm) {
 		for (var i = 0; i < AlefTable.length; i++) {
 			if (alef06 === AlefTable[i]) {
@@ -1118,7 +1118,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
 	var stMap = [];
 	var tsMap = [];
 	var lvMap = [];
-		
+
 	var	BDX = {
 			dir: 0,
 			defInFormat: "LLTR",
@@ -1133,13 +1133,13 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
 			hasBlockSep: false,
 			hasSegSep: false
 		};
-	
+
 	var ITIL = 5;
-	
+
 	var ITCOND = 6;
-	
+
 	var LTR = 0;
-	
+
 	var RTL = 1;
 
 	var validFormat = /^[(I|V)][(L|R|C|D)][(Y|N)][(S|N)][N]$/;
@@ -1180,9 +1180,9 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
 		[ "\uFE65", "\uFE64" ]
 	];
 	var AlefTable = ["\u0622", "\u0623", "\u0625", "\u0627"];
-	
+
 	var LamAlefInialTableFE = ["\ufef5", "\ufef7", "\ufef9", "\ufefb"];
-	
+
 	var LamAlefMedialTableFE = ["\ufef6", "\ufef8", "\ufefa", "\ufefc"];
 	/**
 	 * Arabic Characters in the base form
@@ -1193,7 +1193,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
                     "\u0622", "\u0629", "\u0649", "\u0644", "\u0645", "\u0646", "\u0647", "\u0648", "\u064A", "\u0625",
                     "\u0623", "\u0622", "\u0629", "\u0649", "\u06CC", "\u0626", "\u0624", "\u064B", "\u064C", "\u064D",
                     "\u064E", "\u064F", "\u0650", "\u0651", "\u0652", "\u0621"];
-	
+
 	/**
 	 * Arabic shaped characters in Isolated form
 	 */
@@ -1202,7 +1202,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
                         "\uFECD", "\uFED1", "\uFED5", "\uFED9", "\uFEDD", "\uFEE1", "\uFEE5", "\uFEE9", "\uFEED",
                         "\uFEF1", "\uFE87", "\uFE83", "\uFE81", "\uFE93", "\uFEEF", "\uFBFC", "\uFE89", "\uFE85",
                         "\uFE70", "\uFE72", "\uFE74", "\uFE76", "\uFE78", "\uFE7A", "\uFE7C", "\uFE7E", "\uFE80"];
-	
+
 	/**
 	 * Arabic shaped characters in Final form
 	 */
@@ -1211,7 +1211,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
                      "\uFED6", "\uFEDA", "\uFEDE", "\uFEE2", "\uFEE6", "\uFEEA", "\uFEEE", "\uFEF2", "\uFE88", "\uFE84",
                      "\uFE82", "\uFE94", "\uFEF0", "\uFBFD", "\uFE8A", "\uFE86", "\uFE70", "\uFE72", "\uFE74", "\uFE76",
                      "\uFE78", "\uFE7A", "\uFE7C", "\uFE7E", "\uFE80"];
-	
+
 	/**
 	 * Arabic shaped characters in Media form
 	 */
@@ -1220,7 +1220,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
                       "\uFED0", "\uFED4", "\uFED8", "\uFEDC", "\uFEE0", "\uFEE4", "\uFEE8", "\uFEEC", "\uFEEE",
                       "\uFEF4", "\uFE88", "\uFE84", "\uFE82", "\uFE94", "\uFEF0", "\uFBFF", "\uFE8C", "\uFE86",
                       "\uFE71", "\uFE72", "\uFE74", "\uFE77", "\uFE79", "\uFE7B", "\uFE7D", "\uFE7F", "\uFE80"];
-	
+
 	/**
 	 * Arabic shaped characters in Initial form
 	 */
@@ -1229,13 +1229,13 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
                        "\uFECF", "\uFED3", "\uFED7", "\uFEDB", "\uFEDF", "\uFEE3", "\uFEE7", "\uFEEB", "\uFEED",
                        "\uFEF3", "\uFE87", "\uFE83", "\uFE81", "\uFE93", "\uFEEF", "\uFBFE", "\uFE8B", "\uFE85",
                        "\uFE70", "\uFE72", "\uFE74", "\uFE76", "\uFE78", "\uFE7A", "\uFE7C", "\uFE7E", "\uFE80"];
-	
+
 	/**
 	 * Arabic characters that couldn't join to the next character
 	 */
 	var StandAlonForm = ["\u0621", "\u0627", "\u062F", "\u0630", "\u0631", "\u0632", "\u0648", "\u0622", "\u0629",
                          "\u0626", "\u0624", "\u0625", "\u0675", "\u0623"];
-	
+
 	var FETo06Table = ["\u064B", "\u064B", "\u064C", "\u061F", "\u064D", "\u061F", "\u064E", "\u064E", "\u064F",
                        "\u064F", "\u0650", "\u0650", "\u0651", "\u0651", "\u0652", "\u0652", "\u0621", "\u0622",
                        "\u0622", "\u0623", "\u0623", "\u0624", "\u0624", "\u0625", "\u0625", "\u0626", "\u0626",
@@ -1254,9 +1254,9 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
                        "\uFEF7", "\uFEF8", "\uFEF9", "\uFEFA", "\uFEFB", "\uFEFC", "\u061F", "\u061F", "\u061F"];
 
 	var ArabicAlefBetIntervalsBegine = ["\u0621", "\u0641"];
-	
+
 	var ArabicAlefBetIntervalsEnd = ["\u063A", "\u064a"];
-	
+
 	var	impTabLtr = [
 	/*		L,		R,		EN,		AN,		N,		IL,		Cond */
 		[	0,		3,		0,		1,		0,		0,		0	], /* 0 LTR text	*/
@@ -1273,7 +1273,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
 		[	2,		0,		2,		1,		3,		2,		0	], /* 2 LTR text	*/
 		[	2,		0,		2,		0x21,	3,		1,		1	]  /* 3 LTR+cont	*/
 	];
-	
+
 	var UBAT_L	= 0; /* left to right				*/
 	var UBAT_R	= 1; /* right to left				*/
 	var UBAT_EN = 2; /* European digit				*/
@@ -1298,7 +1298,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
 						"UBAT_CS", "UBAT_ES", "UBAT_ET", "UBAT_NSM", "UBAT_LRE", "UBAT_RLE", "UBAT_PDF", "UBAT_LRO",
 						"UBAT_RLO", "UBAT_BN" ];
 	var TBBASE = 100;
-	
+
 	var TB00 = TBBASE + 0;
 	var TB05 = TBBASE + 1;
 	var TB06 = TBBASE + 2;
@@ -1307,7 +1307,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
 	var TBFB = TBBASE + 5;
 	var TBFE = TBBASE + 6;
 	var TBFF = TBBASE + 7;
-	
+
 	var L	= UBAT_L;
 	var R	= UBAT_R;
 	var EN	= UBAT_EN;
@@ -1327,7 +1327,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
 	var LRO	= UBAT_LRO;
 	var RLO	= UBAT_RLO;
 	var BN	= UBAT_BN;
-	
+
 	var MasterTable = [
  /*******************************************************************************************************/
  /*     0     1     2     3     4     5     6     7     8     9     A     B     C     D     E     F     */
@@ -1521,5 +1521,5 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Stateful"],
 		]
 	];
 
-	return BidiEngine;
+	return strLib.BidiEngine;
 });
