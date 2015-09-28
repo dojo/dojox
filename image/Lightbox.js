@@ -1,4 +1,4 @@
-define(["dojo", "dijit", "dojox", "dojo/text!./resources/Lightbox.html", "dijit/Dialog", "dojox/fx/_base"], function(dojo, dijit, dojox, template){
+define(["require", "dojo", "dijit", "dojox", "dojo/text!./resources/Lightbox.html", "dijit/Dialog", "dojox/fx/_base"], function(require, dojo, dijit, dojox, template){
 
 	dojo.experimental("dojox.image.Lightbox");
 	dojo.getObject("image", true, dojox);
@@ -194,7 +194,7 @@ define(["dojo", "dijit", "dojox", "dojo/text!./resources/Lightbox.html", "dijit/
 
 		// errorImg: Url
 		//		Path to the image used when a 404 is encountered
-		errorImg: dojo.moduleUrl("dojox.image","resources/images/warning.png"),
+		errorImg: require.toUrl("./resources/images/warning.png"),
 
 		templateString: template, 
 		

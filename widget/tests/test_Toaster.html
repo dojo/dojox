@@ -1,5 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
-        "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE HTML>
 <html>
 <head>
 	<title>Toaster Widget Dojo Tests</title>
@@ -7,60 +6,61 @@
 		@import "../../../dojo/resources/dojo.css";
 		@import "../../../dijit/themes/tundra/tundra.css";
 		@import "../../../dijit/themes/dijit.css";
-		@import "../../../dijit/tests/css/dijitTests.css"; 
+		@import "../../../dijit/tests/css/dijitTests.css";
 		@import "../Toaster/Toaster.css";
 	</style>
 
-	<script type="text/javascript" src="../../../dojo/dojo.js" data-dojo-config="isDebug:true, parseOnLoad: true"></script>
-	<script type="text/javascript">
-		dojo.require("dojox.widget.Toaster");
-		dojo.require("dojo.parser");	// scan page for widgets and instantiate them
-
-		dojo.require("dijit.Tooltip");
-		
-		var toast = null;
-		function showTestMessage(){
-			dojo.publish("testMessageTopic", 
-				[ "This is a message! It's kind of long to show message wrapping."]
-			);
-		}
-		function showAnotherMessage(){
-			dojo.publish("testMessageTopic", 
-				[{
-					message: "This is another message!", 
-					type: "warning", 
-					duration: 500
-				}]
-			);
-		}
-		function showYetAnotherMessage(){
-			dojo.publish("testMessageTopic", 
-				[{ message: "This is yet another message!" }]
-			);
-		}
-
-		dojo.addOnLoad(function(){
-			toast = dijit.byId("toast");
+	<script src="../../../dojo/dojo.js" data-dojo-config="isDebug:true, async: 1"></script>
+	<script>
+		require([
+			"dojo/parser",
+			"dojo/topic",
+			"dojo/on",
+			"dojo/dom",
+			"dijit/registry",
+			"dijit/Tooltip",
+			"dojox/widget/Toaster",
+			"dojo/domReady!"
+		], function (parser, topic, on, dom, registry) {
+			parser.parse();
+			on(dom.byId("submitButton1"), "click",function () {
+				topic.publish("testMessageTopic",
+					"This is a message! It's kind of long to show message wrapping."
+				);
+			});
+			on(dom.byId("submitButton2"), "click", function () {
+				topic.publish("testMessageTopic",
+					{
+						message: "This is another message!",
+						type: "warning",
+						duration: 500
+					}
+				);
+			});
+			on(dom.byId("submitButton3"), "click", function () {
+				topic.publish("testMessageTopic",
+					{ message: "This is yet another message!" }
+				);
+			});
 		});
+
 	</script>
 </head>
 <body class="tundra">
-	<div dojoType="dojox.widget.Toaster" id="toast" 
-		positionDirection="br-left" duration="0" 
-		messageTopic="testMessageTopic"></div>
+	<div data-dojo-type="dojox/widget/Toaster" id="toast"
+		data-dojo-props="positionDirection: 'br-left', duration:0, messageTopic:'testMessageTopic'"></div>
 
-	<div dojoType="dojox.widget.Toaster" id="toast2" 
-		separator="&lt;hr&gt;" positionDirection="bl-up" 
-		messageTopic="testMessageTopic"></div>
+	<div data-dojo-type="dojox/widget/Toaster" id="toast2"
+		data-dojo-props="separator: '&lt;hr&gt;', positionDirection: 'bl-up', messageTopic:'testMessageTopic'"></div>
 
-	<button type="submit" 
-		onclick="showTestMessage();">Click to show message</button>
-	<button type="submit" 
-		onclick="showAnotherMessage();">Click to show another message</button>
-	<button type="submit" 
-		onclick="showYetAnotherMessage();">Click to show yet another message</button>
+	<button type="submit" id="submitButton1"
+		>Click to show message</button>
+	<button type="submit" id="submitButton2"
+		>Click to show another message</button>
+	<button type="submit" id="submitButton3"
+		>Click to show yet another message</button>
 
-	<h1>dojox.widget.Toaster test</h1>
+	<h1>dojox/widget/Toaster test</h1>
 
 	<div style="color: #FF0000;">
 		When you click any of the buttons above, the bottom right hand message will
@@ -69,17 +69,17 @@
 		displayed in the bottom right corner it should append the new message below
 		the old one with a separator between them.
 	</div>
-	
+
 	<h2>A Tooltip: (#10046)</h2>
 	<div><span id="one" class="tt" tabindex="0"> focusable text </span>
-		<span dojoType="dijit.Tooltip" connectId="one" id="one_tooltip">
+		<span data-dojo-type="dijit/Tooltip" data-dojo-props="connectId:'one'" id="one_tooltip">
 			<b>
 				<span style="color: blue;">rich formatting</span>
 				<span style="color: red; font-size: x-large;"><i>!</i></span>
 			</b>
 		</span>
 	</div>
-	
+
 	<p>
 		Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean semper
 		sagittis velit. Cras in mi. Duis porta mauris ut ligula. Proin porta rutrum
@@ -156,6 +156,6 @@
 		sapien. Suspendisse imperdiet. Class aptent taciti sociosqu ad litora
 		torquent per conubia nostra, per inceptos hymenaeos.
 	</p>
-		
+
 </body>
 </html>

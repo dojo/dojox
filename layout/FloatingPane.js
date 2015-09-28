@@ -1,14 +1,15 @@
 define(["dojo/_base/kernel","dojo/_base/lang","dojo/_base/window","dojo/_base/declare",
 		"dojo/_base/fx","dojo/_base/connect","dojo/_base/array","dojo/_base/sniff",
-		"dojo/window","dojo/dom","dojo/dom-class","dojo/dom-geometry","dojo/dom-construct",
+		"dojo/window","dojo/dom","dojo/dom-class","dojo/dom-geometry","dojo/dom-construct", "dojo/touch",
 		"dijit/_TemplatedMixin","dijit/_Widget","dijit/BackgroundIframe","dojo/dnd/Moveable",
 		"./ContentPane","./ResizeHandle","dojo/text!./resources/FloatingPane.html","./Dock"], function(
 	kernel, lang, winUtil, declare, baseFx, connectUtil, arrayUtil, 
-	has, windowLib, dom, domClass, domGeom, domConstruct, TemplatedMixin, Widget, BackgroundIframe, 
+	has, windowLib, dom, domClass, domGeom, domConstruct, touch, TemplatedMixin, Widget, BackgroundIframe,
 	Moveable, ContentPane, ResizeHandle, template,Dock){
 	
 kernel.experimental("dojox.layout.FloatingPane");
-var FloatingPane = declare("dojox.layout.FloatingPane", [ ContentPane, TemplatedMixin ],{
+
+return declare("dojox.layout.FloatingPane", [ ContentPane, TemplatedMixin ],{
 	// summary:
 	//		A non-modal Floating window.
 	// description:
@@ -153,8 +154,8 @@ var FloatingPane = declare("dojox.layout.FloatingPane", [ ContentPane, Templated
 				this.minimize();
 			}
 		}
-		this.connect(this.focusNode,"onmousedown","bringToTop");
-		this.connect(this.domNode,	"onmousedown","bringToTop");
+		this.connect(this.focusNode, touch.press,"bringToTop");
+		this.connect(this.domNode,	touch.press,"bringToTop");
 
 		// Initial resize to give child the opportunity to lay itself out
 		this.resize(domGeom.position(this.domNode));
@@ -314,5 +315,4 @@ var FloatingPane = declare("dojox.layout.FloatingPane", [ ContentPane, Templated
 	}
 });
 
-return FloatingPane;
 });

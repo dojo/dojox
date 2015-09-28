@@ -72,7 +72,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/has",
 				vt = this._vScaler.scaler.getTransformerFromModel(this._vScaler),
 				events = this.events();
 
-			for(var i = this.series.length - 1; i >= 0; --i){
+			for(var i = 0; i < this.series.length; i++){
 				var run = this.series[i];
 				if(!this.dirty && !run.dirty){
 					t.skip();
@@ -119,7 +119,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/has",
 				// make shadows if needed
 				if(theme.series.shadow){
 					shadowCircles = arr.map(points, function(item, i){
-						if(item !== null){
+						if(!this.isNullValue(item)){
 							var finalTheme = getFinalTheme(run.data[i]),
 								shadow = finalTheme.series.shadow;
 							var shape = s.createCircle({
@@ -140,7 +140,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/has",
 				// make outlines if needed
 				if(theme.series.outline){
 					outlineCircles = arr.map(points, function(item, i){
-						if(item !== null){
+						if(!this.isNullValue(item)){
 							var finalTheme = getFinalTheme(run.data[i]),
 								outline = dc.makeStroke(finalTheme.series.outline);
 							outline.width = 2 * outline.width + (theme.series.stroke && theme.series.stroke.width || 0);
@@ -161,7 +161,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/has",
 
 				//	run through the data and add the circles.
 				frontCircles = arr.map(points, function(item, i){
-					if(item !== null){
+					if(!this.isNullValue(item)){
 						var finalTheme = getFinalTheme(run.data[i]),
 							rect = {
 								x: item.x - item.radius,

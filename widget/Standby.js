@@ -311,8 +311,9 @@ return declare("dojox.widget.Standby", [_Widget, _TemplatedMixin],{
 
 			if(this.zIndex === "auto"){
 				if(zi != "auto"){
-					ziUl = parseInt(ziUl, 10) + 1;
-					ziIn = parseInt(ziIn, 10) + 2;
+					// honor user-defined z-index
+					ziUl = parseInt(ziUl, 10);
+					ziIn = parseInt(ziIn, 10);
 				}else{
 					//We need to search up the chain to see if there
 					//are any parent zIndexs to overlay.
@@ -329,7 +330,7 @@ return declare("dojox.widget.Standby", [_Widget, _TemplatedMixin],{
 								if(oldZi < newZi){
 									oldZi = newZi;
 									ziUl = newZi + 1;
-									ziIn = newZi + 2;
+									ziIn = newZi + 1;
 								}
 								// Keep looking until we run out, we want the highest zIndex.
 								cNode = cNode.parentNode;
@@ -338,8 +339,9 @@ return declare("dojox.widget.Standby", [_Widget, _TemplatedMixin],{
 					}
 				}
 			}else{
-				ziUl = parseInt(this.zIndex, 10) + 1;
-				ziIn = parseInt(this.zIndex, 10) + 2;
+				// honor user-defined z-index
+				ziUl = parseInt(this.zIndex, 10);
+				ziIn = parseInt(this.zIndex, 10);
 			}
 
 			domStyle.set(this._centerNode, "zIndex", ziIn);

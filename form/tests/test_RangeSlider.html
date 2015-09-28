@@ -61,11 +61,18 @@
 
 			}
 
+			horizRtlOnChange = function(){
+
+				dom.byId('minValueRtl').value = number.format(arguments[0][0]/100, { places:1, pattern:'#%' });
+				dom.byId('maxValueRtl').value = number.format(arguments[0][1]/100, { places:1, pattern:'#%' });
+
+			}
+
 			vertOnChange = function(){
 
 				console.log(arguments);
-				dom.byId('vMinValue').value = number.format(arguments[0][1],{places:1,pattern:'#'});
-				dom.byId('vMaxValue').value = number.format(arguments[0][0],{places:1,pattern:'#'});
+				dom.byId('vMinValue').value = number.format(arguments[0][0],{places:1,pattern:'#'});
+				dom.byId('vMaxValue').value = number.format(arguments[0][1],{places:1,pattern:'#'});
 
 			}
 
@@ -91,12 +98,19 @@
 							doh.is(slider.minimum+30, v[0], "min value " + v[0]);
 							doh.is(slider.maximum-30, v[1], "max value " + v[1]);
 						},
+						function setHValueRtl(){
+							var slider = registry.byId("hrSliderRtl");
+							slider.set('value', [slider.minimum+30, slider.maximum-30], true);
+							var v = slider.get('value').concat([]); // copy array
+							doh.is(slider.minimum+30, v[0], "min value " + v[0]);
+							doh.is(slider.maximum-30, v[1], "max value " + v[1]);
+						},
 						function setVValue(){
 							var slider = registry.byId("vrSlider");
 							slider.set('value', [slider.minimum+30, slider.maximum-30], true);
 							var v = slider.get('value').concat([]); // copy array
-							doh.is(slider.maximum-30, v[0], "max value " + v[0]);
-							doh.is(slider.minimum+30, v[1], "min value " + v[1]);
+							doh.is(slider.maximum-30, v[1], "max value " + v[1]);
+							doh.is(slider.minimum+30, v[0], "min value " + v[0]);
 						},
 						function clickHValue(){
 							var slider = registry.byId("hrSlider");
@@ -113,10 +127,10 @@
 							var bar = domGeometry.position(slider.progressBar, true);
 							slider._onRemainingBarClick({ pageY: bar.y - (bar.h >> 2), preventDefault: function(){}, stopPropagation: function(){} });
 							var v = slider.get('value').concat([]); // copy array
-							doh.is(slider.maximum-20, Math.round(v[0]), "max value " + v[0]);
+							doh.is(slider.maximum-20, Math.round(v[1]), "max value " + v[1]);
 							slider._onRemainingBarClick({ pageY: bar.y + bar.h + (bar.h >> 2), preventDefault: function(){}, stopPropagation: function(){} });
 							v = slider.get('value').concat([]); // copy array
-							doh.is(slider.minimum+20, Math.round(v[1]), "min value " + v[1]);
+							doh.is(slider.minimum+20, Math.round(v[0]), "min value " + v[0]);
 						},
 						function changeMax(){
 							var slider = registry.byId("hrSlider");
@@ -152,6 +166,16 @@
 							var v2 = slider.get('value');
 							doh.is(v[0], v2[0], "min unchanged");
 							doh.is(v[1], v2[1], "max unchanged");
+						},
+						function watchValue(){
+							var slider = registry.byId('watchSlider'),
+								v;
+							slider.watch('value', function(value, oldValue, newValue){
+								v = newValue;
+							});
+							slider.set('value', [slider.minimum+30, slider.maximum-30], true);
+							doh.is(slider.minimum+30, v[0], "min value " + v[0]);
+							doh.is(slider.maximum-30, v[1], "max value " + v[1]);
 						}
 					]);
 					doh.register("disable", [
@@ -200,10 +224,43 @@
 		<div dojoType="dijit/form/HorizontalRule" container="topDecoration" count=7 style="height:10px;margin-bottom:-5px;"></div>
 	</div>
 	</center>
+
+	<h2>Watch slider</h2>
+	<center>
+	<div 
+		id="watchSlider" 
+		discreteValues="11"
+		onChange="horizOnChange"
+		style="width:500px;" 
+		value="80,20" 
+		intermediateChanges="true"
+		dojoType="dojox/form/HorizontalRangeSlider">
+		<ol dojoType="dijit/form/HorizontalRuleLabels" container="topDecoration" style="height:1.2em;font-size:75%;color:gray;" count="7" constraints="{pattern:'#.00%'}"></ol>
+		<div dojoType="dijit/form/HorizontalRule" container="topDecoration" count=7 style="height:10px;margin-bottom:-5px;"></div>
+	</div>
+	</center>
 	<label for="minValue">Horizontal Slider Min Value:</label><input readonly id="minValue" size="10" value="20.0%"/><br/>
 	<label for="maxValue">Horizontal Slider Max Value:</label><input readonly id="maxValue" size="10" value="80.0%"/><br/>
 	<button id="disableButton" dojoType="dijit/form/Button" onClick="registry.byId('hrSlider').set('disabled', true);registry.byId('disableButton').set('disabled',true);registry.byId('enableButton').set('disabled',false);">Disable previous slider</button>
 	<button id="enableButton"  dojoType="dijit/form/Button" onClick="registry.byId('hrSlider').set('disabled', false);registry.byId('disableButton').set('disabled',false);registry.byId('enableButton').set('disabled', true);" disabled>Enable previous slider</button>
+
+	<h2>Horizontal slider RTL</h2>
+	<center>
+	<div 
+		id="hrSliderRtl" 
+		dir="rtl"
+		discreteValues="11"
+		onChange="horizRtlOnChange"
+		style="width:500px;" 
+		value="80,20" 
+		intermediateChanges="true"
+		dojoType="dojox/form/HorizontalRangeSlider">
+		<ol dojoType="dijit/form/HorizontalRuleLabels" container="topDecoration" style="height:1.2em;font-size:75%;color:gray;" count="7" constraints="{pattern:'#.00%'}"></ol>
+		<div dojoType="dijit/form/HorizontalRule" container="topDecoration" count=7 style="height:10px;margin-bottom:-5px;"></div>
+	</div>
+	</center>
+	<label for="minValueRtl">Horizontal Slider Min Value:</label><input readonly id="minValueRtl" size="10" value="20.0%"/><br/>
+	<label for="maxValueRtl">Horizontal Slider Max Value:</label><input readonly id="maxValueRtl" size="10" value="80.0%"/><br/>
 	
 	<h2>A customized horizontal slider</h2>
 	<div 
@@ -228,6 +285,7 @@
 		<div dojoType="dijit/form/VerticalRule" container="rightDecoration" count=11 style="width:5px;" ruleStyle="border-color:gray;"></div>
 		<ol dojoType="dijit/form/VerticalRuleLabels" data-dojo-props='container:"rightDecoration", style:{width:"2em"}, count:6, numericMargin:1, minimum:0, maximum:100, constraints:{pattern:"#"}'></ol>
 	</div>
+
 	<p>
 	<label for="vMaxValue">Vertical Slider Max Value:</label><input readonly id="vMaxValue" size="10" value="90.0"/><br/>
 	<label for="vMinValue">Vertical Slider Min Value:</label><input readonly id="vMinValue" size="10" value="10.0"/><br/>

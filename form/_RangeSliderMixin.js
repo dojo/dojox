@@ -19,8 +19,7 @@ define([
 
 	// make these functions once:
 	var sortReversed = function(a, b){ return b - a; },
-		sortForward = function(a, b){ return a - b; }
-	;
+		sortForward = function(a, b){ return a - b; };
 
 
 	var RangeSliderMixin = declare("dojox.form._RangeSliderMixin", null, {
@@ -38,7 +37,7 @@ define([
 			this.inherited(arguments);
 			// we sort the values!
 			// TODO: re-think, how to set the value
-			this.value.sort(this._isReversed() ? sortReversed : sortForward);
+			this.value.sort(sortForward);
 
 			// define a custom constructor for a SliderMoverMax that points back to me
 			var _self = this;
@@ -53,13 +52,13 @@ define([
 			//The valuenow of the sliderHandle (min) usually determines the valuemin of sliderHandleMax
 			//and valuenow of sliderHandleMax usually determines the valueMax of sliderHandle
 			//However, in our RangeSlider dragging one handle past the other one causes both to
-			//'snap' together and move so both sliders will have the same min, max values			
+			//'snap' together and move so both sliders will have the same min, max values
 
 			this.sliderHandle.setAttribute("aria-valuemin", this.minimum);
 			this.sliderHandle.setAttribute("aria-valuemax", this.maximum);
 			this.sliderHandleMax.setAttribute("aria-valuemin", this.minimum);
 			this.sliderHandleMax.setAttribute("aria-valuemax", this.maximum);
-			
+
 			// a dnd for the bar!
 			var barMover = declare(SliderBarMover, {
 				constructor: function(){
@@ -67,13 +66,13 @@ define([
 				}
 			});
 			this._movableBar = new Moveable(this.progressBar,{ mover: barMover });
-				
+
 			// Remove these from the progress bar since it isn't a slider
 			this.focusNode.removeAttribute("aria-valuemin");
 			this.focusNode.removeAttribute("aria-valuemax");
 			this.focusNode.removeAttribute("aria-valuenow");
 
-		},		
+		},
 
 		destroy: function(){
 			this.inherited(arguments);
@@ -86,8 +85,8 @@ define([
 
 			var useMaxValue = e.target === this.sliderHandleMax;
 			var barFocus = e.target === this.progressBar;
-			var k = lang.delegate(keys, this.isLeftToRight() ? {PREV_ARROW: keys.LEFT_ARROW, NEXT_ARROW: keys.RIGHT_ARROW} 
-			                                                 : {PREV_ARROW: keys.RIGHT_ARROW, NEXT_ARROW: keys.LEFT_ARROW});			
+			var k = lang.delegate(keys, this.isLeftToRight() ? {PREV_ARROW: keys.LEFT_ARROW, NEXT_ARROW: keys.RIGHT_ARROW}
+			                                                 : {PREV_ARROW: keys.RIGHT_ARROW, NEXT_ARROW: keys.LEFT_ARROW});
 			var delta = 0;
 			var down = false;
 
@@ -102,7 +101,7 @@ define([
 				case k.PAGE_UP    :	delta = this.pageIncrement; break;
 				default           : this.inherited(arguments);return;
 			}
-			
+
 			if(down){delta = -delta;}
 
 			if(delta){
@@ -139,7 +138,7 @@ define([
 					this._getBumpValue(signedChange[0].change, signedChange[0].useMaxValue),
 					this._getBumpValue(signedChange[1].change, signedChange[1].useMaxValue)
 				]
-				: this._getBumpValue(signedChange, useMaxValue)
+				: this._getBumpValue(signedChange, useMaxValue);
 
 			this._setValueAttr(value, true, useMaxValue);
 		},
@@ -147,9 +146,6 @@ define([
 		_getBumpValue: function(signedChange, useMaxValue){
 
 			var idx = useMaxValue ? 1 : 0;
-			if(this._isReversed()){
-				idx = 1 - idx;
-			}
 
 			var s = domStyle.getComputedStyle(this.sliderBarContainer),
 				c = domGeometry.getContentBox(this.sliderBarContainer, s),
@@ -217,35 +213,25 @@ define([
 
 		_setValueAttr: function(/*Array or Number*/ value, /*Boolean, optional*/ priorityChange, /*Boolean, optional*/ isMaxVal){
 			// we pass an array, when we move the slider with the bar
-			var actValue = this.value;
+			var actValue = lang.clone(this.value);
+
 			if(!lang.isArray(value)){
-				if(isMaxVal){
-					if(this._isReversed()){
-						actValue[0] = value;
-					}else{
-						actValue[1] = value;
-					}
-				}else{
-					if(this._isReversed()){
-						actValue[1] = value;
-					}else{
-						actValue[0] = value;
-					}
-				}
+				actValue[isMaxVal ? 1 : 0] = value;
 			}else{
 				actValue = value;
 			}
 			// we have to reset this values. don't know the reason for that
 			this._lastValueReported = "";
-			this.valueNode.value = this.value = value = actValue;
+			this.valueNode.value = value = actValue;
 
-			this.value.sort(this._isReversed() ? sortReversed : sortForward);
+			actValue.sort(sortForward);
 
 			this.sliderHandle.setAttribute("aria-valuenow", actValue[0]);
 			this.sliderHandleMax.setAttribute("aria-valuenow", actValue[1]);
-			
+
 			// not calling the _setValueAttr-function of Slider, but the super-super-class (needed for the onchange-event!)
 			FormValueWidget.prototype._setValueAttr.apply(this, arguments);
+
 			this._printSliderBar(priorityChange, isMaxVal);
 		},
 

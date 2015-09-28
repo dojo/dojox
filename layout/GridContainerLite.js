@@ -376,7 +376,7 @@ define([
 			//		List all zones and insert child into columns.
 
 			//console.log("dojox.layout.GridContainerLite ::: _organizeChildren");
-			var children = this.constructor.superclass.getChildren.call(this);
+			var children = gcl.superclass.getChildren.call(this);
 			var numZones = this.nbZones,
 				numPerZone = Math.floor(children.length / numZones),
 				mod = children.length % numZones,
@@ -408,7 +408,7 @@ define([
 			//		Organize children by column property of widget.
 
 			//console.log("dojox.layout.GridContainerLite ::: _organizeChildrenManually");
-			var children = this.constructor.superclass.getChildren.call(this),
+			var children = gcl.superclass.getChildren.call(this),
 				length = children.length,
 				child;
 			for(var i = 0; i < length; i++){
@@ -485,7 +485,7 @@ define([
 
 			//console.log("dojox.layout.GridContainerLite ::: addChild");
 			child.domNode.id = child.id;
-			this.constructor.superclass.addChild.call(this, child, 0);
+			gcl.superclass.addChild.call(this, child, 0);
 			if(column < 0 || column === undefined){ column = 0; }
 			if(p <= 0){ p = 0; }
 			try{

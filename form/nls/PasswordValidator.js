@@ -6,6 +6,9 @@ define({ root:
 })
 //end v1.x content
 ,
+"bs": true,
+"mk": true,
+"sr": true,
 "ar": true,
 "az": true,
 "bg": true,
@@ -13,6 +16,7 @@ define({ root:
 "cs": true,
 "da": true,
 "de": true,
+"eu": true,
 "el": true,
 "es": true,
 "fi": true,

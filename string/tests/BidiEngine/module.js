@@ -1,10 +1,5 @@
-dojo.provide("dojox.string.tests.BidiEngine.module");
-
-try{
-   	dojo.require("dojox.string.tests.BidiEngine.BidiEngineTest");
-   	
-   	dojo.require("dojox.string.tests.BidiEngine.BidiEngineTestLayouts");
-
-}catch(e){
-     doh.debug(e);
-}
+define([
+	"dojox/string/tests/BidiEngine/BidiEngineTest",
+	"dojox/string/tests/BidiEngine/BidiEngineTestLayouts",
+	"dojox/string/tests/BidiEngine/BidiEngineMapsTest"
+],1);

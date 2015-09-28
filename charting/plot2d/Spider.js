@@ -126,7 +126,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			//		Calculate the min/max on all attached series in both directions.
 			// returns: Object
 			//		{hmin, hmax, vmin, vmax} min/max in both directions.
-			return dc.collectSimpleStats(this.series); // Object
+			return dc.collectSimpleStats(this.series, function(v){ return v === null; }); // Object
 		},
 		render: function(dim, offsets){
 			// summary:
@@ -194,7 +194,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 				r: r
 			};
 
-			for (i = this.series.length - 1; i >= 0; i--){
+			for(var i = 0; i < this.series.length; i++){
 				serieEntry = this.series[i];
 				if(!this.dirty && !serieEntry.dirty){
 					t.skip();
