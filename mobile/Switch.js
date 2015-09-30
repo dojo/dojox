@@ -125,6 +125,7 @@ define([
 		},
 
 		startup: function(){
+			this.inherited(arguments);
 			if(!this._started){
 				this.resize();
 			}
