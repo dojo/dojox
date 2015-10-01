@@ -88,7 +88,7 @@ define([
 					+		'<div class="mblSwitchText mblSwitchTextRight"></div>'
 					+	'</div>'
 					+	'<div class="mblSwitchKnob"></div>'
-					+	'<input type="hidden"'+nameAttr+'></div>'
+					+	'<input type="hidden"'+nameAttr+' value="'+this.value+'"></div>'
 					+ '</div>';
 				var n = this.inner = this.domNode.firstChild;
 				this.left = n.childNodes[0];
