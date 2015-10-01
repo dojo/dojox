@@ -264,7 +264,8 @@ return dojox.json.ref = {
 		idPrefix = idPrefix || ''; // the id prefix for this context
 		var paths={};
 		var generated = {};
-		var uniqueIdCount = 0;
+		var idAttributeProvided = idAttribute ? true: false;
+		var uniqueIdCount = 1;
 		function getUniqueId() {
 			var str = (uniqueIdCount++).toString();
 			if (generated.hasOwnProperty(str)) {
@@ -273,10 +274,7 @@ return dojox.json.ref = {
 			return str;
 		}
 		function serialize(it,path,_indentStr){
-			if(typeof it == 'object' && it){
-				if ((path === 'undefined') && (typeof idAttribute != 'undefined')) {
-					path = getUniqueId();
-				}
+			if(typeof it == 'object' && it){				
 				var value;
 				if(it instanceof Date){ // properly serialize dates
 					return '"' + stamp.toISOString(it,{zulu:true}) + '"';
@@ -302,8 +300,16 @@ return dojox.json.ref = {
 					}
 					path = id;
 				}else{
-					it.__id = path; // we will create path ids for other objects in case they are circular
-					generated[path] = it;
+					if (idAttributeProvided) {
+						if(!(it instanceof Array)){
+							path = getUniqueId();
+							it.__id = path; // we will create path ids for other objects in case they are circular
+							generated[path] = it;
+						}
+					} else {
+						it.__id = path; // we will create path ids for other objects in case they are circular
+						generated[path] = it;
+					}					
 				}
 				paths[path] = it;// save it here so they can be deleted at the end
 				_indentStr = _indentStr || "";
@@ -313,7 +319,7 @@ return dojox.json.ref = {
 	
 				if(it instanceof Array){
 					var res = array.map(it, function(obj,i){
-						var val = serialize(obj, typeof idAttribute === 'undefined' ? addProp(path, i) : obj[idAttribute] + '', nextIndent);
+						var val = serialize(obj, idAttributeProvided ? undefined : addProp(path, i), nextIndent);
 						if(typeof val != "string"){
 							val = "undefined";
 						}
@@ -323,7 +329,7 @@ return dojox.json.ref = {
 				}
 	
 				var output = [];
-				if ((typeof idAttribute != 'undefined') && (typeof it[idAttribute] === 'undefined')) {
+				if (idAttributeProvided && (typeof it[idAttribute] === 'undefined')) {
 					output.push(newLine + nextIndent + djson._escapeString(idAttribute) + ":" + sep + djson.toJson(it.__id));
 				}	
 				for(var i in it){
@@ -338,7 +344,7 @@ return dojox.json.ref = {
 							// skip non-string or number keys
 							continue;
 						}
-						var val = serialize(it[i],typeof idAttribute === 'undefined' ? addProp(path, i) : it[i][idAttribute] + '',nextIndent);
+						var val = serialize(it[i],idAttributeProvided ? undefined : addProp(path, i),nextIndent);
 						if(typeof val != "string"){
 							// skip non-serializable values
 							continue;
@@ -353,7 +359,7 @@ return dojox.json.ref = {
 	
 			return djson.toJson(it); // use the default serializer for primitives
 		}
-		var json = serialize(it,typeof idAttribute === 'undefined' ? '#' : it[idAttribute] + '','');
+		var json = serialize(it,idAttributeProvided ? undefined : '#','');
 		if(!indexSubObjects){
 			for(var i in generated)  {// cleanup the temporary path-generated ids
 				delete generated[i].__id;

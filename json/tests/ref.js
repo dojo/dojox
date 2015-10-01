@@ -11,6 +11,15 @@ doh.register("dojox.json.tests.ref", [
 		t.assertEqual(mirrorObj.c, mirrorObj.b);
 		t.assertEqual(mirrorObj["a string"], "a string");
 	},
+	function fromRefJson2(t) {
+		var testStr = '{$id:1,a:{$ref:"1"},id:"root",c:{$id:2,d:"e",f:{$ref:"2"}},b:{$ref:"2"},"an array":["a string"],"a string":{$ref:"#an array.0"}}';
+
+		var mirrorObj = dojox.json.ref.fromJson(testStr, { idAttribute: '$id'});
+		t.assertEqual(mirrorObj, mirrorObj.a);
+		t.assertEqual(mirrorObj.c, mirrorObj.c.f);
+		t.assertEqual(mirrorObj.c, mirrorObj.b);
+		t.assertEqual(mirrorObj["a string"], "a string");
+	},
 	function toAndFromRefJson(t) {
 		var testObj = {a:{},b:{"has space":{}}};
 		testObj.a.d= testObj;
@@ -20,6 +29,21 @@ doh.register("dojox.json.tests.ref", [
 		testObj.b["has space"].f = testObj.b;
 		testObj.b.h=testObj.a;
 		var mirrorObj = dojox.json.ref.fromJson(dojox.json.ref.toJson(testObj));
+		t.assertEqual(mirrorObj.a.d, mirrorObj);
+		t.assertEqual(mirrorObj.b.g, mirrorObj.a);
+		t.assertEqual(mirrorObj.b["has space"].f, mirrorObj.b);
+		t.assertEqual(mirrorObj.b.h, mirrorObj.a);
+		t.assertEqual(mirrorObj.array[0], mirrorObj.array[1]);
+	},
+	function toAndFromRefJson2(t) {
+		var testObj = {a:{},b:{"has space":{}}};
+		testObj.a.d= testObj;
+		var arrayItem = testObj.array = [{}];
+		arrayItem[1] = arrayItem[0];
+		testObj.b.g=testObj.a;
+		testObj.b["has space"].f = testObj.b;
+		testObj.b.h=testObj.a;
+		var mirrorObj = dojox.json.ref.fromJson(dojox.json.ref.toJson(testObj, true, null, null, '$id'), { idAttribute: '$id'});
 		t.assertEqual(mirrorObj.a.d, mirrorObj);
 		t.assertEqual(mirrorObj.b.g, mirrorObj.a);
 		t.assertEqual(mirrorObj.b["has space"].f, mirrorObj.b);
