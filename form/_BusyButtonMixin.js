@@ -14,6 +14,9 @@ return declare("dojox.form._BusyButtonMixin", null, {
 	// isBusy: Boolean
 	isBusy: false,
 
+	// isCancelled: Boolean 
+	isCancelled: false,
+
 	// busyLabel: String
 	//		text while button is busy
 	busyLabel: "",
@@ -48,6 +51,7 @@ return declare("dojox.form._BusyButtonMixin", null, {
 		// summary:
 		//		sets state from idle to busy
 		this.isBusy = true;
+		this.isCancelled = false;
 
 		// Webkit does not submit the form if the submit button is disabled when
 		// clicked ( https://bugs.webkit.org/show_bug.cgi?id=14443 ), so disable the button later
@@ -65,6 +69,7 @@ return declare("dojox.form._BusyButtonMixin", null, {
 		// summary:
 		//		if no timeout is set or for other reason the user can put the button back
 		//		to being idle
+		this.isCancelled = true; 
 		if(this._disableHandle) {
 			this._disableHandle.remove();
 		}
@@ -135,7 +140,10 @@ return declare("dojox.form._BusyButtonMixin", null, {
 		// only do something if button is not busy
 		if(!this.isBusy){
 			this.inherited(arguments);	// calls onClick()
-			this.makeBusy();
+			// If we still aren't cancelled due to click handler... 
+			if (!this.isCancelled) {
+				this.makeBusy();
+			}
 		}
 	}
 });
