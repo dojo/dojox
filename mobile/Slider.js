@@ -12,9 +12,10 @@ define([
 	"dojo/keys",
 	"dojo/touch",
 	"dijit/_WidgetBase",
-	"dijit/form/_FormValueMixin"
+	"dijit/form/_FormValueMixin",
+	"./common"
 ],
-	function(array, connect, declare, lang, win, has, domClass, domConstruct, domGeometry, domStyle, keys, touch, WidgetBase, FormValueMixin){
+	function(array, connect, declare, lang, win, has, domClass, domConstruct, domGeometry, domStyle, keys, touch, WidgetBase, FormValueMixin, common){
 
 	return declare("dojox.mobile.Slider", [WidgetBase, FormValueMixin], {
 		// summary:
@@ -72,9 +73,7 @@ define([
 			}
 			this.inherited(arguments);
 			// prevent browser scrolling on IE10 (evt.preventDefault() is not enough)
-			if(typeof this.domNode.style.msTouchAction != "undefined"){
-				this.domNode.style.msTouchAction = "none";
-			}
+			common._setTouchAction(this.domNode, "none");
 		},
 
 		_setMinAttr: function(/*Number*/ min){

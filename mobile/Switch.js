@@ -70,9 +70,7 @@ define([
 					this.srcNodeRef : domConstruct.create("span");
 			}
 			// prevent browser scrolling on IE10 (evt.preventDefault() is not enough)
-			if(typeof this.domNode.style.msTouchAction != "undefined"){
-				this.domNode.style.msTouchAction = "none";
-			}
+			dm._setTouchAction(this.domNode, "none");
 			this.inherited(arguments);
 			if(!this.templateString){ // true if this widget is not templated
 				var c = (this.srcNodeRef && this.srcNodeRef.className) || this.className || this["class"];
