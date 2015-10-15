@@ -327,6 +327,11 @@ define([
 		}
 	};
 
+	var touchActionProp = has("pointer-events") ? "touchAction" : has("MSPointer") ? "msTouchAction" : null;
+	dm._setTouchAction = touchActionProp ? function(/*Node*/node, /*Boolean*/value){
+		node.style[touchActionProp] = value;
+	} : function(){};
+
 	// Set the background style using dojo/domReady, not dojo/ready, to ensure it is already
 	// set at widget initialization time. (#17418) 
 	domReady(function(){

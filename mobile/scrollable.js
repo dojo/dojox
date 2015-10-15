@@ -14,10 +14,11 @@ define([
 	"./sniff",
 	"./_css3",
 	"./_maskUtils",
+	"./common",
 	"dojo/_base/declare",
 	"dojo/has!dojo-bidi?dojox/mobile/bidi/Scrollable"
 ], function(dojo, connect, event, lang, win, domClass, domConstruct, domStyle,
-			 domGeom, touch, registry, TextBoxMixin, has, css3, maskUtils, declare, BidiScrollable){
+			 domGeom, touch, registry, TextBoxMixin, has, css3, maskUtils, common, declare, BidiScrollable){
 
 	// module:
 	//		dojox/mobile/scrollable
@@ -152,9 +153,7 @@ define([
 				}
 			}
 			// prevent browser scrolling on IE10 (evt.preventDefault() is not enough)
-			if(typeof this.domNode.style.msTouchAction != "undefined"){
-				this.domNode.style.msTouchAction = "none";
-			}
+			common._setTouchAction(this.domNode, "none");
 			this.touchNode = this.touchNode || this.containerNode;
 			this._v = (this.scrollDir.indexOf("v") != -1); // vertical scrolling
 			this._h = (this.scrollDir.indexOf("h") != -1); // horizontal scrolling
