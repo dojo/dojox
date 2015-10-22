@@ -1,11 +1,12 @@
-define(["dojo/_base/lang", "dojo/_base/window", "dojo/_base/declare",
-		"dojo/_base/fx", "dojo/on", "dojo/_base/array", "dojo/_base/sniff",
-		"dojo/window", "dojo/dom", "dojo/dom-class", "dojo/dom-geometry", "dojo/dom-construct",
-		"dijit/_TemplatedMixin", "dijit/_WidgetBase", "dijit/BackgroundIframe", "dojo/dnd/Moveable",
-		"./ContentPane", "./ResizeHandle", "dojo/text!./resources/FloatingPane.html", "dojo/domReady!"], function(
+define([
+	"dojo/_base/lang", "dojo/_base/window", "dojo/_base/declare",
+	"dojo/_base/fx", "dojo/on", "dojo/_base/array", "dojo/_base/sniff",
+	"dojo/window", "dojo/dom", "dojo/dom-class", "dojo/dom-geometry", "dojo/dom-construct",
+	"dijit/_TemplatedMixin", "dijit/_WidgetBase"
+], function(
 	lang, winUtil, declare, fx, on, arrayUtil, 
-	has, windowLib, dom, domClass, domGeom, domConstruct, _TemplatedMixin, _WidgetBase, BackgroundIframe, 
-	Moveable, ContentPane, ResizeHandle, template){
+	has, windowLib, dom, domClass, domGeom, domConstruct, _TemplatedMixin, _WidgetBase
+){
 
 //TODO: don't want to rely on kernel just to make something as experimental	
 //kernel.experimental("dojox.layout.Dock");
@@ -62,7 +63,7 @@ var Dock = declare("dojox.layout.Dock",[_WidgetBase, _TemplatedMixin],{
 		if(!this._inPositioning){
 			if(this.autoPosition == "south"){
 				// Give some time for scrollbars to appear/disappear
-				setTimeout(lang.hitch(this, function() {
+				this.defer(function() {
 					this._inPositiononing = true;
 					var viewport = windowLib.getBox();
 					var s = this.domNode.style;
@@ -70,7 +71,7 @@ var Dock = declare("dojox.layout.Dock",[_WidgetBase, _TemplatedMixin],{
 					s.width = (viewport.w-2) + "px";
 					s.top = (viewport.h + viewport.t) - this.domNode.offsetHeight + "px";
 					this._inPositioning = false;
-				}), 125);
+				}, 125);
 			}
 		}
 	}
