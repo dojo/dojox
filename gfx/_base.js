@@ -207,11 +207,10 @@ function(kernel, lang, Color, has, win, arr, dom, domConstruct, domGeom){
 
 	// IE10
 
-	b._fixMsTouchAction = function(/*dojox/gfx/shape.Surface*/surface){
-		var r = surface.rawNode;
-		if (typeof r.style.msTouchAction != 'undefined')
-			r.style.msTouchAction = "none";
-	};
+	var touchActionProp = has("pointer-events") ? "touchAction" : has("MSPointer") ? "msTouchAction" : null;
+	b._fixMsTouchAction = touchActionProp ? function(/*dojox/gfx/shape.Surface*/surface){
+		surface.rawNode.style[touchActionProp] = "none";
+	} : function() {};
 
 	/*=====
 	g.Stroke = {
