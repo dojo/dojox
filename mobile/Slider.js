@@ -113,6 +113,7 @@ define([
 			this.inherited(arguments);
 
 			function beginDrag(e){
+				e.stopPropagation(); // in case of slider enclosed in a scrollable container, this prevents the widget from scrolling while it's being used
 				e.target.focus();
 				function getEventData(e){
 					point = isMouse ? e[this._attrs.pageX] : (e.touches ? e.touches[0][this._attrs.pageX] : e[this._attrs.clientX]);
@@ -129,7 +130,7 @@ define([
 					lang.hitch(this, getEventData)(e);
 					this.set('value', value, false);
 				}
-		
+
 				function endDrag(e){
 					e.preventDefault();
 					array.forEach(actionHandles, lang.hitch(this, "disconnect"));
