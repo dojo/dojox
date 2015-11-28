@@ -242,7 +242,7 @@ return dojox.json.ref = {
 		return root;
 	},
 	
-	toJson: function(/*Object*/ it, /*Boolean?*/ prettyPrint, /*Object?*/ idPrefix, /*Object?*/ indexSubObjects){
+	toJson: function(/*Object*/ it, /*Boolean?*/ prettyPrint, /*Object?*/ idPrefix, /*Object?*/ indexSubObjects, /*String*/idAttribute){
 		// summary:
 		//		Create a JSON serialization of an object.
 		//		This has support for referencing, including circular references, duplicate references, and out-of-message references
@@ -264,8 +264,17 @@ return dojox.json.ref = {
 		idPrefix = idPrefix || ''; // the id prefix for this context
 		var paths={};
 		var generated = {};
+		var idAttributeProvided = idAttribute ? true: false;
+		var uniqueIdCount = 1;
+		function getUniqueId() {
+			var str = (uniqueIdCount++).toString();
+			if (generated.hasOwnProperty(str)) {
+				return getUniqueId();
+			}
+			return str;
+		}
 		function serialize(it,path,_indentStr){
-			if(typeof it == 'object' && it){
+			if(typeof it == 'object' && it){				
 				var value;
 				if(it instanceof Date){ // properly serialize dates
 					return '"' + stamp.toISOString(it,{zulu:true}) + '"';
@@ -291,8 +300,16 @@ return dojox.json.ref = {
 					}
 					path = id;
 				}else{
-					it.__id = path; // we will create path ids for other objects in case they are circular
-					generated[path] = it;
+					if (idAttributeProvided) {
+						if(!(it instanceof Array)){
+							path = getUniqueId();
+							it.__id = path; // we will create path ids for other objects in case they are circular
+							generated[path] = it;
+						}
+					} else {
+						it.__id = path; // we will create path ids for other objects in case they are circular
+						generated[path] = it;
+					}					
 				}
 				paths[path] = it;// save it here so they can be deleted at the end
 				_indentStr = _indentStr || "";
@@ -302,7 +319,7 @@ return dojox.json.ref = {
 	
 				if(it instanceof Array){
 					var res = array.map(it, function(obj,i){
-						var val = serialize(obj, addProp(path, i), nextIndent);
+						var val = serialize(obj, idAttributeProvided ? undefined : addProp(path, i), nextIndent);
 						if(typeof val != "string"){
 							val = "undefined";
 						}
@@ -312,6 +329,9 @@ return dojox.json.ref = {
 				}
 	
 				var output = [];
+				if (idAttributeProvided && (typeof it[idAttribute] === 'undefined')) {
+					output.push(newLine + nextIndent + djson._escapeString(idAttribute) + ":" + sep + djson.toJson(it.__id));
+				}	
 				for(var i in it){
 					if(it.hasOwnProperty(i)){
 						var keyStr;
@@ -324,7 +344,7 @@ return dojox.json.ref = {
 							// skip non-string or number keys
 							continue;
 						}
-						var val = serialize(it[i],addProp(path, i),nextIndent);
+						var val = serialize(it[i],idAttributeProvided ? undefined : addProp(path, i),nextIndent);
 						if(typeof val != "string"){
 							// skip non-serializable values
 							continue;
@@ -339,7 +359,7 @@ return dojox.json.ref = {
 	
 			return djson.toJson(it); // use the default serializer for primitives
 		}
-		var json = serialize(it,'#','');
+		var json = serialize(it,idAttributeProvided ? undefined : '#','');
 		if(!indexSubObjects){
 			for(var i in generated)  {// cleanup the temporary path-generated ids
 				delete generated[i].__id;
