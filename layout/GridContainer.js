@@ -1,6 +1,6 @@
 define([
 	"dojo/_base/kernel",
-	"dojo/_base/declare", // declare 
+	"dojo/_base/declare", // declare
 	"dojo/_base/array",
 	"dojo/_base/connect",
 	"dojo/_base/sniff",
@@ -619,6 +619,9 @@ define([
 
 			//console.log("dojox.layout.GridContainer ::: _updateColumnsWidth");
 			this.inherited(arguments);
+			if(manager === null){
+				manager = this._dragManager;
+			}
 			manager._dropMode.updateAreas(manager._areaList);
 		},
 
