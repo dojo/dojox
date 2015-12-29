@@ -150,6 +150,7 @@ Socket.LongPoll = function(/*dojo.__XhrArgs*/ args){
 				if(!cancelled){
 					fire("error", {error:error}, deferred);
 					if(!connections.length){
+						clearTimeout(timeoutId);
 						socket.readyState = 3;
 						fire("close", {wasClean:false}, deferred);
 					}
@@ -205,7 +206,7 @@ Socket.LongPoll = function(/*dojo.__XhrArgs*/ args){
 		}
 	};
 	connect = function(){
-		if(socket.readyState == 0){
+		if(socket.readyState === 0){
 			// we fire the open event now because we really don't know when the "socket"
 			// is truly open, and this gives us a to do a send() and get it included in the
 			// HTTP request
