@@ -64,7 +64,7 @@ return declare("dojox.widget.Standby", [_Widget, _TemplatedMixin],{
 	//		and 'text'.
 	//		Default is 'image'.
 	centerIndicator: "image",
-	
+
 	// target: DOMNode||DOMID(String)||WidgetID(String)
 	//		The target to overlay when active.  Can be a widget id, a
 	//		dom id, or a direct node reference.
@@ -79,20 +79,20 @@ return declare("dojox.widget.Standby", [_Widget, _TemplatedMixin],{
 	//		Integer defining how long the show and hide effects should take in milliseconds.
 	//		Defaults to 500
 	duration: 500,
-	
+
 	// zIndex: String
 	//		Control that lets you specify if the zIndex for the overlay
 	//		should be auto-computed based off parent zIndex, or should be set
 	//		to a particular value.  This is useful when you want to overlay
 	//		things in digit.Dialogs, you can specify a base zIndex to append from.
 	zIndex: "auto",
-	
+
 	// opacity: float
 	//		The opacity to make the overlay when it is displayed/faded in.
 	//		The default is 0.75.  This does not affect the image opacity, only the
 	//		overlay.
-	opacity: 0.75,	
-	
+	opacity: 0.75,
+
 	// templateString: [protected] String
 	//		The template string defining out the basics of the widget.  No need for an external
 	//		file.
@@ -188,7 +188,7 @@ return declare("dojox.widget.Standby", [_Widget, _TemplatedMixin],{
 				baseWindow.body().appendChild(this._ieFixNode);
 			}
 			this.inherited(arguments);
-		}		
+		}
 	},
 
 	show: function(){
@@ -352,7 +352,7 @@ return declare("dojox.widget.Standby", [_Widget, _TemplatedMixin],{
 			if(pn && pn !== baseWindow.body() &&
 				target !== baseWindow.body() &&
 				target !== baseWindow.doc){
-				
+
 				// If the parent is the body tag itself,
 				// we can avoid all this, the body takes
 				// care of overflow for me.  Besides, browser
@@ -371,7 +371,7 @@ return declare("dojox.widget.Standby", [_Widget, _TemplatedMixin],{
 					pnBox.w = Math.floor((pnBox.w + 0.9) / _ie7zoom);
 					pnBox.h = Math.floor((pnBox.h + 0.9) / _ie7zoom);
 				}
-				
+
 				//Shift the parent width/height a bit if scollers are present.
 				pnBox.w -= pn.scrollHeight > pn.clientHeight &&
 					pn.clientHeight > 0 ? scrollers.v: 0;
@@ -691,6 +691,17 @@ return declare("dojox.widget.Standby", [_Widget, _TemplatedMixin],{
 			this._centerNode = this._textNode;
 			domStyle.set(this._imageNode, "display", "none");
 		}
+	},
+
+	_setTargetAttr:function(target){
+		// summary:
+		//		Function to allow widget.attr to set the target used
+		// target: String
+		//		The target to use.
+	    if(typeof target === "string"){
+	        var w = registry.byId(target);
+	        this._set("target", w ? w.domNode : dom.byId(target));
+	    }
 	},
 
 	_disableOverflow: function(){
