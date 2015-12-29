@@ -1,4 +1,4 @@
-define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/has", 
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/has",
 		"./CartesianBase", "./_PlotEvents", "./common", "dojox/lang/functional", "dojox/lang/functional/reversed", "dojox/lang/utils", "dojox/gfx/fx"],
 	function(lang, declare, arr, has, CartesianBase, _PlotEvents, dc, df, dfr, du, fx){
 
@@ -6,43 +6,43 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/has",
 	declare("dojox.charting.plot2d.__DefaultCtorArgs", dojox.charting.plot2d.__CartesianCtorArgs, {
 		// summary:
 		//		The arguments used for any/most plots.
-	
+
 		// lines: Boolean?
 		//		Whether or not to draw lines on this plot.  Defaults to true.
 		lines:   true,
-	
+
 		// areas: Boolean?
 		//		Whether or not to draw areas on this plot. Defaults to false.
 		areas:   false,
-	
+
 		// markers: Boolean?
 		//		Whether or not to draw markers at data points on this plot. Default is false.
 		markers: false,
-	
+
 		// tension: Number|String?
 		//		Whether or not to apply 'tensioning' to the lines on this chart.
 		//		Options include a number, "X", "x", or "S"; if a number is used, the
 		//		simpler bezier curve calculations are used to draw the lines.  If X, x or S
 		//		is used, the more accurate smoothing algorithm is used.
 		tension: "",
-	
+
 		// animate: Boolean?|Number?
 		//		Whether or not to animate the chart to place. When a Number it specifies the duration of the animation.
 		//		Default is false.
 		animate: false,
-	
+
 		// stroke: dojox.gfx.Stroke?
 		//		An optional stroke to use for any series on the plot.
 		stroke:		{},
-	
+
 		// outline: dojox.gfx.Stroke?
 		//		An optional stroke used to outline any series on the plot.
 		outline:	{},
-	
+
 		// shadow: dojox.gfx.Stroke?
 		//		An optional stroke to use to draw any shadows for a series on a plot.
 		shadow:		{},
-	
+
 		// fill: dojox.gfx.Fill?
 		//		Any fill to be used for elements on the plot (such as areas).
 		fill:		{},
@@ -55,39 +55,39 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/has",
 		// styleFunc: Function?
 		//		A function that returns a styling object for the a given data item.
 		styleFunc:	null,
-	
+
 		// font: String?
 		//		A font definition to be used for labels and other text-based elements on the plot.
 		font:		"",
-	
+
 		// fontColor: String|dojo.Color?
 		//		The color to be used for any text-based elements on the plot.
 		fontColor:	"",
-	
+
 		// markerStroke: dojo.gfx.Stroke?
 		//		An optional stroke to use for any markers on the plot.
 		markerStroke:		{},
-	
+
 		// markerOutline: dojo.gfx.Stroke?
 		//		An optional outline to use for any markers on the plot.
 		markerOutline:		{},
-	
+
 		// markerShadow: dojo.gfx.Stroke?
 		//		An optional shadow to use for any markers on the plot.
 		markerShadow:		{},
-	
+
 		// markerFill: dojo.gfx.Fill?
 		//		An optional fill to use for any markers on the plot.
 		markerFill:			{},
-	
+
 		// markerFont: String?
 		//		An optional font definition to use for any markers on the plot.
 		markerFont:			"",
-	
+
 		// markerFontColor: String|dojo.Color?
 		//		An optional color to use for any marker text on the plot.
 		markerFontColor:	"",
-		
+
 		// enableCache: Boolean?
 		//		Whether the markers are cached from one rendering to another. This improves the rendering performance of
 		//		successive rendering but penalize the first rendering.  Default false.
@@ -105,7 +105,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/has",
 	var DEFAULT_ANIMATION_LENGTH = 1200;	// in ms
 
 	return declare("dojox.charting.plot2d.Default", [CartesianBase, _PlotEvents], {
-		
+
 		// defaultParams:
 		//		The default parameters of this plot.
 		defaultParams: {
@@ -117,7 +117,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/has",
 			enableCache: false,
 			interpolate: false
 		},
-		
+
 		// optionalParams:
 		//		The optional parameters of this plot.
 		optionalParams: {
@@ -178,7 +178,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/has",
 			// split the run data into dense segments (each containing no nulls)
 			// except if interpolates is false in which case ignore null between valid data
 			for(var j = min; j < max; j++){
-				if(run.data[j] != null && (indexed || run.data[j].y != null)){
+				if(run.data[j] !== null && (indexed || run.data[j].y !== null)){
 					if(!rseg){
 						rseg = [];
 						segments.push({index: j, rseg: rseg});
@@ -251,12 +251,12 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/has",
 					if(this.opt.lines){
 						run.dyn.stroke = theme.series.stroke;
 					}
-					if(this.opt.markers){
+					if (run.markers || (run.markers === undefined && this.opt.markers)) {
 						run.dyn.markerFill = theme.marker.fill;
 						run.dyn.markerStroke = theme.marker.stroke;
 						run.dyn.marker = theme.symbol;
 					}
-					if(this.opt.areas){ 
+					if(this.opt.areas){
 						run.dyn.fill = theme.series.fill;
 					}
 					continue;
@@ -302,7 +302,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/has",
 								}, this));
 							}
 						}
-					} 
+					}
 
 					var lpath = this.opt.tension ? dc.curve(lpoly, this.opt.tension) : "";
 
@@ -372,7 +372,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/has",
 					}
 					var markerBox = null;
 					if(this.opt.markers){
-						var markerTheme = theme; 
+						var markerTheme = theme;
 						frontMarkers = new Array(lpoly.length);
 						outlineMarkers = new Array(lpoly.length);
 						outline = null;
