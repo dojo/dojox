@@ -1,10 +1,10 @@
 define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/has", "./CartesianBase", "./_PlotEvents", "./common",
-		"dojox/lang/functional", "dojox/lang/functional/reversed", "dojox/lang/utils", "dojox/gfx/fx"], 
+		"dojox/lang/functional", "dojox/lang/functional/reversed", "dojox/lang/utils", "dojox/gfx/fx"],
 	function(lang, arr, declare, has, CartesianBase, _PlotEvents, dc, df, dfr, du, fx){
 
 	var purgeGroup = dfr.lambda("item.purgeGroup()");
-	
-	var alwaysFalse = function(){ return false; }; 
+
+	var alwaysFalse = function(){ return false; };
 
 	return declare("dojox.charting.plot2d.Columns", [CartesianBase, _PlotEvents], {
 		// summary:
@@ -52,7 +52,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/has",
 			stats.hmax += 0.5;
 			return stats; // Object
 		},
-		
+
 		createRect: function(run, creator, params){
 			var rect;
 			if(this.opt.enableCache && run._rectFreePool.length > 0){
@@ -99,14 +99,14 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/has",
 				baselineHeight = vt(baseline),
 				events = this.events(),
 				bar = this.getBarProperties();
-			
+
 			var z = this.series.length;
 			arr.forEach(this.series, function(serie){if(serie.hidden){z--;}});
 
 			// Collect and calculate  all values
 			var extractedValues = this.extractValues(this._hScaler);
 			extractedValues = this.rearrangeValues(extractedValues, vt, baselineHeight);
-			
+
 			for(var i = 0; i < this.series.length; i++){
 				var run = this.series[i];
 				if(!this.dirty && !run.dirty){
@@ -141,7 +141,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/has",
 					if(!this.isNullValue(value)){
 						var val = this.getValue(value, j, i, indexed),
 							vv = vt(val.y),
-							h = extractedValues[i][j], 
+							h = extractedValues[i][j],
 							finalTheme,
 							sshape;
 
@@ -154,12 +154,12 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/has",
 						}else{
 							finalTheme = t.post(theme, "column");
 						}
-						
+
 						if(bar.width >= 1){
 							var rect = {
 								x: offsets.l + ht(val.x + 0.5) + bar.gap + bar.thickness * z,
 								y: dim.height - offsets.b - baselineHeight - Math.max(h, 0),
-								width: bar.width, 
+								width: bar.width,
 								height: Math.abs(h)
 							};
 							if(finalTheme.series.shadow){
@@ -171,10 +171,11 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/has",
 									this._animateColumn(sshape, dim.height - offsets.b + baselineHeight, h);
 								}
 							}
-							
+
 							var specialFill = this._plotFill(finalTheme.series.fill, dim, offsets);
 							specialFill = this._shapeFill(specialFill, rect);
 							var shape = this.createRect(run, s, rect).setFill(specialFill).setStroke(finalTheme.series.stroke);
+							this.overrideShape(shape, {index: j, value: val});
 							if(shape.setFilter && finalTheme.series.filter){
 								shape.setFilter(finalTheme.series.filter);
 							}
@@ -232,7 +233,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/has",
 				x = value.x - 1;
 			}
 			return { x: x, y: y };
-		},	
+		},
 		extractValues: function(scaler){
 			var extracted = [];
 			for(var i = this.series.length - 1; i >= 0; --i){
@@ -282,13 +283,13 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/has",
 				return v(0.5) || h(value);
 			}
 			return v(isNaN(value.x) ? 0.5 : value.x + 0.5) || value.y === null || h(value.y);
-		},		
+		},
 		getBarProperties: function(){
 			var f = dc.calculateBarSize(this._hScaler.bounds.scale, this.opt);
 			return {gap: f.gap, width: f.size, thickness: 0};
 		},
 		_animateColumn: function(shape, voffset, vsize){
-			if(vsize==0){
+			if(vsize===0){
 				vsize = 1;
 			}
 			fx.animateTransform(lang.delegate({
@@ -301,6 +302,6 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/has",
 				]
 			}, this.animate)).play();
 		}
-		
+
 	});
 });
