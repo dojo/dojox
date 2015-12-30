@@ -63,7 +63,7 @@ dojo.declare("dojox.rpc.Service", null, {
 	},
 
 	_generateService: function(serviceName, method){
-		if(this[method]){
+		if(this[serviceName]){
 			throw new Error("WARNING: "+ serviceName+ " already exists for service. Unable to generate function");
 		}
 		method.name = serviceName;
