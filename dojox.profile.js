@@ -1,5 +1,6 @@
 var profile = (function(){
 	var testResourceRe = /\/tests\//,
+	nodeModulesRe = /\/node_modules\//,
 
 		copyOnly = function(filename, mid){
 			var list = {
@@ -13,7 +14,7 @@ var profile = (function(){
 			return (mid in list) || /^dojox\/resources\//.test(mid) ||
 				/(png|jpg|jpeg|gif|tiff)$/.test(filename) ||
 				/dojox\/app\/build\//.test(mid) ||
-				/\/node_modules\//.test(mid);
+				nodeModulesRe.test(mid);
 		},
 
 		excludes = [
@@ -58,7 +59,7 @@ var profile = (function(){
 			},
 
 			miniExclude: function(filename, mid){
-				return /\/demos\//.test(mid) || /\/node_modules\//.test(mid);
+				return /\/demos\//.test(mid) || nodeModulesRe.test(mid);
 			}
 		}
 	};
