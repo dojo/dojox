@@ -101,7 +101,7 @@ define([
 			//		type of message; possible values in messageTypes enumeration ("message", "warning", "error", "fatal")
 			// duration:
 			//		duration in milliseconds to display message before removing it. Widget has default value.
-			duration = duration||this.duration;
+			duration = (duration === undefined) ? this.duration : duration;
 			// sync animations so there are no ghosted fades and such
 			if(this.slideAnim){
 				if(this.slideAnim.status() != "playing"){
