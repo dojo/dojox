@@ -7,21 +7,21 @@
 		body {
 			font-family: helvetica;
 		}
-		
+
 		.test-container {
 			width: 800px;
 			margin-bottom: 20px;
 		}
-		
+
 		.test-container:after {
 			clear: both;
 		}
-		
+
 		.test-container div {
 			float: left;
 			margin-right: 20px;
 		}
-		
+
 		.description {
 			width: 400px;
 			border: 1px solid #ccc;
@@ -29,23 +29,23 @@
 			-webkit-border-radius: 5px;
 			padding: 10px;
 		}
-		
+
 		span.clb {
 			display: block;
 			clear: both;
 		}
 	</style>
-	
+
 	<script src="../../../dojo/dojo.js" data-dojo-config="isDebug:true, parseOnLoad:true"></script>
 	<script type="text/javascript">
-    // dojo.registerModulePath('dojox.rails.tests.plugd', '../dojox/rails/tests/plugd'); 
+    // dojo.registerModulePath('dojox.rails.tests.plugd', '../dojox/rails/tests/plugd');
 		dojo.require('doh.runner');
 		dojo.require('dojox.rails');
     	dojo.require('dojox.rails.tests.plugd.trigger');
 		dojo.require('dojo.NodeList-manipulate');
 
     var subscriptions = [];
-		
+
 		function createDom(){
 			var q = dojo.query;
 			q('#data-confirm-link-container').append('<a href="/foo/url" data-confirm="Are you sure?">click me!</a>');
@@ -83,7 +83,7 @@
         dojo.unsubscribe(s);
       });
     }
-		
+
 		dojo.addOnLoad(function(){
 			createDom();
       doh.register('data-remote', [
@@ -128,7 +128,7 @@
             dojo.query('#data-remote-get-form-container form').trigger('submit');
 
             t.assertEqual('get', method);
-            
+
             var expectedArgs = {
               url: '/posts',
               content: {
@@ -157,7 +157,7 @@
 
             // t.is('My Button', button.html());
             // t.is('My Submit', input.val());
-            // 
+            //
             // input.trigger('submit');
 
             // t.is('Disable button...', button.html());
@@ -178,12 +178,12 @@
 
             t.is('My Button', button.html());
             t.is('My Submit', input.val());
-            
+
             var d = new doh.Deferred();
             var failureHandlerCalled = false;
 
             var s1 = dojo.subscribe("ajax:failure", function(){
-              failureHandlerCalled = true; 
+              failureHandlerCalled = true;
               t.is('Disable button...', button.html());
               t.is('Please wait...', input.val());
               t.t(button.attr('disabled'));
@@ -227,7 +227,7 @@
 <div class="test-container">
 	<div class="description">This is a dynamically created <em>link</em>.  When the confirm dialog is cancelled, it should stop processing.  When the confirm dialog is confirmed, it should proceed to the href url.</div>
 	<div id="data-confirm-link-container"></div>
-	<span class="clb"></div>
+	<span class="clb"></span>
 </div>
 
 <div class="test-container">
@@ -239,7 +239,7 @@
       <!-- submit button is created dynamically -->
 		</form>
 	</div>
-	<span class="clb"></div>
+	<span class="clb"></span>
 </div>
 
 
@@ -249,13 +249,13 @@
 <div class="test-container">
 	<div class="description">This is a dynamically created <em>link</em>.  When the link is clicked it should successfully make an ajax request.</div>
 	<div id="data-remote-success-link-container"></div>
-	<span class="clb"></div>
+	<span class="clb"></span>
 </div>
 
 <div class="test-container">
 	<div class="description">This is a dynamically created <em>link</em>.  When the link is clicked it should fail when making an ajax request.</div>
   <div id="data-remote-failure-link-container"></div>
-	<span class="clb"></div>
+	<span class="clb"></span>
 </div>
 
 <div class="test-container">
@@ -268,7 +268,7 @@
       <input name="authenticity_token" type="hidden" value="Hfm4VBZJeCde+5evpma9Rq4eGtCq+/n7fZr0XVDalLw=" />
 		</form>
   </div>
-	<span class="clb"></div>
+	<span class="clb"></span>
 </div>
 
 
@@ -293,26 +293,26 @@
       <input data-disable-with="Please wait..." name="commit" type="submit" value="My Submit" />
     </form>
   </div>
-	<span class="clb"></div>
+	<span class="clb"></span>
 </div>
 
 
-<p>
+<div>
 	Form (Ajaxy)<form action="/posts" class="new_post" data-remote="true" id="new_post" method="post"><input name="authenticity_token" type="hidden" value="Hfm4VBZJeCde+5evpma9Rq4eGtCq+/n7fZr0XVDalLw=" />
 		Title: <input id="post_title" name="post[title]" type="text" /><br />
 		Body: <input id="post_body" name="post[body]" type="text" />
 		<input data-disable-with="Please wait..." name="commit" type="submit" value="Post" />
 	</form>
-</p>
+</div>
 
-<p>
+<div>
 	Form (Normal):<br/>
 	<form action="/posts" class="new_post" id="new_post" method="post"><div style="margin:0;padding:0;display:inline"><input name="authenticity_token" type="hidden" value="Hfm4VBZJeCde+5evpma9Rq4eGtCq+/n7fZr0XVDalLw=" /></div>
 		Title: <input id="post_title" name="post[title]" size="30" type="text" /><br />
 		Body: <input id="post_body" name="post[body]" size="30" type="text" />
 		<input data-disable-with="Please wait..." name="commit" type="submit" value="Post" />
 	</form>
-</p>
+</div>
 
 
 

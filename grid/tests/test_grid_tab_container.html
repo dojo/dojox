@@ -19,7 +19,7 @@
 			overflow: auto;
 		}
 	</style>
-	
+
 	<!-- required: the default dijit theme: -->
 	<link id="themeStyles" rel="stylesheet" href="../../../dijit/themes/tundra/tundra.css">
 
@@ -39,10 +39,10 @@
 		dojo.require("dijit.layout.LinkPane");
 		dojo.require("dijit.form.Button");
 		dojo.require("dojo.parser");	// scan page for widgets and instantiate them
-	
-	
+
+
 	</script>
-	
+
 	<style type="text/css">
 		@import "../resources/Grid.css";
 		@import "../resources/tundraGrid.css";
@@ -56,7 +56,7 @@
 			font-weight: bold;
 			padding-bottom: 0.25em;
 		}
-				
+
 		#grid {
 			border: 1px solid #333;
 			width: 35em;
@@ -100,20 +100,20 @@
 		<div id="tab1" dojoType="dijit.layout.ContentPane"  title="Tab 1">
 			<h1>Test refreshing grid</h1>
 			<br/>
-			
-			
+
+
 			<div data-dojo-id="grid" id="grid" dojoType="dojox.grid.DataGrid" store="test_store" query="{ id: '*' }" structure="layout" rowSelector="20px"></div>
 		</div>
 
-		
+
 
 		<div dojoType="dijit.layout.ContentPane" title="Tab 2">
 			<h1>I am tab 2</h1>
-		
+
 			<br/>
 			<button dojoType="dijit.form.Button" onclick="updateGrid">Click here for refreshing grid on Tab 1</button>
 			<br>
-			
+
 			<p>
 			Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean
 			semper sagittis velit. Cras in mi. Duis porta mauris ut ligula. Proin
@@ -136,7 +136,7 @@
 			tortor pharetra congue. Suspendisse pulvinar.
 			</p>
 		</div>
+	</div>
 
-		
 </body>
 </html>

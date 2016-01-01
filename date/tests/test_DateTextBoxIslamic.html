@@ -54,7 +54,7 @@
 	</head>
 
 	<body class="tundra">
-		
+
 		<h1 class="testTitle">Test DateTextBoxNew Islamic Widget</h1>
 		<!--	to test form submission, you'll need to create an action handler similar to
 			http://www.utexas.edu/teamweb/cgi-bin/generic.cgi -->
@@ -83,7 +83,7 @@
 				<span class="noticeMessage">DateTextBox class, Gregorian Calendar with min max  </span>
 			</div>
 			<div class="testExample">
-				<input id="Text1" name="noDOMvalue" value="2009-01-20" type="text" dojoType="dijit.form.DateTextBox" 
+				<input id="Text1" name="noDOMvalue" value="2009-01-20" type="text" dojoType="dijit.form.DateTextBox"
 					lang="en"
 					constraints="{min:'2009-01-01',max:'2009-02-01', datePattern:'dd MMMM yyyy'}"
 					onMouseEnter="eventHandler"
@@ -98,12 +98,12 @@
 				<input id="Text3" size="34" disabled value="not called yet!" autocomplete="off" NAME="Text3">
 				</nobr>
 			</div>
-				<div class="dojoTitlePaneLabel">
+			<div class="dojoTitlePaneLabel">
 				<label for="q1"> Gregorian Date </label>
 				<span class="noticeMessage">DateTextBox class,  Gregorian Calendar</span>
 			</div>
 			<div class="testExample">
-				<input id="Text4" name="noDOMvalue" value="2009-01-20" type="text" dojoType="dijit.form.DateTextBox" 
+				<input id="Text4" name="noDOMvalue" value="2009-01-20" type="text" dojoType="dijit.form.DateTextBox"
 					lang="en"
 					onMouseEnter="eventHandler"
 					onMouseLeave="eventHandler"
@@ -111,15 +111,14 @@
 					onChange="dojo.byId('oc3').value=''+arguments[0]"
 				>
 				onChange:<input id="oc3" size="34" disabled value="not fired yet!" autocomplete="off">
-
+			</div>
 			<script>
-			// See if we can make a widget in script and attach it to the DOM ourselves.
-			dojo.addOnLoad(function(){
-		//		dojo.connect(dijit.byId('q5'), "onMouseEnter", eventHandler);
-		//		dojo.connect(dijit.byId('q5'), "onMouseLeave", eventHandler);
-		//		dojo.connect(dijit.byId('q5'), "onKeyDown", eventHandler);
-
-			});
+				// See if we can make a widget in script and attach it to the DOM ourselves.
+				dojo.addOnLoad(function(){
+				//		dojo.connect(dijit.byId('q5'), "onMouseEnter", eventHandler);
+				//		dojo.connect(dijit.byId('q5'), "onMouseLeave", eventHandler);
+				//		dojo.connect(dijit.byId('q5'), "onKeyDown", eventHandler);
+				});
 			</script>
 
 			<script>
@@ -135,7 +134,7 @@
 				}
 			</script>
 
-			
+
 			<div>
 				<button name="button" onclick="displayData(); return false;">view data</button>
 				<input type="submit" name="submit" />

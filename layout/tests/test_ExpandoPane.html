@@ -6,7 +6,7 @@
 	<!-- required: a default theme file -->
 	<link rel="stylesheet" id="themeStyles" href="../../../dijit/themes/claro/claro.css">
 	<!-- test file style rollup, you need resources/ExpandoPane.css exclusively -->
-	<link rel="stylesheet" href="_expando.css">	
+	<link rel="stylesheet" href="_expando.css">
 
 	<!-- required: dojo.js -->
 	<script type="text/javascript" src="../../../dojo/dojo.js" data-dojo-config="isDebug:true, parseOnLoad: true, popup:true"></script>
@@ -34,8 +34,8 @@
 
 			startup: function(){
 				this.inherited(arguments);
-				this.rpc.get({ name: this.title, 
-					attributes:["summary","type","source","description","examples"]			 
+				this.rpc.get({ name: this.title,
+					attributes:["summary","type","source","description","examples"]
 				}).addCallback(dojo.hitch(this,"_setSelf"));
 			},
 			_setSelf:function(data){
@@ -52,22 +52,22 @@
 				this.setContent(out);
 
 			}
-			
+
 		});
-		
+
 		var togglePane = function(e){
-			
+
 				var lp = dijit.byId("leftPane");
 				var sel = dojo.byId("easingSelect");
 				var o = dojo.getObject("dojo.fx.easing."+sel.value);
-			
+
 				lp.easeIn = o;
 				lp.easeOut = o;
 				lp.duration = parseInt(dojo.byId("durationBox").value) || 1000;
 				lp._setupAnims();
 				lp.toggle();
 		};
-		
+
 		var easeSelectionCode = function(){
 			var sel = dojo.byId("easingSelect");
 			dojo.connect(sel,"onchange",togglePane);
@@ -84,7 +84,7 @@
 		var _clearSearch = function(){
 			dojo.query("li","searchResults").forEach(dojo.destroy);
 		};
-		
+
 		var shifter = function(input){
 			// convert an array to a object, just that deep
 			var last, output;
@@ -98,7 +98,7 @@
 			}
 			return output;
 		};
-		
+
 		var makeTree = function(data){
 			var undata = {
 				dojo:{}, dijit:{}, dojox:{}
@@ -114,7 +114,7 @@
 			});
 			return items;
 		};
-		
+
 		var runSearch = function(e){
 			dijit.byId("centerPane").selectChild(dijit.byId("resultsPane"));
 			var val = dojo.byId("searchBox").value;
@@ -125,9 +125,9 @@
 			searchHistory.push(val);
 			api.get({ name:val }).addCallback(function(data){
 				var tree = makeTree(data);
-		
+
 				_clearSearch();
-				
+
 				dojo.forEach(data,function(item){
 					console.log(item);
 					var list = dojo.byId("")
@@ -182,14 +182,14 @@
 <body class="claro" role="main">
 		<div id="bc" style="width:100%; height:100%; padding: 5px;" dojoType="dijit.layout.BorderContainer">
 			<div id="header" dojoType="dijit.layout.ContentPane" region="top" splitter="true">Dojo Expando Pane Test</div>
-			<div dojoType="dojox.layout.ExpandoPane" 
-				splitter="true" 
-				duration="125" 
-				region="left" 
-				title="Left Section" 
+			<div dojoType="dojox.layout.ExpandoPane"
+				splitter="true"
+				duration="125"
+				region="left"
+				title="Left Section"
 				previewOnDblClick="true"
-				id="leftPane" 
-				maxWidth="275" 
+				id="leftPane"
+				maxWidth="275"
 				style="width: 275px;">
 				<div dojoType="dijit.layout.TabContainer" attachParent="true" tabPosition="bottom" tabStrip="true">
 					<div dojoType="dijit.layout.ContentPane" title="Search">
@@ -202,7 +202,7 @@
 								</span>
 							</p>
 						</div>
-						
+
 					</div>
 					<div dojoType="dijit.layout.AccordionContainer" title="Panes" style="width:275px;" attachParent="true">
 						<div dojoType="dijit.layout.ContentPane" title="Dojo">
@@ -230,6 +230,7 @@
 						<script type="dojo/method" data-dojo-event="onClick">
 							dijit.byId("leftPane").preview();
 						</script>
+					</button>
 				</div>
 				<div dojoType="dijit.layout.ContentPane" title="Results" id="resultsPane">
 					<div class="wrap">
@@ -239,20 +240,20 @@
 					</div>
 				</div>
 			</div>
-			<div dojoType="dojox.layout.ExpandoPane" 
-				splitter="true" 
-				title="Right Section" 
-				region="right" 
-				id="rightPane" 
-				maxWidth="275" 
-				style="width:275px" 
-				easeIn="dojo.fx.easing.backOut" 
+			<div dojoType="dojox.layout.ExpandoPane"
+				splitter="true"
+				title="Right Section"
+				region="right"
+				id="rightPane"
+				maxWidth="275"
+				style="width:275px"
+				easeIn="dojo.fx.easing.backOut"
 				easeOut="dojo.fx.easing.backInOut">
 
 				<div dojoType="dijit.layout.AccordionContainer" id="rightAccordion" style="width:275px;" attachParent="true">
 					<div dojoType="dijit.layout.ContentPane" title="Easing Selection">
 						<div class="wrap">
-							<p id="easingSelectLabel">This select modifies the left Expando's easing function. An Expando can have an easeIn and an easeOut parameter. This sets both.</p> 
+							<p id="easingSelectLabel">This select modifies the left Expando's easing function. An Expando can have an easeIn and an easeOut parameter. This sets both.</p>
 							<select id="easingSelect" name="easingSelect" aria-labelledby="easingSelectLabel">
 								<option value="dojo._DefaultEasing">Default</option>
 							</select>
@@ -295,13 +296,13 @@
 					<div dojoType="dijit.layout.ContentPane" title="Acc 3">c</div>
 				</div>
 			</div>
-			<div dojoType="dojox.layout.ExpandoPane" 
-				splitter="true" 
-				duration="125" 
-				region="bottom" 
-				title="Bottom Section" 
-				id="bottomPane" 
-				maxWidth="275" 
+			<div dojoType="dojox.layout.ExpandoPane"
+				splitter="true"
+				duration="125"
+				region="bottom"
+				title="Bottom Section"
+				id="bottomPane"
+				maxWidth="275"
 				style="height: 100px;">
 				<div dojoType="dijit.layout.TabContainer" attachParent="true" tabPosition="bottom" tabStrip="true">
 					<div dojoType="dijit.layout.ContentPane" title="Search">
@@ -313,10 +314,10 @@
 						</button>
 					</div>
 					<div dojoType="dijit.layout.AccordionContainer" title="Panes" style="width:275px;" attachParent="true">
-						
+
 					</div>
 					<div dojoType="dijit.layout.ContentPane" title="Tree View">
-						
+
 					</div>
 				</div>
 			</div>
