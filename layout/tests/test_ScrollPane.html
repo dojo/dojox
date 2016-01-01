@@ -6,7 +6,7 @@
 
 	<!-- required: a default theme file -->
 	<link rel="stylesheet" id="themeStyles" href="../../../dijit/themes/tundra/tundra.css">
-	<link rel="stylesheet" href="../resources/ScrollPane.css">	
+	<link rel="stylesheet" href="../resources/ScrollPane.css">
 
 	<!-- required: dojo.js -->
 	<script type="text/javascript" src="../../../dojo/dojo.js" data-dojo-config="isDebug:true"></script>
@@ -15,14 +15,14 @@
 	<script type="text/javascript" src="../../../dijit/tests/_testCommon.js"></script>
 
 	<script language="JavaScript" type="text/javascript">
-		
+
 		dojo.require("dojox.layout.ScrollPane");
 		dojo.require("dojo.parser");
 		dojo.require("dijit.layout.BorderContainer");
 		dojo.require("dijit.layout.ContentPane");
 		dojo.require("dijit.layout.TabContainer");
 		dojo.addOnLoad(function(){
-			var i; 
+			var i;
 			var node = dojo.byId("cloneMe");
 			dojo.query(".list").forEach(function(n){
 				for(i = 0; i<42; i++){
@@ -31,13 +31,13 @@
 			});
 
 			dojo.parser.parse();
-			
+
 			// programatic example:
 			var widget = new dojox.layout.ScrollPane({
 				orientation: "vertical",
 				style:"width:125px; height:300px; border:2px solid #ededed"
 			},"progExample");
-						
+
 		});
 	</script>
 	<style type="text/css">
@@ -52,7 +52,7 @@
 		}
 		table.fooBar td {
 			width:50px;
-			border-right:2px solid #000; 
+			border-right:2px solid #000;
 			padding:20px;
 		}
 
@@ -69,7 +69,7 @@
 	<h1 class='testTitle'>dojox.layout.ScrollPane</h1>
 
 	<p>An intuitive UI for lists of data in a confined space. supports horizontal or vertical "scrolling", but not both</p>
-	
+
 	<h2>vertical:</h2>
 	<div style="float:left; padding-right:12px;">
 
@@ -78,17 +78,17 @@
 				<li id="cloneMe"><a href="#"><span>testItem</span></a></li>
 			</ol>
 		</div>
-		
+
 	</div>
 	<div id="altStyle" style="float:left; padding-right:12px;">
 
 		<div dojoType="dojox.layout.ScrollPane" style="width:100px; height:300px; border:1px solid #b7b7b7">
 			<ol class="list" id="vertList2"></ol>
 		</div>
-	
+
 	</div>
 
-	<br style="clear:both;">	
+	<br style="clear:both;">
 
 	<h2>horizontal</h2>
 	<div dojoType="dojox.layout.ScrollPane" orientation="horizontal"  style="width:600px; height:125px; border:1px solid #b7b7b7" id="horiz">
@@ -157,21 +157,21 @@
 		</div>
 	</div>
 
-	<h2>Programatically:<h2>
-	
+	<h2>Programatically:</h2>
+
 	<div id="progExample">
 		<ol class="list"></ol>
 	</div>
 
 	<h2>Tabs:</h2>
-	
+
 	<div id="tabber" dojoType="dijit.layout.TabContainer" style="height:6em; width:200px">
 		<div dojoType="dojox.layout.ScrollPane" title="tab1" orientation="horizontal">
 			<p class='special'>Lorem, ipsum Dolor
 				Lorem, ipsum Dolor
 				Lorem, ipsum Dolor
 				Lorem, ipsum Dolor
-				Lorem, ipsum Dolor	
+				Lorem, ipsum Dolor
 			</p>
 		</div>
 		<div dojoType="dojox.layout.ScrollPane" title="tab2" orientation="horizontal">
