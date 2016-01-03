@@ -1,4 +1,5 @@
 define([
+	'./DynamoDB',
 	'./LocalStorage',
 	'./transaction',
 	'./priority'

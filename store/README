@@ -1,8 +1,8 @@
 -------------------------------------------------------------------------------
 DojoX Stores (data)
 -------------------------------------------------------------------------------
-Version 1.8
-Release date: 06/13/2012
+Version 1.11
+Release date: 01/03/2016
 -------------------------------------------------------------------------------
 Project state: beta
 -------------------------------------------------------------------------------
@@ -11,6 +11,8 @@ Project state: beta
 -------------------------------------------------------------------------------
 Credits
 LocalDB, priority, transaction:	Kris Zyp (kris@sitepen.com)
+OData: Paul Bouchon
+DynamoDB: Colin Snover, Jason Cheatham, Nick Nisi
 -------------------------------------------------------------------------------
 Project description
 
@@ -19,13 +21,17 @@ on the dojo.store APIs can live. The following stores are available (as of 1.10)
 * LocalDB - This store provides access to local database functionality in
 the browser, adapting to WebSQL or IndexedDB. In the db folder you will find
 the specific implementations (which can be used directly)
+* OData - This store provides access per the OData spec
+* DynamoDB - This store provides access per the DynamoDB spec
 * priority - This is a store for prioritizing requests
-* transaciton - This is a store that implements transaction support
+* transaction - This is a store that implements transaction support
 
 -------------------------------------------------------------------------------
 Dependencies:
 
 Dojo
+Intern 3 and Node.js (for testing)
+
 -------------------------------------------------------------------------------
 Documentation
 
