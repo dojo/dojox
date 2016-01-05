@@ -778,6 +778,10 @@ define([
 			// summary:
 			//		Stops the currently running animation.
 			domClass.remove(this.containerNode, "mblScrollableScrollTo2");
+			this.containerNode.className = this.containerNode.className
+				.replace(/mblScrollableScrollTo2-[^ ]+/, ""); // TODO: remove supports regexp?
+				// TODO: there must be a better way than hardcoding this class name in
+				// 20 different places and 2 files
 			if(this._scrollBarV){
 				this._scrollBarV.className = "";
 			}
@@ -1261,11 +1265,13 @@ define([
 						}
 					}else{
 						// use -webkit-transform + -webkit-animation
-						this.setKeyframes(from, to, idx);
+						var entering = this.findDisp(this.domNode) === this.domNode;
+						var className = this.setKeyframes(from, to, idx, entering);
 						domStyle.set(node, css3.add({}, {
 							animationDuration: duration + "s",
 							animationTimingFunction: easing
 						}));
+						domClass.add(node, className);
 						domClass.add(node, "mblScrollableScrollTo"+idx);
 						if(idx == 2){
 							this.scrollTo(to, true, node);
@@ -1438,22 +1444,25 @@ define([
 			}
 		},
 
-		setKeyframes: function(/*Object*/from, /*Object*/to, /*Number*/idx){
+		setKeyframes: function(/*Object*/from, /*Object*/to, /*Number*/idx, entering){
 			// summary:
 			//		Programmatically sets key frames for the scroll animation.
 
 			if(!dm._rule){
 				dm._rule = [];
 			}
+
+			var keyframeId = idx + (entering ? "-in" : "-out");
+
 			// idx: 0:scrollbarV, 1:scrollbarH, 2:content
-			if(!dm._rule[idx]){
+			if(!(dm._rule[keyframeId])){
 				var node = domConstruct.create("style", null, win.doc.getElementsByTagName("head")[0]);
 				node.textContent =
-					".mblScrollableScrollTo"+idx+"{" + css3.name("animation-name", true) + ": scrollableViewScroll"+idx+";}"+
-					"@" + css3.name("keyframes", true) + " scrollableViewScroll"+idx+"{}";
-				dm._rule[idx] = node.sheet.cssRules[1];
+					".mblScrollableScrollTo"+keyframeId+"{" + css3.name("animation-name", true) + ": scrollableViewScroll"+keyframeId+";}"+
+					"@" + css3.name("keyframes", true) + " scrollableViewScroll"+keyframeId+"{}";
+				dm._rule[keyframeId] = node.sheet.cssRules[1];
 			}
-			var rule = dm._rule[idx];
+			var rule = dm._rule[keyframeId];
 			if(rule){
 				if(from){
 					rule.deleteRule(has("webkit")?"from":0);
@@ -1466,6 +1475,7 @@ define([
 					(rule.insertRule||rule.appendRule).call(rule, "to { " + css3.name("transform", true) + ": "+this.makeTranslateStr(to)+"; }");
 				}
 			}
+			return "mblScrollableScrollTo"+keyframeId;
 		},
 
 		setSelectable: function(/*DomNode*/node, /*Boolean*/selectable){
