@@ -6,4 +6,4 @@
 	url = https://github.com/damiengarbarino/dojo-calendar.git
 [submodule "dgauges"]
 	path = dgauges
-	url = https://github.com/dmandrioli/dgauges.git
+	url = https://github.com/dojo/dgauges.git
