@@ -96,7 +96,12 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/has",
 		// interpolate: Boolean?
 		//		Whether when there is a null data point in the data the plot interpolates it or if the lines is split at that
 		//		point.	Default false.
-		interpolate: false
+		interpolate: false,
+
+		// zeroLine: Number?
+		//		Zero line for an area fill. Should be a numeric value in user coordinates.
+		//		Default: the lowest value on a vertical axis.
+		zeroLine: 0
 	});
 =====*/
 
@@ -136,7 +141,8 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/has",
 			markerShadow:		{},
 			markerFill:			{},
 			markerFont:			"",
-			markerFontColor:	""
+			markerFontColor:	"",
+			zeroLine:           0
 		},
 
 		constructor: function(chart, kwArgs){
@@ -178,7 +184,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/has",
 			// split the run data into dense segments (each containing no nulls)
 			// except if interpolates is false in which case ignore null between valid data
 			for(var j = min; j < max; j++){
-				if(run.data[j] !== null && (indexed || run.data[j].y !== null)){
+				if(!this.isNullValue(run.data[j])){
 					if(!rseg){
 						rseg = [];
 						segments.push({index: j, rseg: rseg});
@@ -261,6 +267,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/has",
 					}
 					continue;
 				}
+
 				// optim works only for index based case
 				var indexed = arr.some(run.data, function(item){
 					return typeof item == "number" || (item && !item.hasOwnProperty("x"));
@@ -307,15 +314,19 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/has",
 					var lpath = this.opt.tension ? dc.curve(lpoly, this.opt.tension) : "";
 
 					if(this.opt.areas && lpoly.length > 1){
-						var fill = this._plotFill(theme.series.fill, dim, offsets), apoly = lang.clone(lpoly);
+						var fill = this._plotFill(theme.series.fill, dim, offsets), apoly = lang.clone(lpoly),
+							zeroLine = dim.height - offsets.b;
+						if(!isNaN(this.opt.zeroLine)){
+							zeroLine = Math.max(offsets.t, Math.min(dim.height - offsets.b - vt(this.opt.zeroLine), zeroLine));
+						}
 						if(this.opt.tension){
-							var apath = "L" + apoly[apoly.length-1].x + "," + (dim.height - offsets.b) +
-								" L" + apoly[0].x + "," + (dim.height - offsets.b) +
+							var apath = "L" + apoly[apoly.length-1].x + "," + zeroLine +
+								" L" + apoly[0].x + "," + zeroLine +
 								" L" + apoly[0].x + "," + apoly[0].y;
 							run.dyn.fill = s.createPath(lpath + " " + apath).setFill(fill).getFill();
 						} else {
-							apoly.push({x: lpoly[lpoly.length - 1].x, y: dim.height - offsets.b});
-							apoly.push({x: lpoly[0].x, y: dim.height - offsets.b});
+							apoly.push({x: lpoly[lpoly.length - 1].x, y: zeroLine});
+							apoly.push({x: lpoly[0].x, y: zeroLine});
 							apoly.push(lpoly[0]);
 							run.dyn.fill = s.createPolyline(apoly).setFill(fill).getFill();
 						}
