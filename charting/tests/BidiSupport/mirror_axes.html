@@ -78,6 +78,17 @@ makeObjects = function(){
             addSeries("Series C", [{x: 5, y: 3}, {x: 6, y: 4}, {x: 7, y: 3}]).
 			setDir("rtl").
             render();
+
+   var chart4 = new dojox.charting.Chart("test5", {title: "Chart Title", titleAlign: "edge"}).
+            setTheme(customTheme).
+            addAxis("x", {fixLower: "major", fixUpper: "major", natural: true, includeZero: true, majorTick: { length: -10}}).
+            addAxis("y", {vertical: true, fixLower: "major", fixUpper: "major", natural: true, includeZero: true}).
+            addPlot("default", {type: "Markers"}).
+            addSeries("Series A", [{x: 1, y: 1}, {x: 2, y: 2}, {x: 3, y: 1}]).
+            addSeries("Series B", [{x: 3, y: 2}, {x: 4, y: 3}, {x: 5, y: 2}]).
+            addSeries("Series C", [{x: 5, y: 3}, {x: 6, y: 4}, {x: 7, y: 3}]).
+			setDir("rtl").
+            render();
 };
 
 dojo.ready(makeObjects);
@@ -95,6 +106,8 @@ dojo.ready(makeObjects);
 <div id="test3" style="width: 200px; height: 200px;"></div>
 <p>4: Like #1 but no axes.</p>
 <div id="test4" style="width: 200px; height: 200px;"></div>
+<p>4: Like #1 but with the title aligned to the axis edge.</p>
+<div id="test5" style="width: 200px; height: 200px;"></div>
 <p>That's all Folks!</p>
 </body>
 </html>
