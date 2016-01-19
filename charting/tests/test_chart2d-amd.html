@@ -213,6 +213,29 @@
 				}
 			},
 			{
+				description: "Areas, Negative Values.",
+				makeChart: function(node){
+					(new Chart(node)).
+						addPlot("default", {type: "Areas", tension:"X", zeroLine: 0}).
+						setTheme(Shrooms).
+						addAxis("x", {
+							majorLabels: true,
+							minorLabels: true,
+							minorTicks: false,
+							microTicks: false,
+						}).
+						addAxis("y", {
+							vertical: true,
+							microTicks: true,
+							minorTicks: true
+						}).
+						addSeries("Series A", [1, 2, 0.5, 1.5, 1, 2.8, 0.4]).
+						addSeries("Series B", [2.6, 1.8, 2, 1, 1.4, 0.7, 2]).
+						addSeries("Series C", [-6.3, -1.8, -3, -0.5, -4.4, -2.7, -2]).
+						render();
+				}
+			},
+			{
 				description: "Areas, no axes, custom strokes and fills.",
 				makeChart: function(node){
 					(new Chart(node)).
@@ -880,7 +903,7 @@
 
 			arr.forEach(charts, function(item, idx){
 				var start = now();
-				var n = dom.byId("chart_"+idx);
+				var n = dom.byId("chart_"+ (idx + 1));
 				domStyle.set(n, item.style||defaultStyle);
 				item.makeChart(n);
 				console.debug((now()-start), "ms to create:", (idx+1)+":", item.description);
@@ -893,7 +916,7 @@
 	<textarea id="template" style="display: none;">
 		{% for item in charts %}
 			<p>{{ forloop.counter }}: {{ item.description }}</p>
-			<div id="chart_{{ forloop.counter0 }}"></div>
+			<div id="chart_{{ forloop.counter }}"></div>
 		{% endfor %}
 	</textarea>
 
