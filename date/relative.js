@@ -1,4 +1,4 @@
-define(["..", "dojo/_base/lang", "dojo/date/locale", "dojo/i18n"], function(dojox, lang, ddl, i18n){
+define(["dojox/main", "dojo/_base/lang", "dojo/date/locale", "dojo/i18n"], function(dojox, lang, ddl, i18n){
 
 var drelative = lang.getObject("date.relative", true, dojox);
 

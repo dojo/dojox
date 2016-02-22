@@ -1,4 +1,4 @@
-define(["..", "dojo/_base/lang", "dojo/date", "./umalqura/Date"], function(dojox, lang, dd, IDate){
+define(["dojox/main", "dojo/_base/lang", "dojo/date", "./umalqura/Date"], function(dojox, lang, dd, IDate){
 
 var dumalqura = lang.getObject("date.umalqura", true, dojox);
 

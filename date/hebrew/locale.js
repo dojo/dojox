@@ -1,4 +1,4 @@
-define(["../..", "dojo/_base/lang", "dojo/_base/array", "dojo/date", "dojo/i18n", "dojo/regexp", "dojo/string", "./Date", "./numerals", "dojo/i18n!dojo/cldr/nls/hebrew"],
+define(["dojox/main", "dojo/_base/lang", "dojo/_base/array", "dojo/date", "dojo/i18n", "dojo/regexp", "dojo/string", "./Date", "./numerals", "dojo/i18n!dojo/cldr/nls/hebrew"],
 	function(dojox, lang, arr, dd, i18n, regexp, string, HDate, numerals){
 
 	var hlocale = lang.getObject("date.hebrew.locale", true, dojox);

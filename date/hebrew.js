@@ -1,4 +1,4 @@
-define(["..", "dojo/_base/lang", "dojo/date", "./hebrew/Date"], function(dojox, lang, dd, HDate){
+define(["dojox/main", "dojo/_base/lang", "dojo/date", "./hebrew/Date"], function(dojox, lang, dd, HDate){
 
 var dhebrew = lang.getObject("date.hebrew", true, dojox);
 
