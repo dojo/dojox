@@ -180,7 +180,10 @@ return declare("dojox.grid._Layout", null, {
 	addRowsDef: function(inDef){
 		var result = [];
 		if(lang.isArray(inDef)){
-			if(lang.isArray(inDef[0])){
+            // inDef[0] could be a NodeList if the Grid is defined in a declarative way.
+            // lang.isArray() does not recognize a NodeList as an array, now so the wrong path will be chosen.
+            // lang.isArrayLike() does the right match against a NodeList, instead.
+			if(lang.isArrayLike(inDef[0])){
 				for(var i=0, row; inDef && (row=inDef[i]); i++){
 					result.push(this.addRowDef(i, row));
 				}
