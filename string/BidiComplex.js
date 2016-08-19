@@ -5,14 +5,15 @@
 //		in both static text and dynamic text during user input.
 
 define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/connect", "dojo/_base/sniff",
-		"dojo/keys"], 
-  function(dojo, lang, arr, hub, has, keys){
-	dojo.experimental("dojox.string.BidiComplex");
-	var bdc = lang.getObject("string.BidiComplex", true, dojox);
+		"dojo/keys"
+], function(dojo, lang, arr, hub, has, keys){
+	kernel.experimental("dojox.string.BidiComplex");
 
+	var strLib = (dojox) ? lang.getObject("string", true, dojox) : {};
+	strLib.bdc = {};
 	var _str0 = []; //FIXME: shared reference here among various functions means the functions can't be reused
 
-	bdc.attachInput = function(/*DOMNode*/field, /*String*/pattern){
+	strLib.bdc.attachInput = function(/*DOMNode*/field, /*String*/pattern){
 		// summary:
 		//		Attach key listeners to the INPUT field to accommodate dynamic complex BiDi expressions
 		// field: INPUT DOM node
@@ -28,15 +29,15 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/
 
 		field.value = bdc.createDisplayString(field.value, field.alt);
 	};
-		
-	bdc.createDisplayString = function(/*String*/str, /*String*/pattern){
+
+	strLib.bdc.createDisplayString = function(/*String*/str, /*String*/pattern){
 		// summary:
 		//		Create the display string by adding the Unicode direction Markers
 		// pattern: Complex Expression Pattern type. One of "FILE_PATH", "URL", "EMAIL", "XPATH"
 
 		str = bdc.stripSpecialCharacters(str);
 		var segmentsPointers = bdc._parse(str, pattern);
-		
+
 		var buf = '\u202A'/*LRE*/ + str;
 		var shift = 1;
 		arr.forEach(segmentsPointers, function(n){
@@ -50,25 +51,25 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/
 		return buf;
 	};
 
-	bdc.stripSpecialCharacters = function(str){
+	strLib.bdc.stripSpecialCharacters = function(str){
 		// summary:
 		//		removes all Unicode directional markers from the string
 
 		return str.replace(/[\u200E\u200F\u202A-\u202E]/g, ""); // String
 	};
 
-	bdc._ceKeyDown = function(event){
+	strLib.bdc._ceKeyDown = function(event){
 		var elem = has("ie") ? event.srcElement : event.target;
 		_str0 = elem.value;
 	};
-				
-	bdc._ceKeyUp = function(event){
+
+	strLib.bdc._ceKeyUp = function(event){
 		var LRM = '\u200E';
 		var elem = has("ie") ? event.srcElement : event.target;
 
 		var str1 = elem.value;
 		var ieKey = event.keyCode;
-		
+
 		if((ieKey == keys.HOME)
 			|| (ieKey == keys.END)
 			|| (ieKey == keys.SHIFT)){
@@ -119,7 +120,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/
 				return;
 			}
 		}
-		
+
 		var str2 = bdc.createDisplayString(str1, elem.alt);
 
 		if(str1 != str2)
@@ -145,7 +146,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/
 		}
 	};
 
-	bdc._processCopy = function(elem, text, isReverse){
+	strLib.bdc._processCopy = function(elem, text, isReverse){
 		// summary:
 		//		This function strips the unicode directional controls when the text copied to the Clipboard
 
@@ -159,21 +160,21 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/
 		}
 
 		var textToClipboard = bdc.stripSpecialCharacters(text);
-	
+
 		if(has("ie")){
 			window.clipboardData.setData("Text", textToClipboard);
 		}
 		return true;
 	};
 
-	bdc._ceCopyText = function(elem){
+	strLib.bdc._ceCopyText = function(elem){
 		if(has("ie")){
 			elem.returnValue = false;
 		}
 		return bdc._processCopy(elem, null, false);
 	};
 
-	bdc._ceCutText = function(elem){
+	strLib.bdc._ceCutText = function(elem){
 
 		var ret = bdc._processCopy(elem, null, false);
 		if(!ret){
@@ -193,7 +194,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/
 	};
 
 	// is there dijit code to do this?
-	bdc._getCaretPos = function(event, elem){
+	strLib.bdc._getCaretPos = function(event, elem){
 		if(has("ie")){
 			var position = 0,
 			range = document.selection.createRange().duplicate(),
@@ -217,7 +218,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/
 	};
 
 	// is there dijit code to do this?
-	bdc._setSelectedRange = function(elem,selectionStart,selectionEnd){
+	strLib.bdc._setSelectedRange = function(elem,selectionStart,selectionEnd){
 		if(has("ie")){
 			var range = elem.createTextRange();
 			if(range){
@@ -263,7 +264,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/
 	};
 
 
-	bdc._parse = function(/*String*/str, /*String*/pattern){
+	strLib.bdc._parse = function(/*String*/str, /*String*/pattern){
 		var previous = -1, segmentsPointers = [];
 		var delimiters = {
 			FILE_PATH: "/\\:.",
@@ -285,7 +286,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/
 				break;
 			case "EMAIL":
 				var inQuotes = false; // FIXME: unused?
-	
+
 				arr.forEach(str, function(ch, i){
 					if(ch== '\"'){
 						if(_isCharBeforeBiDiChar(str, i, previous)){
@@ -302,7 +303,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/
 							segmentsPointers.push(i);
 						}
 					}
-	
+
 					if(delimiters.indexOf(ch) >= 0 && _isCharBeforeBiDiChar(str, i, previous)){
 								previous = i;
 								segmentsPointers.push(i);
@@ -311,5 +312,5 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/
 		}
 		return segmentsPointers;
 	};
-	return bdc;
+	return strLib.bdc;
 });

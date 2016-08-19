@@ -1,10 +1,10 @@
 define([
 	"dojo/_base/lang",
-	"dojo/_base/sniff"	
+	"dojo/_base/sniff"
 ], function(lang, has){
-	var tokenize = lang.getObject("dojox.string", true).tokenize;
+	var strLib = (dojox) ? lang.getObject("string", true, dojox) : {};
 
-	tokenize = function(/*String*/ str, /*RegExp*/ re, /*Function?*/ parseDelim, /*Object?*/ instance){
+	strLib.tokenize = function(/*String*/ str, /*RegExp*/ re, /*Function?*/ parseDelim, /*Object?*/ instance){
 		// summary:
 		//		Split a string by a regular expression with the ability to capture the delimiters
 		// parseDelim:
@@ -20,7 +20,7 @@ define([
 				tokens.push(content);
 			}
 			if(parseDelim){
-				if(has("opera")){
+				if(has("opera") < 15){
 					var copy = match.slice(0);
 					while(copy.length < match.length){
 						copy.push(null);
@@ -40,5 +40,5 @@ define([
 		}
 		return tokens;
 	};
-	return tokenize;
+	return strLib.tokenize;
 });
