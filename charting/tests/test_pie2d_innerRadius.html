@@ -17,15 +17,16 @@
 				"dojox/charting/themes/PlotKit/red",
 				"dojox/charting/themes/Adobebricks",
 				"dojox/charting/themes/Algae",
-				"dojox/charting/themes/Claro",
+				"dojox/charting/themes/Julie",
 				"dojo/domReady!"
-			], function(Chart, Pie, pkBlue, pkGreen, pkRed, Adobebricks, Algae, Claro){
+			], function(Chart, Pie, pkBlue, pkGreen, pkRed, Adobebricks, Algae, Julie){
 				var chart1 = new Chart("test1");
 				chart1.setTheme(pkBlue);
 				chart1.addPlot("default", {
 					type: Pie,
 					font: "normal normal bold 12pt Tahoma",
 					fontColor: "white",
+					innerRadius: 33,
 					labelOffset: 40
 				});
 				chart1.addSeries("Series A", [4, 2, 1, 1]);
@@ -37,6 +38,7 @@
 					type: Pie,
 					font: "normal normal bold 12pt Tahoma",
 					fontColor: "black",
+					innerRadius: 33,
 					labelOffset: -25,
 					precision: 0
 				});
@@ -50,6 +52,7 @@
 					font: "normal normal bold 10pt Tahoma",
 					fontColor: "white",
 					labelOffset: 25,
+					innerRadius: 33,
 					radius: 90
 				});
 				chart3.addSeries("Series A", [4, 2, 1, 1]);
@@ -62,6 +65,7 @@
 					font: "normal normal bold 10pt Tahoma",
 					fontColor: "black",
 					labelOffset: -25,
+					innerRadius: 33,
 					radius: 90
 				});
 				chart4.addSeries("Series A", [4, 2, 1, 1]);
@@ -73,6 +77,7 @@
 					type: Pie,
 					font: "normal normal bold 14pt Tahoma",
 					fontColor: "white",
+					innerRadius: 33,
 					labelOffset: 40
 				});
 				chart5.addSeries("Series A", [{
@@ -95,8 +100,9 @@
 				chart6.addPlot("default", {
 					type: Pie,
 					font: "normal normal bold 14pt Tahoma",
-					fontColor: "black",
+					fontColor: "white",
 					labelOffset: 40,
+					innerRadius: 33,
 					startAngle: -45
 				});
 				chart6.addSeries("Series A", [{
@@ -124,7 +130,8 @@
 				chart7.addPlot("default", {
 					type: Pie,
 					font: "normal normal bold 12pt Tahoma",
-					fontColor: "white",
+					fontColor: "black",
+					innerRadius: 33,
 					radius: 80
 				});
 				chart7.addSeries("Series A", [4]);
@@ -135,7 +142,8 @@
 				chart8.addPlot("default", {
 					type: Pie,
 					font: "normal normal bold 12pt Tahoma",
-					fontColor: "white",
+					fontColor: "black",
+					innerRadius: 33,
 					radius: 80
 				});
 				chart8.addSeries("Series A", [{
@@ -159,34 +167,34 @@
 				chart8.render();
 
 				var chart9 = new Chart("test9");
-				chart9.setTheme(Claro);
+				chart9.setTheme(Julie);
 				chart9.addPlot("default", {
 					type: Pie,
 					font: "normal normal bold 12pt Tahoma",
-					fontColor: "white",
+					innerRadius: 33,
 					radius: 80
 				});
 				chart9.addSeries("Series A", []);
 				chart9.render();
-				
+
 				var chart10 = new Chart("test10");
-				chart10.setTheme(Claro);
+				chart10.setTheme(Julie);
 				chart10.addPlot("default", {
 					type: Pie,
 					font: "normal normal bold 12pt Tahoma",
-					fontColor: "white",
+					innerRadius: 33,
 					radius: 80,
 					zeroDataMessage: "No Non-Zero Data"
 				});
 				chart10.addSeries("Series A", []);
 				chart10.render();
-
+				
 				var chart11 = new Chart("test11");
-				chart11.setTheme(Claro);
+				chart11.setTheme(Julie);
 				chart11.addPlot("default", {
 					type: Pie,
 					font: "normal normal bold 12pt Tahoma",
-					fontColor: "white",
+					innerRadius: 33,
 					radius: 80,
 					zeroDataMessage: "No Non-Zero Data"
 				});
@@ -254,3 +262,4 @@
 		<p>That's all Folks!</p>
 	</body>
 </html>
+
