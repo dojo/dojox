@@ -42,6 +42,10 @@ doh.register("dojox.validate.tests.creditcard",
 			tests.t(validate.isValidCreditCard('5303105105105100','mc'));
 			tests.t(validate.isValidCreditCard('5402105105105100','ec'));
 			tests.t(validate.isValidCreditCard('5501105105105100','mc'));
+			// new 2016 Mastercard ranges
+			tests.t(validate.isValidCreditCard('2221005050505054','mc'));
+			tests.t(validate.isValidCreditCard('2333335050505050','mc'));
+			tests.t(validate.isValidCreditCard('2720995050505052','mc'));
 			//Visa card checks
 			tests.t(validate.isValidCreditCard('4111111111111111','vi'));
 			tests.t(validate.isValidCreditCard('4111111111010','vi'));
@@ -84,6 +88,10 @@ doh.register("dojox.validate.tests.creditcard",
 			tests.is("mc|ec", validate.isValidCreditCardNumber('5400000000000000')); //should match 'mc|ec'
 			tests.is("mc|ec", validate.isValidCreditCardNumber('5500000000000000')); //should match 'mc|ec'
 			tests.f(validate.isValidCreditCardNumber('55000000000000000')); //should fail, too long
+			// new 2016 Mastercard ranges
+			tests.is("mc", validate.isValidCreditCardNumber('2221005050505054'));
+			tests.is("mc", validate.isValidCreditCardNumber('2333335050505050'));
+			tests.is("mc", validate.isValidCreditCardNumber('2720995050505052'));
 			//Visa card checks
 			tests.is("vi", validate.isValidCreditCardNumber('4111111111111111')); //should match 'vi'
 			tests.is("vi", validate.isValidCreditCardNumber('4111111111010')); //should match 'vi'
