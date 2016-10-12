@@ -711,9 +711,9 @@ return declare("dojox.widget.Standby", [_Widget, _TemplatedMixin],{
 	        var w = registry.byId(target);
 	        this._set("target", w ? w.domNode : dom.byId(target));
 	    }
-
-	    /* MUDO bug introduced in 8f016dc0b5c6141eb1c2533ca2c3d4d343f7d107, by Dylan, at 2015-12-29, while fixing
-			        https://bugs.dojotoolkit.org/ticket/16544 */
+	    else {
+			this._set("target", target);
+		}
 	},
 
 	_disableOverflow: function(){
