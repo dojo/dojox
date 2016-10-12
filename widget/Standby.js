@@ -711,6 +711,9 @@ return declare("dojox.widget.Standby", [_Widget, _TemplatedMixin],{
 	        var w = registry.byId(target);
 	        this._set("target", w ? w.domNode : dom.byId(target));
 	    }
+	    else {
+			this._set("target", target);
+		}
 	},
 
 	_disableOverflow: function(){
