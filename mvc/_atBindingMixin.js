@@ -7,14 +7,12 @@ define([
 	"./resolve",
 	"./sync"
 ], function(array, lang, declare, has, Stateful, resolve, sync){
-	if(has("mvc-bindings-log-api")){
-		function getLogContent(/*dojo/Stateful*/ target, /*String*/ targetProp){
-			return [target._setIdAttr || !target.declaredClass ? target : target.declaredClass, targetProp].join(":");
-		}
+	function getLogContent(/*dojo/Stateful*/ target, /*String*/ targetProp){
+		return [target._setIdAttr || !target.declaredClass ? target : target.declaredClass, targetProp].join(":");
+	}
 
-		function logResolveFailure(target, targetProp){
-			console.warn(targetProp + " could not be resolved" + (typeof target == "string" ? (" with " + target) : "") + ".");
-		}
+	function logResolveFailure(target, targetProp){
+		console.warn(targetProp + " could not be resolved" + (typeof target == "string" ? (" with " + target) : "") + ".");
 	}
 
 	function getParent(/*dijit/_WidgetBase*/ w){
