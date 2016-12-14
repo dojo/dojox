@@ -9,11 +9,11 @@ define([
 ], function(array, lang, declare, has, Stateful, resolve, sync){
 	var getLogContent = (has("mvc-bindings-log-api")) ? function getLogContent(/*dojo/Stateful*/ target, /*String*/ targetProp){
 			return [target._setIdAttr || !target.declaredClass ? target : target.declaredClass, targetProp].join(":");
-		} : "";
+	} : "";
 
 	var logResolveFailure = (has("mvc-bindings-log-api")) ? function(target, targetProp){
 			console.warn(targetProp + " could not be resolved" + (typeof target == "string" ? (" with " + target) : "") + ".");
-		} : "";
+	} : "";
 
 	function getParent(/*dijit/_WidgetBase*/ w){
 		// summary:
