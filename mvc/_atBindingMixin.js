@@ -7,7 +7,7 @@ define([
 	"./resolve",
 	"./sync"
 ], function(array, lang, declare, has, Stateful, resolve, sync){
-	var getLogContent = (has("mvc-bindings-log-api")) ? function (/*dojo/Stateful*/ target, /*String*/ targetProp){
+	var getLogContent = (has("mvc-bindings-log-api")) ? function(/*dojo/Stateful*/ target, /*String*/ targetProp){
 			return [target._setIdAttr || !target.declaredClass ? target : target.declaredClass, targetProp].join(":");
 	} : "";
 
