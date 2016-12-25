@@ -2,13 +2,14 @@ define([
 	"dojo/_base/lang",
 	"dojo/dom-attr",
 	"dojo/dom-class",
+        "dojo/dom-construct",
 	"dijit/form/Button",
 	"dijit/form/DropDownButton",
 	"dijit/form/ComboButton",
 	"dojo/i18n",
 	"dojo/i18n!dijit/nls/loading",
 	"dojo/_base/declare"
-], function(lang, domAttr, domClass, Button, DropDownButton, ComboButton, i18n, nlsLoading, declare){
+], function(lang, domAttr, domClass, domConstruct, Button, DropDownButton, ComboButton, i18n, nlsLoading, declare){
 return declare("dojox.form._BusyButtonMixin", null, {
 
 	// isBusy: Boolean
