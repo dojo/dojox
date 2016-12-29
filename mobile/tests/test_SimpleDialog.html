@@ -25,10 +25,10 @@
 		], function(dom, registry, ProgressIndicator){
 			show = function(dlg){
 				registry.byId(dlg).show();
-			}
+			};
 			hide = function(dlg){
 				registry.byId(dlg).hide();
-			}
+			};
 			var prog;
 			show_progress_indicator = function(dlg,cont){
 				show(dlg);
@@ -39,7 +39,7 @@
 				setTimeout(function(){
 					hide_progress_indicator(dlg);
 				}, 5000);
-			}
+			};
 			hide_progress_indicator = function(dlg){
 				prog.stop();
 				hide(dlg);
@@ -78,8 +78,6 @@
 		}
 		.mblSimpleDialog .mblProgressIndicator {
 			position: relative;
-			margin: 14px 0 7px;
-			top: 0;
 		}
 
 		.mblSimpleDialog .mblListItem {

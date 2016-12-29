@@ -14,13 +14,11 @@
 }
 .mblProgressIndicatorCenter {
   position: absolute;
-  top: 180px;
-  left: 50%;
-}
-.mblProgressIndicatorCenter .mblProgContainer {
-  left: -50%;
-  -webkit-transform-origin: 50% 0;
-  transform-origin: 50% 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  margin: auto;
 }
 .mblProg {
   position: absolute;
