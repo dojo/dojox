@@ -548,7 +548,10 @@ define([
 	},
 	{
 		render: function(context, buffer){
-			var str = this.contents.resolve(context) || "";
+			var str = this.contents.resolve(context);
+            if (str === undefined || str === null) {
+                str = '';
+            }
 			if(!str.safe){
 				str = dd._base.escape("" + str);
 			}
