@@ -1410,7 +1410,7 @@ define([
 			//		unexpectedly when the user flicks the screen to scroll.
 			//		Note that only the desktop browsers need the cover.
 
-			if(!has("touch") && !has("pointer-events") && !this.noCover){
+			if(!has("touch") && !(has("pointer-events") || has("MSPointer")) && !this.noCover){
 				if(!dm._cover){
 					dm._cover = domConstruct.create("div", null, win.doc.body);
 					dm._cover.className = "mblScrollableCover";
