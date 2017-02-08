@@ -161,21 +161,18 @@ define([
 				forloop.first = !j;
 				forloop.last = (j == arred.length - 1);
 
-				if (lang.isArrayLike(item)) {
-					if(assign.length > 1){
-						if(!dirty){
-							dirty = true;
-							context = context.push();
-						}
-						var zipped = {};
-						for(k = 0; k < item.length && k < assign.length; k++){
-							zipped[assign[k]] = item[k];
-						}
-						lang.mixin(context, zipped);
-					}else{
-						// in single assignment scenarios, pick only the value
-						context[assign[0]] = item[1];
+				if(assign.length > 1 && lang.isArrayLike(item)){
+					if(!dirty){
+						dirty = true;
+						context = context.push();
 					}
+					var zipped = {};
+					for(k = 0; k < item.length && k < assign.length; k++){
+						zipped[assign[k]] = item[k];
+					}
+					lang.mixin(context, zipped);
+				}else{
+					context[assign[0]] = item;
 				}
 
 				if(j + 1 > this.pool.length){
