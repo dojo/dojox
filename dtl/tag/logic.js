@@ -172,11 +172,11 @@ define([
 							zipped[assign[k]] = item[k];
 						}
 						lang.mixin(context, zipped);
-					} else{
+					}else{
 						// in single assignment scenarios, pick only the value
 						context[assign[0]] = item[1];
 					}
-				} else{
+				}else{
 				    // in single assignment scenarios, pick only the value
 				    context[assign[0]] = item;
 				}
