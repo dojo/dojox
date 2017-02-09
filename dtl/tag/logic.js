@@ -176,6 +176,9 @@ define([
 						// in single assignment scenarios, pick only the value
 						context[assign[0]] = item[1];
 					}
+				}else{
+				    // in single assignment scenarios, pick only the value
+				    context[assign[0]] = item;
 				}
 
 				if(j + 1 > this.pool.length){
