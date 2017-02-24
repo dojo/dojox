@@ -686,56 +686,62 @@
 		</div>
 	</div>
 
-	<h2>Declarative Event Hooks</h2>
+	<!--
+	 TODO: Declarative event hooks as implemented here don't work. They're intended to be handled by dojox/widget/Rotator, but
+	 the syntax here is setup for dojo/parser. The example here actually causes an error in dojo/parser because the script tags
+	 aren't direct children of a node with a data-dojo-type.
+	-->
+
+	<!-- <h2>Declarative Event Hooks</h2> -->
 	
-	<p>The 2nd pane will output when the onBeforeIn/Out and onAfterIn/Out events are fired.</p>
+	<!-- <p>The 2nd pane will output when the onBeforeIn/Out and onAfterIn/Out events are fired.</p> -->
 	
-	<p>
-	<button onclick="myRotator12.prev();">Prev</button>
-	<button onclick="myRotator12.next();">Next</button>
-	<button onclick="myRotator12.go(0);">Goto 0 (Nexaweb, Renkoo) [pan left]</button>
-	<button onclick="myRotator12.go(1);">Goto 1 (Sitepen, Tibco) [pan down]</button>
-	<button onclick="myRotator12.go(2);">Goto 2 (Webtide, OpenLaszlo) [pan right]</button>
-	<button onclick="myRotator12.go(3);">Goto 3 (Sun, Google) [pan up]</button>
-	</p>
+	<!-- <p> -->
+	<!-- <button onclick="myRotator12.prev();">Prev</button> -->
+	<!-- <button onclick="myRotator12.next();">Next</button> -->
+	<!-- <button onclick="myRotator12.go(0);">Goto 0 (Nexaweb, Renkoo) [pan left]</button> -->
+	<!-- <button onclick="myRotator12.go(1);">Goto 1 (Sitepen, Tibco) [pan down]</button> -->
+	<!-- <button onclick="myRotator12.go(2);">Goto 2 (Webtide, OpenLaszlo) [pan right]</button> -->
+	<!-- <button onclick="myRotator12.go(3);">Goto 3 (Sun, Google) [pan up]</button> -->
+	<!-- </p> -->
 	
-	<table><tr><td>
+	<!-- <table><tr><td> -->
 	
-		<div data-dojo-type="dojox/widget/Rotator" class="rotator" data-dojo-id="myRotator12"
-			 data-dojo-props="transition: 'dojox.widget.rotator.panLeft'">
-			<div class="pane">
-				<a href="http://www.nexaweb.com" target="_new"><img src="images/rotator_nexaweb.png" width="130" alt="Nexaweb"/></a>
-				<a href="http://www.renkoo.com" target="_new"><img src="images/rotator_renkoo.png" width="130" alt="Renkoo"/></a>
-			</div>
-			<div class="pane" transition="dojox.widget.rotator.panDown">
-				<script type="dojo/method" data-dojo-event="onBeforeIn" data-dojo-args="args">
-					log("myRotator12Log", "onBeforeIn - get dom nodes ready to be displayed, wire events");
-				</script>
-				<script type="dojo/method" data-dojo-event="onAfterIn" data-dojo-args="args">
-					log("myRotator12Log", "onAfterIn - this pane is now visible, so do cool stuff!");
-				</script>
-				<script type="dojo/method" data-dojo-event="onBeforeOut" data-dojo-args="args">
-					log("myRotator12Log", "onBeforeOut - stop any animations, disconnect events, etc");
-				</script>
-				<script type="dojo/method" data-dojo-event="onAfterOut" data-dojo-args="args">
-					log("myRotator12Log", "onAfterOut - clean up dom, reset state, disconnect events, etc");
-				</script>
-				<a href="http://www.sitepen.com" target="_new"><img src="images/rotator_sitepen.png" width="130" alt="Sitepen"/></a>
-				<a href="http://www.tibco.com" target="_new"><img src="images/rotator_tibco.png" width="130" alt="Tibco"/></a>
-			</div>
-			<div class="pane" transition="dojox.widget.rotator.panRight">
-				<a href="http://www.webtide.com/" target="_new"><img src="images/rotator_webtide.png" width="130" alt="Webtide"/></a>
-				<a href="http://www.openlaszlo.com" target="_new"><img src="images/rotator_openlaszlo.png" width="150" alt="OpenLaszlo"/></a>
-			</div>
-			<div class="pane" transition="dojox.widget.rotator.panUp">
-				<a href="http://www.sun.com" target="_new"><img src="images/rotator_sun.png" width="130" alt="Sun"/></a>
-				<a href="http://www.google.com" target="_new"><img src="images/rotator_google.png" width="130" alt="Google"/></a>
-			</div>
-		</div>
+	<!-- 	<div data-dojo-type="dojox/widget/Rotator" class="rotator" data-dojo-id="myRotator12" -->
+	<!-- 		 data-dojo-props="transition: 'dojox.widget.rotator.panLeft'"> -->
+	<!-- 		<div class="pane"> -->
+	<!-- 			<a href="http://www.nexaweb.com" target="_new"><img src="images/rotator_nexaweb.png" width="130" alt="Nexaweb"/></a> -->
+	<!-- 			<a href="http://www.renkoo.com" target="_new"><img src="images/rotator_renkoo.png" width="130" alt="Renkoo"/></a> -->
+	<!-- 		</div> -->
+	<!-- 		<div class="pane" transition="dojox.widget.rotator.panDown"> -->
+	<!-- 			<script type="dojo/method" data-dojo-event="onBeforeIn" data-dojo-args="args"> -->
+	<!-- 				log("myRotator12Log", "onBeforeIn - get dom nodes ready to be displayed, wire events"); -->
+	<!-- 			</script> -->
+	<!-- 			<script type="dojo/method" data-dojo-event="onAfterIn" data-dojo-args="args"> -->
+	<!-- 				log("myRotator12Log", "onAfterIn - this pane is now visible, so do cool stuff!"); -->
+	<!-- 			</script> -->
+	<!-- 			<script type="dojo/method" data-dojo-event="onBeforeOut" data-dojo-args="args"> -->
+	<!-- 				log("myRotator12Log", "onBeforeOut - stop any animations, disconnect events, etc"); -->
+	<!-- 			</script> -->
+	<!-- 			<script type="dojo/method" data-dojo-event="onAfterOut" data-dojo-args="args"> -->
+	<!-- 				log("myRotator12Log", "onAfterOut - clean up dom, reset state, disconnect events, etc"); -->
+	<!-- 			</script> -->
+	<!-- 			<a href="http://www.sitepen.com" target="_new"><img src="images/rotator_sitepen.png" width="130" alt="Sitepen"/></a> -->
+	<!-- 			<a href="http://www.tibco.com" target="_new"><img src="images/rotator_tibco.png" width="130" alt="Tibco"/></a> -->
+	<!-- 		</div> -->
+	<!-- 		<div class="pane" transition="dojox.widget.rotator.panRight"> -->
+	<!-- 			<a href="http://www.webtide.com/" target="_new"><img src="images/rotator_webtide.png" width="130" alt="Webtide"/></a> -->
+	<!-- 			<a href="http://www.openlaszlo.com" target="_new"><img src="images/rotator_openlaszlo.png" width="150" alt="OpenLaszlo"/></a> -->
+	<!-- 		</div> -->
+	<!-- 		<div class="pane" transition="dojox.widget.rotator.panUp"> -->
+	<!-- 			<a href="http://www.sun.com" target="_new"><img src="images/rotator_sun.png" width="130" alt="Sun"/></a> -->
+	<!-- 			<a href="http://www.google.com" target="_new"><img src="images/rotator_google.png" width="130" alt="Google"/></a> -->
+	<!-- 		</div> -->
+	<!-- 	</div> -->
 	
-	</td><td>
-		<div class="logWindow" id="myRotator12Log"></div>
-	</td></tr></table>
+	<!-- </td><td> -->
+	<!-- 	<div class="logWindow" id="myRotator12Log"></div> -->
+	<!-- </td></tr></table> -->
 	
 	<h2>Programmatic Example with Fade Transition</h2>
 	
@@ -823,6 +829,55 @@
 		<div class="pane">
 			<a href="http://www.sun.com" target="_new"><img src="images/rotator_sun.png" width="130" alt="Sun"/></a>
 			<a href="http://www.google.com" target="_new"><img src="images/rotator_google.png" width="130" alt="Google"/></a>
+		</div>
+	</div>
+
+	<h2>Insertion and removal</h2>
+	
+	<p>Inserts and removes panes.</p>
+
+	<script>
+	function myRotator15Insert(index) {
+		var child = document.createElement('div');
+		child.className = 'pane';
+		switch (myRotator15Inserted) {
+			case 0:
+				child.innerHTML = '<a href="http://www.sitepen.com" target="_new"><img src="images/rotator_sitepen.png" width="130" alt="Sitepen"/></a>' +
+					'<a href="http://www.tibco.com" target="_new"><img src="images/rotator_tibco.png" width="130" alt="Tibco"/></a>';
+				break;
+			case 1:
+				child.innerHTML = '<a href="http://www.webtide.com/" target="_new"><img src="images/rotator_webtide.png" width="130" alt="Webtide"/></a>' +
+					'<a href="http://www.openlaszlo.com" target="_new"><img src="images/rotator_openlaszlo.png" width="150" alt="OpenLaszlo"/></a>';
+				break;
+			case 2:
+				child.innerHTML = '<a href="http://www.sun.com" target="_new"><img src="images/rotator_sun.png" width="130" alt="Sun"/></a>' +
+					'<a href="http://www.google.com" target="_new"><img src="images/rotator_google.png" width="130" alt="Google"/></a>';
+				break;
+		}
+		myRotator15.insert(child, index);
+		myRotator15Inserted = (myRotator15Inserted + 1) % 3
+	}
+
+	function myRotator15Remove() {
+		myRotator15.remove(1);
+	}
+
+	var myRotator15Inserted = 0;
+	</script>
+	
+	<p>
+	<button onclick="myRotator15.prev();">Prev</button>
+	<button onclick="myRotator15.next();">Next</button>
+	<button onclick="myRotator15Insert();">Append</button>
+	<button onclick="myRotator15Insert(1);">Insert</button>
+	<button onclick="myRotator15Remove();">Remove</button>
+	</p>
+	
+	<div data-dojo-type="dojox/widget/Rotator" class="rotator" data-dojo-id="myRotator15"
+		 data-dojo-props="transition: 'dojox.widget.rotator.crossFade'">
+		<div class="pane">
+			<a href="http://www.nexaweb.com" target="_new"><img src="images/rotator_nexaweb.png" width="130" alt="Nexaweb"/></a>
+			<a href="http://www.renkoo.com" target="_new"><img src="images/rotator_renkoo.png" width="130" alt="Renkoo"/></a>
 		</div>
 	</div>
 
