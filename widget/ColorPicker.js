@@ -501,7 +501,7 @@ define([
 			
 			//#13268 Fix for IE and Edge, as they don't support evt.layerX/Y
 			var selCenter = this.PICKER_HUE_SELECTOR_H/2;
-			var ypos = evt.layerY || (evt.y -evt.target.getBoundingClientRect().top);
+			var ypos = evt.layerY || (evt.y - evt.target.getBoundingClientRect().top);
 			ypos -= selCenter;
 			if(this.animatePoint){
 				fx.slideTo({
@@ -527,10 +527,10 @@ define([
 			
 			//#13268 Fix for IE and Edge, as they don't support evt.layerX/Y
 			
-			var newTop = evt.layerY || (evt.y -evt.target.getBoundingClientRect().top);
-			newTop-= satSelCenterH;
-            var newLeft = evt.layerX || (evt.x -evt.target.getBoundingClientRect().left);
-            newLeft-= satSelCenterW;
+			var newTop = evt.layerY || (evt.y - evt.target.getBoundingClientRect().top);
+			newTop -= satSelCenterH;
+			var newLeft = evt.layerX || (evt.x - evt.target.getBoundingClientRect().left);
+			newLeft -= satSelCenterW;
 			
 			if(evt){ FocusManager.focus(evt.target); }
 
