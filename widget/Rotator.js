@@ -102,7 +102,7 @@ define([
 		//		will be passed as attributes to a html.create() call.
 		panes: null,
 
-		constructor: function(/*Object*/params, /*DomNode|string*/node){
+		constructor: function(/*Object*/params, /*DomNode|string*/nodeRef){
 			// summary:
 			//		Initializes the panes and events.
 			lang.mixin(this, params);
@@ -112,7 +112,7 @@ define([
 				tt = _t._transitions = {},
 				idm = _t._idMap = {},
 				tp = _t.transitionParams = eval("({ " + _t.transitionParams + " })"),
-				node = _t._domNode = dom.byId(node),
+				node = _t._domNode = dom.byId(nodeRef),
 				cb = _t._domNodeContentBox = domGeometry.getContentBox(node); // we are going to assume the rotator will not be changing size
 
 			// if we don't have an id, then generate one
@@ -159,7 +159,7 @@ define([
 				panes = this.panes,
 				paneNode;
 
-			if (index == null) {
+			if (index === null) {
 				index = panes.length;
 			}
 
@@ -202,7 +202,7 @@ define([
 					}
 				}
 
-				if (index == null) {
+				if (index === null) {
 					return;
 				}
 			}
@@ -229,7 +229,9 @@ define([
 		destroy: function(){
 			// summary:
 			//		Destroys the Rotator and its DOM node.
-			array.forEach([this._controlSub, this.wfe], function(wfe) { wfe.remove() });
+			array.forEach([this._controlSub, this.wfe], function(wfe) {
+				wfe.remove();
+			});
 			domConstruct.destroy(this._domNode);
 			this.panes = [];
 		},
@@ -260,7 +262,7 @@ define([
 			_t._resetWaitForEvent();
 
 			// determine the next index and set it to idx for the next go to
-			p = idm != null ? idm : (p || 0);
+			p = idm !== null ? idm : (p || 0);
 			p = p < len ? (p < 0 ? len-1 : p) : 0;
 
 			// if we're already on the requested pane or still transitioning, then return
@@ -381,8 +383,8 @@ define([
 			}
 
 			// find the selected pane and initialize styles
-			if(this.idx == null || domAttr.get(node, "selected")){
-				if(this.idx != null){
+			if(this.idx === null || domAttr.get(node, "selected")){
+				if(this.idx !== null){
 					domStyle.set(panes[this.idx].node, _displayStr, _noneStr);
 				}
 				this.idx = index;
