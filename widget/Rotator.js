@@ -449,7 +449,7 @@ define([
 			//		Stub function that can be overriden or connected to.
 		},
 
-		_transitionWarn(bt, dt){
+		_transitionWarn: function(bt, dt){
 			console.warn(this.declaredClass, ' - Unable to find transition "', bt, '", defaulting to "', dt, '".');
 		}
 	});
