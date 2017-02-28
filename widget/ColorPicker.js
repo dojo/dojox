@@ -509,11 +509,11 @@ define([
 					duration:this.slideDuration,
 					top: ypos,
 					left: 0,
-					onEnd: lang.hitch(this, function(){ this._updateColor(false); FocusManager.focus(this.hueCursorNode); })
+					onEnd: lang.hitch(this, function(){ this._updateColor(true); FocusManager.focus(this.hueCursorNode); })
 				}).play();
 			}else{
 				html.style(this.hueCursorNode, "top", ypos + "px");
-				this._updateColor(false);
+				this._updateColor(true);
 			}
 		},
 		
@@ -547,7 +547,7 @@ define([
 					left: newLeft + "px",
 					top: newTop + "px"
 				});
-				this._updateColor(false);
+				this._updateColor(true);
 			}
 		},
 		
