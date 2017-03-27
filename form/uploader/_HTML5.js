@@ -2,8 +2,27 @@ define([
 	"dojo/_base/declare",
 	"dojo/_base/lang",
 	"dojo/_base/array",
-	"dojo"
-],function(declare, lang, arrayUtil, dojo){
+	"dojo",
+	"dojo/request",
+	"dojo/request/xhr",
+	"dojo/has"
+],function(declare, lang, arrayUtil, dojo, request, xhr, has){
+	function noop(){}
+
+	if(has("native-xhr2")){
+		// Ensure a progress handler is set before XMLHttpRequest#open()
+		// is called so the progress handler attached in
+		// Uploader#uploadWithFormData() will fire
+		xhr._create = (function(create){
+			return function(){
+				var _xhr = create();
+
+				_xhr.upload.addEventListener('progress', noop, false);
+
+				return _xhr;
+			};
+		})(xhr._create);
+	}
 
 	return declare("dojox.form.uploader._HTML5", [], {
 		// summary:
@@ -93,9 +112,56 @@ define([
 					fd.append(nm, data[nm]);
 				}
 			}
+
+			var self = this;
+			var deferred = request(
+				this.getUrl(),
+				{
+					method: "POST",
+					data: fd,
+					handleAs: "json",
+					headers: {
+						Accept: "application/json"
+					}
+				},
+				true
+			);
+
+			deferred.promise.response
+				.otherwise(function (error){
+					console.error(error);
+					console.error(error.response.text);
+					self.onError(error);
+				})
+			;
 	
-			var xhr = this.createXhr();
-			xhr.send(fd);
+			function onProgressHandler(event){
+				self._xhrProgress(event);
+
+				if(event.type !== "load"){
+					return;
+				}
+
+				self.onComplete(deferred.response.data);
+
+				// Disconnect event handlers when done
+				deferred.response.xhr.removeEventListener("load", onProgressHandler, false);
+				deferred.response.xhr.upload.removeEventListener("progress", onProgressHandler, false);
+				deferred.response.xhr.upload.removeEventListener("progress", noop, false);
+
+				deferred = null;
+			}
+
+			if(has("native-xhr2")){
+				// Use addEventListener directly to pass the raw events to Uploader#_xhrProgress
+				deferred.response.xhr.addEventListener("load", onProgressHandler, false);
+				deferred.response.xhr.upload.addEventListener("progress", onProgressHandler, false);
+			}else{
+				// If the browser doesn't have upload events, notify when the upload is complete
+				deferred.promise.then(function(data){
+					self.onComplete(data);
+				});
+			}
 		},
 	
 		_xhrProgress: function(evt){
@@ -116,50 +182,7 @@ define([
 				}
 				this.onProgress(o);
 			}
-		},
-	
-		createXhr: function(){
-			var xhr = new XMLHttpRequest();
-			var timer;
-			xhr.upload.addEventListener("progress", lang.hitch(this, "_xhrProgress"), false);
-			xhr.addEventListener("load", lang.hitch(this, "_xhrProgress"), false);
-			xhr.addEventListener("error", lang.hitch(this, function(evt){
-				this.onError(evt);
-				clearInterval(timer);
-			}), false);
-			xhr.addEventListener("abort", lang.hitch(this, function(evt){
-				this.onAbort(evt);
-				clearInterval(timer);
-			}), false);
-			xhr.onreadystatechange = lang.hitch(this, function(){
-				if(xhr.readyState === 4){
-	//				console.info("COMPLETE")
-					clearInterval(timer);
-					try{
-						this.onComplete(JSON.parse(xhr.responseText.replace(/^\{\}&&/,'')));
-					}catch(e){
-						var msg = "Error parsing server result:";
-						console.error(msg, e);
-						console.error(xhr.responseText);
-						this.onError(msg, e);
-					}
-				}
-			});
-			xhr.open("POST", this.getUrl());
-			xhr.setRequestHeader("Accept","application/json");
-			
-			timer = setInterval(lang.hitch(this, function(){
-				try{
-					if(typeof(xhr.statusText)){} // accessing this error throws an error. Awesomeness.
-				}catch(e){
-					//this.onError("Error uploading file."); // not always an error.
-					clearInterval(timer);
-				}
-			}),250);
-	
-			return xhr;
 		}
-	
 	});
 
 });

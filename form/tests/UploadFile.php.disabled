@@ -52,7 +52,7 @@ $download_path = "../tests/uploads/";	// same folder as above, but relative to t
 //
 // 	NOTE: maintain this path for JSON services
 //
-require("../../../dojo/tests/resources/JSON.php");
+require("../../../dojo/testsDOH/resources/JSON.php");
 $json = new Services_JSON();
 
 //
