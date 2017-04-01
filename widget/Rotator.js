@@ -203,7 +203,7 @@ define([
 		destroy: function(){
 			// summary:
 			//		Destroys the Rotator and its DOM node.
-			array.forEach([this._controlSub, this.wfe], function(wfe) { wfe.remove() });
+			array.forEach([this._controlSub, this.wfe], function(wfe) { wfe && wfe.remove() });
 			domConstruct.destroy(this._domNode);
 		},
 
