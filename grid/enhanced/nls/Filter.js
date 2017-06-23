@@ -103,7 +103,6 @@ define({ root:
 "he": true,
 "hr": true,
 "hu": true,
-"hr": true,
 "id": true,
 "it": true,
 "ja": true,
