@@ -233,19 +233,6 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "../plot2d/
 					break;
 				}
 			}
-			// BIDI Support for RTL languages
-			if(has("dojo-bidi")){
-				// In RTL language like Arabic, data need to be flipped, do this by substracting it from the data length
-				i = l - i;
-				r = data[i];
-
-				if(cd[attr] > 1){
-					// Add mouse width (1) to use the X position of the mouse left side
-					cd[attr] = l - cd[attr] + 1;
-					if(cd[attr] > l)
-						cd[attr] = l-0.1;
-				}
-			}
 
 			var x, y, px, py;
 			if(typeof r == "number"){
