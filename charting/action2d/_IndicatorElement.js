@@ -282,12 +282,20 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "../plot2d/
 	if(has("dojo-bidi")){
 		_IndicatorElement.extend({
 			_checkXCoords: function(cp1, cp2){
-				if(this.chart.isRightToLeft()){
+				if(this.chart.isRightToLeft() && this.isDirty()){
+					var offset = this.chart.node.offsetLeft;
+					function transform(plot, cp) {
+						var x = cp.x - offset;
+						var shift = (plot.chart.offsets.l - plot.chart.offsets.r);
+						var transformed_x = plot.chart.dim.width + shift - x;
+
+						return transformed_x + offset;
+					}
 					if(cp1){
-						cp1.x = this.chart.dim.width + (this.chart.offsets.l - this.chart.offsets.r) - cp1.x;
+						cp1.x = transform(this, cp1);
 					}
 					if(cp2){
-						cp2.x = this.chart.dim.width + (this.chart.offsets.l - this.chart.offsets.r) - cp2.x;
+						cp2.x = transform(this, cp2);
 					}
 				}
 			}
