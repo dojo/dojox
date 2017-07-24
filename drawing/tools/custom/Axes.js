@@ -1,6 +1,6 @@
 define(["dojo/_base/lang", "../../util/oo", "../../manager/_registry", "../../stencil/Path",
 	"../../annotations/Arrow", "../../annotations/Label", "../../tools/custom/Vector"],
-function(lang, oo, registry, StencilPath, Arrow, LabelExports, Vector){
+function(lang, oo, registry, StencilPath, Arrow, Label, Vector){
 
 var Axes = oo.declare(
 	StencilPath,
@@ -101,14 +101,14 @@ var Axes = oo.declare(
 
 			// NOTE: Not passing style into text because it's changing it
 			var props = {align:"middle", valign:"middle", util:this.util, annotation:true, container:this.container, mouse:this.mouse, stencil:this};
-			this.labelX = new LabelExports.Label(lang.mixin(props,{
+			this.labelX = new Label.Label(lang.mixin(props,{
 				labelPosition:this.setLabelX
 			}));
-			this.labelY = new LabelExports.Label(lang.mixin(props,{
+			this.labelY = new Label.Label(lang.mixin(props,{
 				labelPosition:this.setLabelY
 			}));
 			if(this.style.zAxisEnabled){
-				this.labelZ = new LabelExports.Label(lang.mixin(props,{
+				this.labelZ = new Label.Label(lang.mixin(props,{
 					labelPosition:this.setLabelZ
 				}));
 			}
