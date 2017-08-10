@@ -1,8 +1,6 @@
 define(["exports", "dojo/_base/lang", "../util/oo", "../stencil/Text"],
 function(exports, lang, oo, Text){
 
-// TODO: why not just return Label?
-
 exports.Label = oo.declare(
 	Text,
 	function(/*Object*/options){
