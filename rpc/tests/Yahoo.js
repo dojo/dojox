@@ -143,7 +143,7 @@ doh.register("dojox.rpc.tests.yahoo",
 			name: "#13, Yahoo Local::getCollection",
 			timeout: dojox.rpc.tests.yahooService.TEST_METHOD_LONG_TIMEOUT,
 			runTest: dojox.rpc.tests.yahooService._testMethod({
-				expectedResult: "getCollection",
+				name: "getCollection",
 				parameters: {collection_id: "1000031487"},
 				expectedResult: "Result"
 			})

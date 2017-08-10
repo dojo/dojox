@@ -11,10 +11,6 @@ dojo.declare("dojox.widget._FileInfoPane",
 	//		a pane to display the information for the currently-selected
 	//		file
 	
-	// templateString: string
-	//		delete our template string
-	templateString: "",
-	
 	// templateString: String
 	//		The template to be used to construct the widget.
 	templateString: dojo.cache("dojox.widget", "FilePicker/_FileInfoPane.html"),
