@@ -185,6 +185,9 @@ define([
 					}
 					_t._domNode.removeChild(removed.node);
 				}
+				if (_t.idx > idx) {
+					_t.idx--;
+				}
 			}
 
 			var index,
@@ -196,7 +199,7 @@ define([
 			}
 			else {
 				for (var i = 0; i < panes.length; i++) {
-					if (panes.node === nodeOrIndex) {
+					if (panes[i].node === nodeOrIndex) {
 						index = i;
 						break;
 					}
@@ -220,9 +223,6 @@ define([
 			}
 			else {
 				removeFromPanes(index);
-				if (this.idx > index) {
-					this.idx--;
-				}
 			}
 		},
 
