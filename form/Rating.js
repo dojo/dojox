@@ -31,17 +31,27 @@ define([
 		//		The current value of the Rating
 		value: 0,
 
+		// name: String
+		// 		The name value for the radio inputs
+		name: 'rating-' + Math.random().toString(36).substring(2),
+
 		buildRendering: function(/*Object*/ params){
 			// summary:
 			//		Build the templateString. The number of stars is given by this.numStars,
 			//		which is normally an attribute to the widget node.
 
+			// The radio input used to display and select stars
+			var starTpl = '<label class="dojoxRatingStar dijitInline">' +
+			 	'<input type="radio" name="' + this.name + '" value="${value}" class="dojoxRatingInput">' +
+				'</label>';
+
 			// The hidden value node is attached as "focusNode" because tabIndex, id, etc. are getting mapped there.
 			var tpl = '<div dojoAttachPoint="domNode" class="dojoxRating dijitInline">' +
-				'<input type="hidden" value="0" dojoAttachPoint="focusNode" /><ul data-dojo-attach-point="list">${stars}</ul>' +
-				'</div>';
-			// The value-attribute is used to "read" the value for processing in the widget class
-			var starTpl = '<li class="dojoxRatingStar dijitInline" value="${value}"></li>';
+				'<div data-dojo-attach-point="list">' +
+				string.substitute(starTpl, {value:0}) +
+				'${stars}' +
+				'</div></div>';
+
 			var rendered = "";
 			for(var i = 0; i < this.numStars; i++){
 				rendered += string.substitute(starTpl, {value:i + 1});
@@ -57,7 +67,8 @@ define([
 			this.own(
 				// Fire when mouse is moved over one of the stars.
 				on(this.list, on.selector(".dojoxRatingStar", "mouseover"), lang.hitch(this, "_onMouse")),
-				on(this.list, on.selector(".dojoxRatingStar", "click"), lang.hitch(this, "onStarClick")),
+				on(this.list, on.selector(".dojoxRatingStar", "click"), lang.hitch(this, "_onClick")),
+				on(this.list, on.selector(".dojoxRatingInput", "change"), lang.hitch(this, "onStarChange")),
 				on(this.list, mouse.leave, lang.hitch(this, function(){
 					// go from hover display back to dormant display
 					this._renderStars(this.value);
@@ -68,9 +79,16 @@ define([
 		_onMouse: function(evt){
 			// summary:
 			//		Called when mouse is moved over one of the stars
-			var hoverValue = +domAttr.get(evt.target, "value");
+			var hoverValue = +domAttr.get(evt.target.children[0], "value");
 			this._renderStars(hoverValue, true);
 			this.onMouseOver(evt, hoverValue);
+		},
+
+		_onClick: function(evt) {
+			var clickedValue = +domAttr.get(evt.target.children[0], "value");
+			// for backwards compatibility
+			evt.target.value = clickedValue;
+			this.onStarClick(evt, clickedValue);
 		},
 
 		_renderStars: function(value, hover){
@@ -87,15 +105,13 @@ define([
 			});
 		},
 
-		onStarClick: function(/*Event*/ evt){
+		onStarChange: function(/*Event*/ evt){
 			// summary:
-			//		Connect on this method to get noticed when a star was clicked.
+			//		Connect on this method to get noticed when the star value was changed.
 			// example:
-			//	|	connect(widget, "onStarClick", function(event){ ... })
+			//	|	connect(widget, "onStarChange", function(event){ ... })
 			var newVal = +domAttr.get(evt.target, "value");
-			this.setAttribute("value", newVal == this.value ? 0 : newVal);
 			this._renderStars(this.value);
-			this.onChange(this.value); // Do I have to call this by hand?
 		},
 
 		onMouseOver: function(/*=====evt, value=====*/ ){
@@ -110,10 +126,12 @@ define([
 		},
 
 		_setValueAttr: function(val){
-			this.focusNode.value = val;		// reflect the value in our hidden field, for form submission
 			this._set("value", val);
 			this._renderStars(val);
-			this.onChange(val); // Do I really have to call this by hand? :-(
+			let input = query("input[type=radio]", this.domNode)[val];
+			if (input) {
+				input.checked = true;
+			}
 		}
 	});
 });
