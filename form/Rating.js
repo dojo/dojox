@@ -31,30 +31,29 @@ define([
 		//		The current value of the Rating
 		value: 0,
 
-		// name: String
-		// 		The name value for the radio inputs
-		name: 'rating-' + Math.random().toString(36).substring(2),
-
 		buildRendering: function(/*Object*/ params){
 			// summary:
 			//		Build the templateString. The number of stars is given by this.numStars,
 			//		which is normally an attribute to the widget node.
 
+			var radioName = 'rating-' + Math.random().toString(36).substring(2);
+
 			// The radio input used to display and select stars
-			var starTpl = '<label class="dojoxRatingStar dijitInline">' +
-			 	'<input type="radio" name="' + this.name + '" value="${value}" class="dojoxRatingInput">' +
+			var starTpl = '<label class="dojoxRatingStar dijitInline ${hidden}">' +
+				'<span class="dojoxRatingLabel">${value} stars</span>' +
+			 	'<input type="radio" name="' + radioName + '" value="${value}" dojoAttachPoint="focusNode" class="dojoxRatingInput">' +
 				'</label>';
 
 			// The hidden value node is attached as "focusNode" because tabIndex, id, etc. are getting mapped there.
 			var tpl = '<div dojoAttachPoint="domNode" class="dojoxRating dijitInline">' +
 				'<div data-dojo-attach-point="list">' +
-				string.substitute(starTpl, {value:0}) +
+				string.substitute(starTpl, {value:0, hidden: 'dojoxRatingHidden'}) +
 				'${stars}' +
 				'</div></div>';
 
 			var rendered = "";
 			for(var i = 0; i < this.numStars; i++){
-				rendered += string.substitute(starTpl, {value:i + 1});
+				rendered += string.substitute(starTpl, {value:i + 1, hidden: ''});
 			}
 			this.templateString = string.substitute(tpl, {stars:rendered});
 
@@ -79,23 +78,31 @@ define([
 		_onMouse: function(evt){
 			// summary:
 			//		Called when mouse is moved over one of the stars
-			var hoverValue = +domAttr.get(evt.target.children[0], "value");
+			var hoverValue = +domAttr.get(evt.target.querySelector('input'), "value");
 			this._renderStars(hoverValue, true);
 			this.onMouseOver(evt, hoverValue);
 		},
 
 		_onClick: function(evt) {
-			var clickedValue = +domAttr.get(evt.target.children[0], "value");
-			// for backwards compatibility
-			evt.target.value = clickedValue;
-			this.onStarClick(evt, clickedValue);
+			if (evt.target.tagName === 'LABEL') {
+				var clickedValue = +domAttr.get(evt.target.querySelector('input'), "value");
+				// for backwards compatibility
+				evt.target.value = clickedValue;
+				this.onStarClick(evt, clickedValue);
+
+				// check for clicking current value
+				if (clickedValue == this.value) {
+					evt.preventDefault();
+					this.onStarChange(evt);
+				}
+			}
 		},
 
 		_renderStars: function(value, hover){
 			// summary:
 			//		Render the stars depending on the value.
 			query(".dojoxRatingStar", this.domNode).forEach(function(star, i){
-				if(i + 1 > value){
+				if(i > value){
 					domClass.remove(star, "dojoxRatingStarHover");
 					domClass.remove(star, "dojoxRatingStarChecked");
 				}else{
@@ -105,13 +112,17 @@ define([
 			});
 		},
 
-		onStarChange: function(/*Event*/ evt){
-			// summary:
-			//		Connect on this method to get noticed when the star value was changed.
-			// example:
-			//	|	connect(widget, "onStarChange", function(event){ ... })
+		onStarChange: function(evt) {
 			var newVal = +domAttr.get(evt.target, "value");
+			this.setAttribute("value", newVal == this.value ? 0 : newVal);
 			this._renderStars(this.value);
+
+			this.onChange(this.value);
+		},
+
+		onStarClick: function(/*Event*/ evt, /*Number*/ value){
+			// summary:
+			//		Connect on this method to get noticed when the star value was clicked.
 		},
 
 		onMouseOver: function(/*=====evt, value=====*/ ){
@@ -128,10 +139,11 @@ define([
 		_setValueAttr: function(val){
 			this._set("value", val);
 			this._renderStars(val);
-			let input = query("input[type=radio]", this.domNode)[val];
+			var input = query("input[type=radio]", this.domNode)[val];
 			if (input) {
 				input.checked = true;
 			}
+			this.onChange(val);
 		}
 	});
 });
