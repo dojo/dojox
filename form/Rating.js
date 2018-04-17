@@ -86,7 +86,7 @@ define([
 		_onClick: function(evt) {
 			if (evt.target.tagName === 'LABEL') {
 				var clickedValue = +domAttr.get(evt.target.querySelector('input'), "value");
-				// for backwards compatibility
+				// for backwards compatibility with previous dojo versions' onStarClick event
 				evt.target.value = clickedValue;
 				this.onStarClick(evt, clickedValue);
 
