@@ -320,6 +320,14 @@ doh.register("dojox.dtl.dom.tag",
 			var template = new dd.DomTemplate('<div tabIndex="-1"></div>');
 			//the following should not throw errors in IE
 			dd.tests.dom.util.render(template, context);
-		}
+		},
+		function test_attribute_with_empty_data(t){
+		    var dd = dojox.dtl;
+
+		    var template = new dd.DomTemplate('<div attr="{{fruit}}"></div>');
+		    var context = new dd.Context({ fruit : "" });
+		    const htmlResult = template.render(context).getParent().outerHTML;
+		    t.is('<div attr=""></div>', htmlResult);
+		},
 	]
 );
