@@ -2,6 +2,14 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 	"dojo/_base/connect", "dojo/_base/array", "dojo/dom-construct", "dojo/_base/Color", "./matrix" /*===== , "./path" =====*/ ], 
 	function(g, lang, declare, kernel, has, events, arr, domConstruct, Color, matrixLib){
 
+	function removeItemAt(a, index) {
+		var len = (a.length - 1);
+		while (index < len) {
+			a[index] = a[++index];
+		}
+		a.length = len;
+	}
+
 	var shape = g.shape = {
 		// summary:
 		//		This module contains the core graphics Shape API.
@@ -588,7 +596,7 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 						shape.parent = null;
 						shape.parentMatrix = null;
 					}
-					this.children.splice(i, 1);
+					removeItemAt(this.children, i);
 					break;
 				}
 			}
@@ -658,7 +666,7 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 			//		one of the child shapes to move to the front
 			for(var i = 0; i < this.children.length; ++i){
 				if(this.children[i] == shape){
-					this.children.splice(i, 1);
+					removeItemAt(this.children, i);
 					this.children.push(shape);
 					break;
 				}
@@ -672,7 +680,7 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 			//		one of the child shapes to move to the front
 			for(var i = 0; i < this.children.length; ++i){
 				if(this.children[i] == shape){
-					this.children.splice(i, 1);
+					removeItemAt(this.children, i);
 					this.children.unshift(shape);
 					break;
 				}
