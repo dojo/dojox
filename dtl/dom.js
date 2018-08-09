@@ -916,7 +916,7 @@ define([
 			if(dd.BOOLS[key]){
 				value = !(value == "false" || value == "undefined" || !value);
 			}
-			if(value !== this.contents){
+			if(value !== this.contents || value === ""){
 				this.contents = value;
 				return buffer.setAttribute(key, value);
 			}
