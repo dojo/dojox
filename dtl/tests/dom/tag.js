@@ -329,5 +329,25 @@ doh.register("dojox.dtl.dom.tag",
 		    const htmlResult = template.render(context).getParent().outerHTML;
 		    t.is('<div attr=""></div>', htmlResult);
 		},
+		function test_option_tag_with_same_value_attribute_and_innerHTML(t){
+		    var dd = dojox.dtl;
+
+			const html =
+			  '<div>'
+			+ '<select>'
+			+ '<option value="{{fruit}}">{{fruit}}</option>'
+			+ '</select>'
+			+ '</div>';
+			var template = new dd.DomTemplate(html);
+		    var context = new dd.Context({ fruit : "Fruit" });
+			const htmlResult = template.render(context).getParent().outerHTML;
+			const htmlExpected =
+			  '<div>'
+			+ '<select>'
+			+ '<option value="Fruit">Fruit</option>'
+			+ '</select>'
+			+ '</div>';
+		    t.is(htmlExpected, htmlResult);
+		},
 	]
 );
