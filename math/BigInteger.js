@@ -1,5 +1,5 @@
 // AMD-ID "dojox/math/BigInteger"
-define(["dojo", "dojox"], function(dojo, dojox) {
+define(["dojo", "dojox", "dojo/has"], function(dojo, dojox, has) {
 
 	dojo.getObject("math.BigInteger", true, dojox);
 	dojo.experimental("dojox.math.BigInteger");
@@ -73,11 +73,14 @@ define(["dojo", "dojox"], function(dojo, dojox) {
 	  }
 	  return c;
 	}
-	if(j_lm && (navigator.appName == "Microsoft Internet Explorer")) {
+	if(j_lm && has("ie")) {
 	  BigInteger.prototype.am = am2;
 	  dbits = 30;
 	}
-	else if(j_lm && (navigator.appName != "Netscape")) {
+	// had another guard navigator.appName != "Netscape"
+	// this was removed since
+	// https://stackoverflow.com/questions/14573881/why-does-javascript-navigator-appname-return-netscape-for-safari-firefox-and-ch
+	else if(j_lm) {
 	  BigInteger.prototype.am = am1;
 	  dbits = 26;
 	}
@@ -167,6 +170,7 @@ define(["dojo", "dojox"], function(dojo, dojox) {
 	function bnpClamp() {
 	  var c = this.s&this._DM;
 	  while(this.t > 0 && this[this.t-1] == c) --this.t;
+	  this.t = (this.t === 0) ? 1 : this.t;
 	}
 
 	// (public) return string representation in given radix
@@ -205,14 +209,12 @@ define(["dojo", "dojox"], function(dojo, dojox) {
 	// (public) |this|
 	function bnAbs() { return (this.s<0)?this.negate():this; }
 
-	// (public) return + if this > a, - if this < a, 0 if equal
+	// (public) return +1 if this > a, -1 if this < a, 0 if equal
 	function bnCompareTo(a) {
-	  var r = this.s-a.s;
-	  if(r) return r;
+	  if(this.s !== a.s) return this.s > a.s ? 1 : -1; // check sign
+	  if(this.t !== a.t) return (this.s === 0) ? (this.t > a.t ? 1 : -1) : (this.t < a.t ? 1 : -1); // check size
 	  var i = this.t;
-	  r = i-a.t;
-	  if(r) return r;
-	  while(--i >= 0) if((r = this[i] - a[i])) return r;
+	  while(--i >= 0) if(this[i] !== a[i]) return (this.s === 0) ? (this[i] > a[i] ? 1 : -1) : (this[i] > a[i] ? 1 : -1); // check indivitual bytes
 	  return 0;
 	}
 
@@ -557,6 +559,7 @@ define(["dojo", "dojox"], function(dojo, dojox) {
 		_invDigit:		bnpInvDigit,
 		_isEven:		bnpIsEven,
 		_exp:			bnpExp,
+		_intAt:  intAt,
 
 		// public
 		toString:		bnToString,
