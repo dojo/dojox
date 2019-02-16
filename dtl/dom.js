@@ -223,9 +223,6 @@ define([
 					value = node.className || value;
 				}else if(key == "for"){
 					value = node.htmlFor || value;
-				}else if(key == "value" && node.value == node.innerHTML){
-					// Sometimes .value is set the same as the contents of the item (button)
-					continue;
 				}else if(node.getAttribute){
 					value = node.getAttribute(key, 2) || value;
 					if(key == "href" || key == "src"){
