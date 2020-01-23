@@ -2,22 +2,8 @@ dojo.provide("dojox.xmpp.util");
 dojo.require("dojox.string.Builder");
 dojo.require("dojox.encoding.base64");
 
-var xmlEntityMap = {
-	'&': '&amp;',
-	'>': '&gt;',
-	'<': '&lt;',
-	'\'': '&apos;',
-	'"': '&quot;'
-};
-var xmlEntityRegex = /(&|>|<|'|")/g;
-
 dojox.xmpp.util.xmlEncode = function(str) {
-	if(str) {
-		str = str.replace(xmlEntityRegex, function (match) {
-			return xmlEntityMap[match] || '';
-		})
-	}
-	return str;
+	return dojo.string.escape(str);
 };
 
 dojox.xmpp.util.encodeJid = function(jid) {
