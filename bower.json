@@ -15,8 +15,8 @@
 		"url": "https://github.com/dojo/dojox.git"
 	},
 	"dependencies": {
-		"dojo": "1.11.11",
-		"dijit": "1.11.11"
+		"dojo": "1.11.12-pre",
+		"dijit": "1.11.12-pre"
 	},
 	"devDependencies": {
 	}
