@@ -120,7 +120,7 @@ define(['dojo/_base/declare', 'dojo/Deferred', 'dojo/when', 'dojo/store/util/Que
 			cols.push('__extra');
 			vals.push('?');
 			params.push(JSON.stringify(extra));
-			
+
 			var idColumn = this.idProperty;
 			if(this.identifyGeneratedKey){
 				params.idColumn = idColumn;
@@ -217,7 +217,7 @@ define(['dojo/_base/declare', 'dojo/Deferred', 'dojo/when', 'dojo/store/util/Que
 				var conditions = [];
 				for(var i in query){
 					var filterValue = query[i];
-					function convertWildcard(value){
+					var convertWildcard = function convertWildcard(value){
 						// convert to LIKE if it ends with a *
 						var wildcard = value && value.match && value.match(wildcardRe);
 						if(wildcard){
@@ -226,13 +226,13 @@ define(['dojo/_base/declare', 'dojo/Deferred', 'dojo/when', 'dojo/store/util/Que
 						}
 						params.push(value);
 						return '=?';
-					}
+					};
 					if(filterValue){
 						if(filterValue.contains){
 							// search within the repeating table
 							var repeatingTable = store.table + '_repeating_' + i;
 							conditions.push(filterValue.contains.map(function(value){
-								return store.idProperty + ' IN (SELECT id FROM ' + repeatingTable + ' WHERE ' + 
+								return store.idProperty + ' IN (SELECT id FROM ' + repeatingTable + ' WHERE ' +
 									'value' + convertWildcard(value) + ')';
 							}).join(' AND '));
 							continue;
@@ -261,7 +261,7 @@ define(['dojo/_base/declare', 'dojo/Deferred', 'dojo/when', 'dojo/store/util/Que
 				}
 				return conditions.join(' AND ');
 			}
-			
+
 			if(options.sort){
 				condition += ' ORDER BY ' +
 				options.sort.map(function(sort){
@@ -316,6 +316,6 @@ define(['dojo/_base/declare', 'dojo/Deferred', 'dojo/when', 'dojo/store/util/Que
 			}
 			return deferred.promise;
 		}
-		
+
 	});
 });
