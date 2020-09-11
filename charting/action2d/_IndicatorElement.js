@@ -284,13 +284,13 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "../plot2d/
 			_checkXCoords: function(cp1, cp2){
 				if(this.chart.isRightToLeft() && this.isDirty()){
 					var offset = this.chart.node.offsetLeft;
-					function transform(plot, cp) {
+					var transform = function transform(plot, cp) {
 						var x = cp.x - offset;
 						var shift = (plot.chart.offsets.l - plot.chart.offsets.r);
 						var transformed_x = plot.chart.dim.width + shift - x;
 
 						return transformed_x + offset;
-					}
+					};
 					if(cp1){
 						cp1.x = transform(this, cp1);
 					}
