@@ -90,16 +90,24 @@
 		dojo.require("dijit.form.FilteringSelect");
 		dojo.require("dijit.form.Button");
 	</script>
-	<form dojoType="dijit.form.Form">
+	<form jsId="rating2form" dojoType="dijit.form.Form">
 		<select dojoType="dijit.form.FilteringSelect">
 			<option>Does</option>
 			<option>this</option>
 			<option>work?</option>
 		</select>
 		<br /><br />
-		<div dojoType="dojox.form.Rating" numStars="5" value="1"></div>
+		<div jsId="rating2" dojoType="dojox.form.Rating" numStars="5" value="1" name="rating_widget_2"></div>
 		<br /><br />
-		<button dojoType="dijit.form.Button">Click me</button>
+		<button dojoType="dijit.form.Button">
+			<script type="dojo/event" data-dojo-event="onClick">
+				dojo.query('#rating2Value')[0].innerHTML = rating2.value;
+				dojo.query('#rating2FormValue')[0].innerHTML = JSON.stringify(rating2form.get('value'));
+			</script>
+			Click me</button>
+		<br /><br />
+		The value is: <b><span id="rating2Value">0</span></b>
+		The form value is: <b><span id="rating2FormValue">-empty-</span></b>
 	</form>
 </body>
 </html>
