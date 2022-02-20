@@ -36,12 +36,12 @@ define([
 			//		Build the templateString. The number of stars is given by this.numStars,
 			//		which is normally an attribute to the widget node.
 
-			var radioName = 'rating-' + Math.random().toString(36).substring(2);
+			this.name = this.name || 'rating-' + Math.random().toString(36).substring(2);
 
 			// The radio input used to display and select stars
 			var starTpl = '<label class="dojoxRatingStar dijitInline ${hidden}">' +
 				'<span class="dojoxRatingLabel">${value} stars</span>' +
-			 	'<input type="radio" name="' + radioName + '" value="${value}" dojoAttachPoint="focusNode" class="dojoxRatingInput">' +
+			 	'<input type="radio" name="' + this.name + '" value="${value}" dojoAttachPoint="focusNode" class="dojoxRatingInput">' +
 				'</label>';
 
 			// The hidden value node is attached as "focusNode" because tabIndex, id, etc. are getting mapped there.
