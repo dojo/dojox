@@ -29,7 +29,9 @@ define(["dojo", "dojox/main", "dojox/image/Badge", "dojox/data/FlickrRestStore"]
 		//		of the A tag.
 		target: "",
 
-		apikey: "8c6803164dbc395fb7131c9d54843627",
+		// apikey: your flickr API key
+		//		You can set your flickr API key here
+		apikey: "",
 		_store: null,
 
 		postCreate: function(){
